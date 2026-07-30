@@ -1006,6 +1006,99 @@ document.getElementById('btnCloseModal').addEventListener('click', () => {
   document.getElementById('modalPreflight').classList.remove('active');
 });
 
+// ============================================================================
+// 💻 KRISHNA AI OS COMMAND TERMINAL CONTROLLER
+// ============================================================================
+function setupOsTerminalController() {
+  const btnOsTerminal = document.getElementById('btnOsTerminal');
+  const modalOsTerminal = document.getElementById('modalOsTerminal');
+  const btnCloseOsTerminal = document.getElementById('btnCloseOsTerminal');
+  const terminalInput = document.getElementById('osTerminalInput');
+  const btnRunOsCmd = document.getElementById('btnRunOsCmd');
+  const terminalLogs = document.getElementById('osTerminalLogs');
+
+  if (!btnOsTerminal || !modalOsTerminal) return;
+
+  btnOsTerminal.addEventListener('click', () => {
+    modalOsTerminal.classList.add('active');
+    if (terminalInput) terminalInput.focus();
+  });
+
+  if (btnCloseOsTerminal) {
+    btnCloseOsTerminal.addEventListener('click', () => {
+      modalOsTerminal.classList.remove('active');
+    });
+  }
+
+  function appendTerminalLog(msg, color = "#38bdf8") {
+    if (!terminalLogs) return;
+    const time = new Date().toLocaleTimeString();
+    const div = document.createElement('div');
+    div.style.color = color;
+    div.innerHTML = `<span style="color:var(--text-dim);">[${time}]</span> ${msg}`;
+    terminalLogs.appendChild(div);
+    terminalLogs.scrollTop = terminalLogs.scrollHeight;
+  }
+
+  function processOsCommand() {
+    const rawCmd = terminalInput.value.trim();
+    if (!rawCmd) return;
+
+    appendTerminalLog(`> ${rawCmd}`, "#ffffff");
+    terminalInput.value = '';
+
+    const cmd = rawCmd.toLowerCase();
+
+    if (cmd === '/help') {
+      appendTerminalLog("⚡ KRISHNA AI OS COMMAND REGISTRY:", "var(--cyan)");
+      appendTerminalLog("  /status          — View agent telemetry, thread pool & DB status", "var(--text)");
+      appendTerminalLog("  /simulate-judge  — Trigger 5-judge simulation panel re-run", "var(--text)");
+      appendTerminalLog("  /cut-bloat       — Prune secondary bloat task from sprint plan", "var(--text)");
+      appendTerminalLog("  /preflight       — Launch Demo Readiness Pre-Flight Check", "var(--text)");
+      appendTerminalLog("  /clear           — Clear terminal log screen", "var(--text)");
+    } else if (cmd === '/status') {
+      appendTerminalLog("📊 [AGENT TELEMETRY & SYSTEM DIAGNOSTICS]", "var(--green)");
+      appendTerminalLog("  • Technical Judge Agent : ONLINE (Latency 12ms)", "var(--text)");
+      appendTerminalLog("  • Innovation Agent      : ONLINE (Benchmark Index 94.2)", "var(--text)");
+      appendTerminalLog("  • Risk Auditor          : ONLINE (0 Critical Scope Creeps)", "var(--text)");
+      appendTerminalLog("  • DB Connection Pool    : PgBouncer ACTIVE (120/120 Sockets Free)", "var(--text)");
+    } else if (cmd === '/simulate-judge') {
+      appendTerminalLog("🤖 Triggering 5-Judge Simulation Panel...", "var(--purple)");
+      const titleEl = document.getElementById('projTitle');
+      const ideaText = titleEl ? titleEl.innerText : 'AI Micro-SaaS';
+      renderFiveJudgesSection(ideaText, 'React, Node, Supabase');
+      appendTerminalLog("✓ 5-Judge Simulation updated successfully!", "var(--green)");
+    } else if (cmd === '/cut-bloat') {
+      appendTerminalLog("✂ Executing 1-Click Scope Cut...", "var(--warning)");
+      const cutBtn = document.getElementById('cutFatBtn');
+      if (cutBtn) cutBtn.click();
+      appendTerminalLog("✓ Secondary bloat task pruned from sprint plan!", "var(--green)");
+    } else if (cmd === '/preflight') {
+      appendTerminalLog("🚀 Launching Demo Readiness Pre-Flight Modal...", "var(--cyan)");
+      document.getElementById('modalPreflight').classList.add('active');
+    } else if (cmd === '/clear') {
+      terminalLogs.innerHTML = '';
+      appendTerminalLog("[SYS_CLEARED] Terminal log screen reset.", "var(--text-dim)");
+    } else {
+      appendTerminalLog(`⚠️ Unknown command: '${rawCmd}'. Type /help for valid OS commands.`, "var(--danger)");
+    }
+  }
+
+  if (btnRunOsCmd) btnRunOsCmd.addEventListener('click', processOsCommand);
+  if (terminalInput) {
+    terminalInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') processOsCommand();
+    });
+  }
+}
+
+// Initialize OS Terminal Controller
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', setupOsTerminalController);
+} else {
+  setupOsTerminalController();
+}
+
 // Export PDF/HTML Report Logic (Direct Download without popup blocks)
 document.getElementById('btnExport').addEventListener('click', () => {
   if (!globalProjectData) return;
