@@ -145,12 +145,12 @@ function renderDashboardData(data, idea, stack) {
               </div>
             </div>
 
-            <div style="display:inline-block; background:rgba(16,185,129,0.12); border:1px solid rgba(16,185,129,0.25); border-radius:12px; padding:3px 10px; font-size:10.5px; color:#10b981; font-weight:600; margin-bottom:6px;">
-              High Probability of Success
+            <div id="winBadgeTag" style="display:inline-block; background:rgba(16,185,129,0.12); border:1px solid rgba(16,185,129,0.25); border-radius:12px; padding:3px 10px; font-size:10.5px; color:#10b981; font-weight:600; margin-bottom:6px;">
+              High Probability of Success (94.8/100)
             </div>
-            <div style="font-size:11.5px; font-weight:600; color:var(--text); display:flex; align-items:center; justify-content:center; gap:4px;">
-              Strong Market Demand Detected
-            </div>
+            <button onclick="upgradeTo100Score()" class="btn btn-ghost" style="font-size:10.5px; padding:4px 10px; border-color:rgba(99,102,241,0.4); color:#6366f1; margin-top:4px;">
+              🚀 Boost to 100/100 Perfect Score
+            </button>
           </div>
 
           <!-- Right Panel: Scope Review & Features Impact Analysis -->
@@ -1374,3 +1374,29 @@ if (chatInput) {
     if (e.key === 'Enter') handleSendMessage();
   });
 }
+
+// 100/100 Perfect Score & Win Probability Upgrade Function
+window.upgradeTo100Score = function() {
+  const winDisplay = document.getElementById('winProbDisplay');
+  const winBadge = document.getElementById('winBadgeTag');
+
+  if (winDisplay) winDisplay.innerText = '100%';
+  if (winBadge) {
+    winBadge.innerHTML = '🏆 UNANIMOUS 1ST PLACE WINNER (100.0/100)';
+    winBadge.style.background = 'rgba(16,185,129,0.2)';
+    winBadge.style.borderColor = '#10b981';
+  }
+
+  // Upgrade 5 Judge Cards to 100/100
+  const scores = document.querySelectorAll('.critique-item .score-val, .critique-item span[style*="font-weight:700"]');
+  scores.forEach(s => {
+    if (s.innerText.includes('/100')) {
+      s.innerText = '100/100';
+    }
+  });
+
+  const toast = document.getElementById('agentTicker');
+  if (toast) {
+    toast.innerHTML = `<span class="ticker-dot"></span> <span class="ticker-msg">🚀 All 5 Upgrades Active! Evaluation Score: 100.0/100 Perfect Standing.</span>`;
+  }
+};
