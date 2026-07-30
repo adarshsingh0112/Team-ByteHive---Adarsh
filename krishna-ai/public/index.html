@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KrishnaAI — Hackathon Project Coach OS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="bg-glow">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+</div>
+<canvas id="particle-canvas"></canvas>
+
+<div class="app-container">
+  <header>
+    <div class="logo">
+      <div class="logo-mark"></div>
+      Krishna<span style="color:var(--text-dimmer);font-weight:400;">AI</span>
+    </div>
+    <div class="nav-actions">
+      <button class="btn btn-ghost" id="btnToggleHistory" style="font-size:12px; padding:6px 12px;">📁 Saved Projects</button>
+      <div class="status-pill"><span class="status-dot"></span> Coach OS Ready</div>
+      <button class="btn btn-ghost" id="btnToggleCoach" style="font-size:12px; padding:6px 12px;">💬 Krishna Coach</button>
+    </div>
+  </header>
+
+  <!-- VIEW 1: INIT -->
+  <div class="view active" id="view-init">
+    <div class="init-content">
+      <h1 class="hero-title">Hackathon Execution OS</h1>
+      <p class="hero-sub">Enter your concept and team details. I will execute the 11-step production pipeline: critiquing scope, generating sprint plans, assigning roles, detecting risks, building recovery plans, producing pitch PPTs, and predicting win probability.</p>
+      
+      <div class="prompt-box">
+        <textarea class="prompt-input" id="mainPrompt" placeholder="What are you building? (e.g., An AI-powered crowdfunding app with automated milestone verification...)"></textarea>
+        
+        <div class="meta-inputs">
+          <div class="meta-group">
+            <label>Tech Stack</label>
+            <input type="text" id="inTech" value="Next.js, Supabase, Node, Vercel" placeholder="e.g. React, Python, FastAPI">
+          </div>
+          <div class="meta-group">
+            <label>Team Size</label>
+            <select id="inTeam">
+              <option value="Solo Developer">Solo Developer</option>
+              <option value="2 Developers">2 Developers</option>
+              <option value="3 Developers" selected>3 Developers</option>
+              <option value="4+ Developers">4+ Developers</option>
+            </select>
+          </div>
+          <div class="meta-group">
+            <label>Hackathon Duration</label>
+            <select id="inTime">
+              <option value="24 Hours" selected>24 Hours</option>
+              <option value="36 Hours">36 Hours</option>
+              <option value="48 Hours">48 Hours</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="prompt-footer">
+          <div class="api-key-wrap">
+            <div class="api-input-group">
+              <input type="password" id="apiKeyInput" class="api-key-input" placeholder="Paste Gemini API Key (Optional)">
+            </div>
+            <div style="display:flex; align-items:center; gap: 12px; margin-top: 6px;">
+              <span class="api-status mock" id="apiStatusBadge">⚙️ Mode: Smart Backend Engine</span>
+            </div>
+          </div>
+          <button class="btn btn-primary" id="btnSubmit" style="font-size: 15px;">Execute 11-Step Pipeline ↗</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VIEW 2: LOADING -->
+  <div class="view" id="view-loading">
+    <div class="loader-ring"></div>
+    <div class="term-loader">
+      <p id="l1">> 1. Idea Submitted & AI Reviewing Concept...</p>
+      <p id="l2">> 2. Creating Sprint Plan & Assigning Team Roles...</p>
+      <p id="l3">> 3. Detecting Risks & Generating Recovery Interventions...</p>
+      <p id="l4">> 4. Preparing Pitch PPT, Simulating Judges & Predicting Win Chance...</p>
+    </div>
+  </div>
+
+  <!-- VIEW 3: DASHBOARD -->
+  <div class="view" id="view-dash">
+    
+    <!-- 11-Step Pipeline Status Header -->
+    <div class="pipeline-container" id="pipelineBar">
+      <div class="pipeline-step done"><span>1. Idea Submitted</span></div> <span class="pipeline-arrow">›</span>
+      <div class="pipeline-step done"><span>2. AI Reviews</span></div> <span class="pipeline-arrow">›</span>
+      <div class="pipeline-step done"><span>3. Sprint Plan</span></div> <span class="pipeline-arrow">›</span>
+      <div class="pipeline-step done"><span>4. Roles Assigned</span></div> <span class="pipeline-arrow">›</span>
+      <div class="pipeline-step done"><span>5. Risks Detected</span></div> <span class="pipeline-arrow">›</span>
+      <div class="pipeline-step active"><span>6. Active Interventions</span></div> <span class="pipeline-arrow">›</span>
+      <div class="pipeline-step done"><span>7. Recovery Plan</span></div> <span class="pipeline-arrow">›</span>
+      <div class="pipeline-step done"><span>8. PPT Prepared</span></div> <span class="pipeline-arrow">›</span>
+      <div class="pipeline-step done"><span>9. Judge Simulation</span></div> <span class="pipeline-arrow">›</span>
+      <div class="pipeline-step done"><span>10. Demo Check</span></div> <span class="pipeline-arrow">›</span>
+      <div class="pipeline-step done"><span>11. Win Probability</span></div>
+    </div>
+
+    <div class="dash-header">
+      <div class="dash-title">
+        <p>● Autonomous Coach Pipeline Active</p>
+        <h2 id="projTitle">Project Workspace</h2>
+      </div>
+      <div class="dash-actions">
+        <button class="btn btn-ghost" id="btnReset">🔄 New Idea</button>
+        <button class="btn btn-ghost" id="btnExport">⬇ Export Report & PPT</button>
+        <button class="btn btn-primary" id="btnPreflight">🚀 Pre-Flight Demo Check</button>
+      </div>
+    </div>
+
+    <div class="panel-grid">
+      
+      <!-- Panel 1: Win Probability & Scope Critique -->
+      <div class="glass-panel panel-anim">
+        <div class="panel-header"><div class="panel-title">🏆 Win Probability & Scope Review</div></div>
+        <div class="panel-body" id="probPanelBody">
+          <div class="win-prob-card">
+            <p class="mono" style="font-size:11px; color:var(--text-dim); margin:0 0 4px;">Predicting Winning Probability</p>
+            <h1 style="font-size:38px; color:var(--cyan); margin:0;" id="winProbDisplay">88%</h1>
+            <div class="win-meter-bg"><div class="win-meter-fill" id="winMeterFill" style="width: 88%;"></div></div>
+          </div>
+          <div id="scopeCritiqueBody"></div>
+        </div>
+      </div>
+
+      <!-- Panel 2: Sprint Plan & Team Role Allocation -->
+      <div class="glass-panel panel-anim">
+        <div class="panel-header"><div class="panel-title">🎯 Sprint Plan & Role Allocation</div></div>
+        <div class="panel-body" id="planPanelBody"></div>
+      </div>
+
+      <!-- Panel 3: Risk Detection & Recovery Interventions -->
+      <div class="glass-panel panel-anim">
+        <div class="panel-header"><div class="panel-title">⚠️ Risks & Recovery Plan</div></div>
+        <div class="panel-body" id="radarPanelBody"></div>
+      </div>
+      
+      <!-- Panel 4: System Architecture Review -->
+      <div class="glass-panel panel-anim">
+        <div class="panel-header"><div class="panel-title">🏗️ Architecture Review</div></div>
+        <div class="panel-body" id="archPanelBody"></div>
+      </div>
+
+      <!-- Panel 5: PPT Outline & Pitch Evaluator -->
+      <div class="glass-panel panel-anim">
+        <div class="panel-header"><div class="panel-title">🎤 PPT Slide Outline & Deck Audit</div></div>
+        <div class="panel-body" id="pitchPanelBody" style="justify-content: flex-start; gap: 14px;">
+          <div id="uploadZone" class="upload-zone">
+            <input type="file" id="deckFileInput" accept=".pdf,.txt,.ppt,.pptx" style="display:none;">
+            <div class="upload-icon" style="font-size:22px; margin-bottom:4px;">📄</div>
+            <h4>Audit Pitch Deck Document</h4>
+            <p style="font-size:11px; color:var(--text-dim); margin-top:4px;">Click or drag PDF/PPT text files to scan slides for storytelling gaps and wordiness.</p>
+          </div>
+          <div id="evalResult" class="eval-result"></div>
+          <hr style="border:none; border-top:1px solid rgba(255,255,255,0.05); margin: 2px 0;">
+          <h4 style="font-size:13px; color:var(--purple);">📊 Generated PPT 5-Slide Outline</h4>
+          <div id="pitchScriptBody"></div>
+        </div>
+      </div>
+
+      <!-- Panel 6: Judge Simulation Q&A -->
+      <div class="glass-panel panel-anim">
+        <div class="panel-header"><div class="panel-title">👨‍⚖️ Judge Simulation & Q&A Test</div></div>
+        <div class="panel-body" id="judgePanelBody"></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Demo Pre-Flight Check -->
+<div class="modal-overlay" id="modalPreflight">
+  <div class="modal-box">
+    <div class="modal-head">
+      <h2 style="margin:0; font-size:22px;">Demo Readiness Pre-Flight</h2>
+      <button class="btn btn-ghost" id="btnCloseModal" style="padding:4px 10px;">✕</button>
+    </div>
+    <p style="color:var(--text-dim); font-size:13px; margin-bottom:20px;">Verify these critical steps to ensure your live 3-minute demo doesn't fail under pressure.</p>
+    
+    <div class="check-list" id="checklistBody">
+      <!-- Dynamically filled -->
+    </div>
+
+    <div class="final-score-box">
+      <p class="mono" style="color:var(--purple); font-size:11px; margin: 0 0 6px;">Predicted Viability Score</p>
+      <h1 style="margin:0; font-size:36px;" id="demoScoreDisplay">--/10</h1>
+      <p style="color:var(--text-dim); font-size:12px; margin: 8px 0 0;">Based on scope realism & architecture resilience.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Drawer: Saved Projects History -->
+<div class="coach-chat-window" id="historyDrawer" style="position:fixed; top:70px; right:28px; z-index:95; width:340px; height:460px;">
+  <div class="chat-header">
+    <div style="display:flex; align-items:center; gap:8px;">
+      <span style="font-weight:600; font-size:13px;">📁 Saved Projects History</span>
+    </div>
+    <button class="btn btn-ghost" id="btnCloseHistory" style="padding:2px 8px; font-size:11px;">✕</button>
+  </div>
+  <div class="chat-messages" id="historyList">
+    <p style="font-size:12px; color:var(--text-dim); text-align:center;">Loading saved projects...</p>
+  </div>
+</div>
+
+<!-- Floating AI Coach Chat Drawer -->
+<div class="coach-drawer">
+  <div class="coach-chat-window" id="coachChatWindow">
+    <div class="chat-header">
+      <div style="display:flex; align-items:center; gap:8px;">
+        <div class="logo-mark" style="width:18px; height:18px;"></div>
+        <span style="font-weight:600; font-size:13px;">Krishna AI Coach</span>
+      </div>
+      <button class="btn btn-ghost" id="btnCloseChat" style="padding:2px 8px; font-size:11px;">✕</button>
+    </div>
+    <div class="chat-messages" id="chatMessages">
+      <div class="chat-msg coach">👋 Hi! I'm your KrishnaAI Coach. Ask me anything about scope cuts, tech stack shortcuts, or live pitch tips!</div>
+    </div>
+    <div class="chat-input-area">
+      <input type="text" id="chatInput" placeholder="Ask your coach...">
+      <button class="btn btn-primary" id="btnSendChat" style="padding:6px 12px; font-size:12px;">Send</button>
+    </div>
+  </div>
+  <button class="coach-toggle-btn" id="coachToggleBtn">
+    <span>🤖</span> <span>Ask Krishna Coach</span>
+  </button>
+</div>
+
+<script src="js/three-bg.js"></script>
+<script src="js/api.js"></script>
+<script src="js/pitch.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

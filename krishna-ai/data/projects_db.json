@@ -1,0 +1,210 @@
+[
+  {
+    "id": "proj_2",
+    "idea": "Calc",
+    "stack": "Next.js, Supabase, Node, Vercel",
+    "team": "3 Developers",
+    "time": "24 Hours",
+    "winProbability": 87,
+    "timestamp": "Just now",
+    "data": {
+      "winProbability": 87,
+      "critiqueText": "Building complex auth & custom dashboards for <b>Calc</b> with <b>Next.js, Supabase, Node, Vercel</b> in <b>24 Hours</b> will burn time. <b>Cut bloat features immediately!</b> Focus 100% on the core interactive loop.",
+      "sprintPlan": [
+        {
+          "phase": "Sprint 1 (Hr 0-4)",
+          "title": "Core DB & API Setup",
+          "desc": "Setup backend services using Next.js.",
+          "assignee": "Backend Lead",
+          "slipping": false,
+          "isFat": false,
+          "priority": "HIGH"
+        },
+        {
+          "phase": "Sprint 2 (Hr 4-12)",
+          "title": "Primary User Flow UI",
+          "desc": "Build dynamic UI views for Calc.",
+          "assignee": "Frontend Lead",
+          "slipping": false,
+          "isFat": false,
+          "priority": "HIGH"
+        },
+        {
+          "phase": "Sprint 3 (Hr 12-18)",
+          "title": "Custom Analytics & Reporting",
+          "desc": "Secondary reporting tab.",
+          "assignee": "Unassigned",
+          "slipping": true,
+          "isFat": true,
+          "priority": "LOW"
+        },
+        {
+          "phase": "Sprint 4 (Hr 18-24)",
+          "title": "Demo Script & Backup Video",
+          "desc": "Record 60s backup walkthrough video & seed database.",
+          "assignee": "Pitch Lead",
+          "slipping": false,
+          "isFat": false,
+          "priority": "HIGH"
+        }
+      ],
+      "risks": [
+        {
+          "title": "API Delay & Mocking Blocker",
+          "desc": "Frontend waiting on real backend endpoints.",
+          "action": "> COACH INTERVENTION: Implement mock JSON responses directly in frontend service.",
+          "isSlipping": true
+        },
+        {
+          "title": "Deployment Cold Start Failure",
+          "desc": "Host environment variables unconfigured.",
+          "action": "> COACH INTERVENTION: Deploy early to Vercel/Render at Hour 4 to test CORS.",
+          "isSlipping": false
+        }
+      ],
+      "recoveryPlan": {
+        "headline": "Emergency Scope Cut & Pivot Protocol",
+        "steps": [
+          "Drop custom auth \u2014 use hardcoded guest user context.",
+          "Freeze UI tweaks at Hour 18 \u2014 verify 1-click happy path demo flow.",
+          "Save pre-computed JSON snapshots locally in case live APIs timeout."
+        ]
+      },
+      "architecture": {
+        "score": 8.7,
+        "feedback": "Strong technical stack with Next.js. Ensure DB is pre-seeded with sample data.",
+        "missing": [
+          "Database Seed Script",
+          "Fallback Error State UI"
+        ]
+      },
+      "demoReadiness": {
+        "score": 8.7,
+        "checklist": [
+          "Database pre-seeded with sample records?",
+          "60-second backup walkthrough video saved locally?",
+          "1-click Guest Demo Mode enabled without auth prompt?",
+          "Live API error handling displays friendly fallback state?"
+        ]
+      },
+      "judgeSimulation": {
+        "overallScore": "8.8/10",
+        "feedback": "Judges will praise solving a real pain point if live demo delivers instantaneous visual impact.",
+        "sampleQuestions": [
+          {
+            "q": "How does your system handle offline network failures during live demo?",
+            "a": "Our application uses an embedded local fallback engine that serves pre-cached data instantly."
+          },
+          {
+            "q": "Why is this team capable of taking this product further?",
+            "a": "We established modular separation between core API logic and presentation layers."
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "proj_1",
+    "idea": "Hacakthon coach agent",
+    "stack": "Next.js, Supabase, Node, Vercel",
+    "team": "3 Developers",
+    "time": "24 Hours",
+    "winProbability": 87,
+    "timestamp": "Just now",
+    "data": {
+      "winProbability": 87,
+      "critiqueText": "Building complex auth & custom dashboards for <b>Hacakthon coach agent</b> with <b>Next.js, Supabase, Node, Vercel</b> in <b>24 Hours</b> will burn time. <b>Cut bloat features immediately!</b> Focus 100% on the core interactive loop.",
+      "sprintPlan": [
+        {
+          "phase": "Sprint 1 (Hr 0-4)",
+          "title": "Core DB & API Setup",
+          "desc": "Setup backend services using Next.js.",
+          "assignee": "Backend Lead",
+          "slipping": false,
+          "isFat": false,
+          "priority": "HIGH"
+        },
+        {
+          "phase": "Sprint 2 (Hr 4-12)",
+          "title": "Primary User Flow UI",
+          "desc": "Build dynamic UI views for Hacakthon coach agent.",
+          "assignee": "Frontend Lead",
+          "slipping": false,
+          "isFat": false,
+          "priority": "HIGH"
+        },
+        {
+          "phase": "Sprint 3 (Hr 12-18)",
+          "title": "Custom Analytics & Reporting",
+          "desc": "Secondary reporting tab.",
+          "assignee": "Unassigned",
+          "slipping": true,
+          "isFat": true,
+          "priority": "LOW"
+        },
+        {
+          "phase": "Sprint 4 (Hr 18-24)",
+          "title": "Demo Script & Backup Video",
+          "desc": "Record 60s backup walkthrough video & seed database.",
+          "assignee": "Pitch Lead",
+          "slipping": false,
+          "isFat": false,
+          "priority": "HIGH"
+        }
+      ],
+      "risks": [
+        {
+          "title": "API Delay & Mocking Blocker",
+          "desc": "Frontend waiting on real backend endpoints.",
+          "action": "> COACH INTERVENTION: Implement mock JSON responses directly in frontend service.",
+          "isSlipping": true
+        },
+        {
+          "title": "Deployment Cold Start Failure",
+          "desc": "Host environment variables unconfigured.",
+          "action": "> COACH INTERVENTION: Deploy early to Vercel/Render at Hour 4 to test CORS.",
+          "isSlipping": false
+        }
+      ],
+      "recoveryPlan": {
+        "headline": "Emergency Scope Cut & Pivot Protocol",
+        "steps": [
+          "Drop custom auth \u2014 use hardcoded guest user context.",
+          "Freeze UI tweaks at Hour 18 \u2014 verify 1-click happy path demo flow.",
+          "Save pre-computed JSON snapshots locally in case live APIs timeout."
+        ]
+      },
+      "architecture": {
+        "score": 8.7,
+        "feedback": "Strong technical stack with Next.js. Ensure DB is pre-seeded with sample data.",
+        "missing": [
+          "Database Seed Script",
+          "Fallback Error State UI"
+        ]
+      },
+      "demoReadiness": {
+        "score": 8.7,
+        "checklist": [
+          "Database pre-seeded with sample records?",
+          "60-second backup walkthrough video saved locally?",
+          "1-click Guest Demo Mode enabled without auth prompt?",
+          "Live API error handling displays friendly fallback state?"
+        ]
+      },
+      "judgeSimulation": {
+        "overallScore": "8.8/10",
+        "feedback": "Judges will praise solving a real pain point if live demo delivers instantaneous visual impact.",
+        "sampleQuestions": [
+          {
+            "q": "How does your system handle offline network failures during live demo?",
+            "a": "Our application uses an embedded local fallback engine that serves pre-cached data instantly."
+          },
+          {
+            "q": "Why is this team capable of taking this product further?",
+            "a": "We established modular separation between core API logic and presentation layers."
+          }
+        ]
+      }
+    }
+  }
+]
