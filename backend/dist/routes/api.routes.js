@@ -114,7 +114,6 @@ RETURN ONLY VALID JSON WITH THIS EXACT SCHEMA:
 }
   `;
     const aiResult = await (0, gemini_service_1.callGeminiStructured)(prompt);
-    // Format result to bridge master schema with frontend dashboard compatibility
     const result = aiResult || {
         project_summary: `KrishnaAI Coach analysis for ${projectIdea.substring(0, 40)}`,
         winning_probability: 88,
@@ -138,7 +137,6 @@ RETURN ONLY VALID JSON WITH THIS EXACT SCHEMA:
         elevator_pitch: "KrishnaAI is the autonomous Hackathon Execution OS that turns raw ideas into winning demos.",
         success_probability_reason: "Solid architecture and clear 3-minute live demo execution."
     };
-    // Add backward-compatible fields expected by frontend dashboard
     result.winProbability = result.winning_probability || 88;
     result.critiqueText = result.scope_review?.reason || `Scope critique for ${projectIdea.substring(0, 30)}`;
     result.sprintPlan = (result.sprint_plan || []).map((s) => ({
@@ -169,25 +167,46 @@ RETURN ONLY VALID JSON WITH THIS EXACT SCHEMA:
     projectsStore.unshift(newProject);
     res.json(result);
 });
-// 2. POST /api/chat — Real-time AI Krishna Coach Chat Assistant
+// 2. POST /api/chat — Real-time Human-like AI Krishna Coach Chat Assistant
 router.post('/chat', async (req, res) => {
     const { message, context } = req.body;
     if (!message)
         return res.status(400).json({ error: "message parameter is required." });
     const prompt = `
-    You are KRISHNA COACH, an elite Hackathon Coach and Senior Tech Lead.
-    Project context: "${context || 'General hackathon build'}"
-    Team message: "${message}"
+You are Krishna AI, an empathetic, highly intelligent, human-like AI Hackathon Coach & Senior Technical Mentor.
+You speak naturally, warmly, and constructively like a real senior engineer pair programming with a hackathon team.
 
-    Provide direct, practical, motivating, and actionable advice (under 100 words). Use markdown formatting.
+User Query: "${message}"
+Active Project Context: "${context || 'Hackathon Execution OS'}"
+
+Instructions:
+- Directly answer the user's specific question with deep human technical and product insight.
+- If the user asks "explain about krishna ai" or "what is krishna ai", explain that KrishnaAI is an autonomous Hackathon Execution OS that turns raw ideas into winning build roadmaps, risk mitigations, 5-judge evaluations, and pitch scripts.
+- Keep responses concise (under 120 words), friendly, conversational, and markdown-formatted.
+- Never give generic static slogans.
   `;
     const aiReply = await (0, gemini_service_1.callGeminiText)(prompt);
     if (aiReply) {
-        return res.json({ reply: aiReply, aiSource: "Google Gemini AI" });
+        return res.json({ reply: aiReply, aiSource: "Google Gemini AI (Live)" });
+    }
+    // Smart Contextual Human-like Response Generator if GEMINI_API_KEY is pending in .env
+    const lowerMsg = message.toLowerCase();
+    let dynamicReply = "";
+    if (lowerMsg.includes("explain") || lowerMsg.includes("what is krishna") || lowerMsg.includes("krishna ai")) {
+        dynamicReply = "👋 **KrishnaAI** is your autonomous Hackathon Execution OS! I help hackathon teams turn raw project concepts into winning 24-hour build roadmaps, prune bloated scope, mitigate live demo risks, simulate 5 international judges, and polish your pitch deck. How can I assist your team's build right now?";
+    }
+    else if (lowerMsg.includes("pitch") || lowerMsg.includes("demo") || lowerMsg.includes("judge")) {
+        dynamicReply = "🎤 **Pitch Tip**: Start your 3-minute demo directly inside your working software! Judges spend 80% of their scoring on visual working functionality and immediate problem solving, so skip long introductory slides.";
+    }
+    else if (lowerMsg.includes("scope") || lowerMsg.includes("feature") || lowerMsg.includes("time")) {
+        dynamicReply = "✂️ **Scope Strategy**: If a feature takes more than 4 hours or requires complex custom auth, prune it! Pre-seed sample data into guest mode so your core happy path runs in under 30 seconds.";
+    }
+    else {
+        dynamicReply = `🤖 **Krishna Coach**: Regarding "${message}" — Focus on getting your core happy-path MVP flow working end-to-end first! Once your primary API & frontend view connect smoothly, we can polish secondary features and judge defense answers.`;
     }
     res.json({
-        reply: "🚀 **Coach Advice**: Focus on building one clean happy-path MVP flow that never crashes during live demo!",
-        aiSource: "Krishna AI Engine"
+        reply: dynamicReply,
+        aiSource: "Krishna AI Conversational Engine"
     });
 });
 // 3. POST /api/pitch — 5-Slide Pitch Script Generator
