@@ -3,84 +3,165 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const gemini_service_1 = require("../services/gemini.service");
 const router = (0, express_1.Router)();
-// In-memory project store
 let projectsStore = [];
-// 1. POST /api/analyze — Full AI scope critique, sprint plan, risk analysis, recovery plan, win probability
+// 1. POST /api/analyze — Master KRISHNA COACH 12-Step Hackathon Mentor Engine
 router.post('/analyze', async (req, res) => {
-    const { idea, stack, team, time } = req.body;
-    if (!idea) {
-        return res.status(400).json({ error: "idea parameter is required." });
-    }
+    const { idea, stack, team, time, title, problem, description, theme, member_skills } = req.body;
+    const projectIdea = idea || description || problem || "Hackathon AI App";
+    const projectStack = stack || "Next.js, Express, Supabase, Gemini AI";
+    const projectTeam = team || "3 Developers";
+    const projectTime = time || "24 Hours";
     const prompt = `
-    Act as an elite Hackathon Coach and Head Judge.
-    Analyze this project proposal:
-    Idea: "${idea}", Tech Stack: "${stack || 'Next.js, Node'}", Team Size: "${team || '3 Devs'}", Duration: "${time || '24h'}"
+You are KRISHNA COACH, an elite AI Hackathon Mentor combining the expertise of:
+Senior Hackathon Judge, Startup Mentor, Principal Software Architect, Product Manager, AI Engineer, UI/UX Expert, Investor, Pitch Coach, Demo Coach.
 
-    Calculate dynamic winProbability (0-100) based on project complexity and realism.
+INPUT PROJECT DETAILS:
+Project Title: ${title || projectIdea.substring(0, 30)}
+Problem Statement: ${problem || projectIdea}
+Project Description: ${projectIdea}
+Tech Stack: ${projectStack}
+Team Size & Skills: ${projectTeam} (${member_skills || 'Fullstack Devs'})
+Hackathon Duration: ${projectTime}
 
-    RETURN EXACTLY THIS JSON STRUCTURE:
+Perform the internal 12-Step Evaluation:
+1. Understand Project & Target Users
+2. Identify Innovation & Weaknesses
+3. Score 9 Judge Criteria
+4. Product Manager Scope Cut & MVP
+5. Software Architecture Design
+6. Sprint Plan & Task Breakdown
+7. Team Role Allocation
+8. Risk Analyst & Mitigations
+9. Startup Mentor GTM & Business Model
+10. Pitch Coach Elevator Pitch & Q&A
+11. Demo Coach Flow & Fallback Plan
+12. Predict Winning Probability
+
+RETURN ONLY VALID JSON WITH THIS EXACT SCHEMA:
+{
+  "project_summary": "Comprehensive overview of the project concept and value proposition.",
+  "winning_probability": 86,
+  "confidence_score": 92,
+  "judge_score": {
+    "innovation": 88,
+    "technical_depth": 85,
+    "impact": 84,
+    "market": 82,
+    "execution": 86,
+    "presentation": 88,
+    "uiux": 90,
+    "demo": 87,
+    "overall": 86.2
+  },
+  "strengths": [
+    "High market impact with clear 1-click execution",
+    "Solid production architecture with zero-client API key security"
+  ],
+  "weaknesses": [
+    "Potential API rate limiting under high user concurrency",
+    "High information density on small viewport displays"
+  ],
+  "scope_review": {
+    "status": "Scope Pruned & MVP Ready",
+    "reason": "Secondary reporting tabs removed to guarantee flawless live demo execution.",
+    "features_to_remove": ["Custom multi-tenant auth UI", "Complex export formatters"],
+    "features_to_add": ["Pre-seeded guest mode", "Offline demo video fallback"]
+  },
+  "risk_analysis": [
     {
-      "winProbability": number,
-      "critiqueText": "Direct scope critique highlighting bloat features.",
-      "sprintPlan": [
-        { "phase": "Sprint 1 (Hr 0-4)", "title": "String", "desc": "String", "assignee": "Backend Lead", "slipping": false, "isFat": false, "priority": "HIGH" },
-        { "phase": "Sprint 2 (Hr 4-12)", "title": "String", "desc": "String", "assignee": "Frontend Lead", "slipping": false, "isFat": false, "priority": "HIGH" },
-        { "phase": "Sprint 3 (Hr 12-18)", "title": "String", "desc": "String", "assignee": "Fullstack Dev", "slipping": true, "isFat": true, "priority": "LOW" },
-        { "phase": "Sprint 4 (Hr 18-24)", "title": "String", "desc": "String", "assignee": "Pitch Lead", "slipping": false, "isFat": false, "priority": "HIGH" }
-      ],
-      "risks": [
-        { "title": "String", "desc": "String", "action": "String", "isSlipping": boolean }
-      ],
-      "recoveryPlan": {
-        "headline": "String",
-        "steps": ["String", "String"]
-      },
-      "architecture": {
-        "score": number,
-        "feedback": "String",
-        "missing": ["String"]
-      },
-      "demoReadiness": {
-        "score": number,
-        "checklist": ["String"]
-      },
-      "judgeSimulation": {
-        "overallScore": "String",
-        "feedback": "String",
-        "sampleQuestions": [
-          { "q": "String", "a": "String" }
-        ]
-      }
+      "risk": "Third-party LLM rate limit during live judge demo",
+      "probability": "Medium",
+      "impact": "High",
+      "mitigation": "Pre-cache top 5 happy path demo queries."
     }
+  ],
+  "architecture": {
+    "frontend": "Next.js 14, React, Tailwind CSS, Three.js, GSAP",
+    "backend": "Node.js, Express, TypeScript microservice",
+    "database": "Supabase PostgreSQL with RLS policies",
+    "authentication": "Supabase Auth / Google OAuth",
+    "deployment": "Vercel (Frontend) + Railway/Render (Backend Container)",
+    "ai_pipeline": "Google Gemini 1.5 Flash via server-side SDK"
+  },
+  "sprint_plan": [
+    { "phase": "Sprint 1 (Hr 0-4)", "title": "Core DB Schema & Server Express Setup", "assignee": "Backend Lead", "priority": "HIGH" },
+    { "phase": "Sprint 2 (Hr 4-12)", "title": "Interactive Glassmorphism Frontend Dashboard", "assignee": "Frontend Lead", "priority": "HIGH" },
+    { "phase": "Sprint 3 (Hr 12-18)", "title": "Gemini AI Pipeline Orchestration", "assignee": "AI Engineer", "priority": "HIGH" },
+    { "phase": "Sprint 4 (Hr 18-24)", "title": "Demo Script, Pre-Flight Verification & Video Backup", "assignee": "Pitch Lead", "priority": "HIGH" }
+  ],
+  "role_allocation": [
+    { "role": "Backend & DB Architect", "tasks": "Express routes, Supabase models, Rate limiting" },
+    { "role": "Frontend UI/UX Lead", "tasks": "Glassmorphism design, GSAP animations, Coach Drawer UX" },
+    { "role": "AI Systems Engineer", "tasks": "Gemini prompt tuning, JSON schema enforcement" },
+    { "role": "Pitch & Demo Captain", "tasks": "5-slide deck, 60s backup video recording" }
+  ],
+  "demo_flow": [
+    "1. Open active workspace directly in pre-authenticated guest mode",
+    "2. Enter raw project idea and click Execute 11-Step Pipeline",
+    "3. Show real-time Win Probability meter and 1-click Scope Cut",
+    "4. Open 5-Judge Simulation panel showing 86% score breakdown",
+    "5. Trigger live AI Coach Chat drawer and conclude in under 3 minutes"
+  ],
+  "backup_demo_plan": [
+    "Pre-recorded 60-second HD video walkthrough stored locally",
+    "Pre-cached local JSON response engine for offline evaluation"
+  ],
+  "judge_questions": [
+    { "q": "How does your system prevent API latency during live evaluation?", "a": "We utilize pre-seeded response caching and server-side connection pooling." }
+  ],
+  "elevator_pitch": "KrishnaAI is the world's first autonomous Hackathon Execution OS that transforms raw project concepts into winning 24-hour build roadmaps, risk mitigations, and 5-judge simulated evaluations.",
+  "success_probability_reason": "Clear market gap, production-hardened tech stack, zero client API key exposure, and 100% dynamic AI evaluation."
+}
   `;
     const aiResult = await (0, gemini_service_1.callGeminiStructured)(prompt);
+    // Format result to bridge master schema with frontend dashboard compatibility
     const result = aiResult || {
-        winProbability: Math.floor(Math.random() * 15) + 80,
-        critiqueText: `Building complex systems for <b>${idea.substring(0, 30)}</b> with <b>${stack || 'your stack'}</b> in <b>${time || '24h'}</b> will burn time. Cut secondary features immediately!`,
-        sprintPlan: [
-            { phase: "Sprint 1 (Hr 0-4)", title: "Core DB & API Setup", desc: `Setup DB models for ${idea.substring(0, 25)}.`, assignee: "Backend Lead", slipping: false, isFat: false, priority: "HIGH" },
-            { phase: "Sprint 2 (Hr 4-12)", title: "Frontend Core Flow UI", desc: "Build primary interactive views.", assignee: "Frontend Lead", slipping: false, isFat: false, priority: "HIGH" },
-            { phase: "Sprint 3 (Hr 12-18)", title: "Advanced Reporting & Analytics", desc: "Complex secondary reporting tab.", assignee: "Unassigned", slipping: true, isFat: true, priority: "LOW" },
-            { phase: "Sprint 4 (Hr 18-24)", title: "Demo Script & Backup Video", desc: "Record 60s backup walkthrough video.", assignee: "Pitch Lead", slipping: false, isFat: false, priority: "HIGH" }
+        project_summary: `KrishnaAI Coach analysis for ${projectIdea.substring(0, 40)}`,
+        winning_probability: 88,
+        confidence_score: 92,
+        judge_score: { innovation: 88, technical_depth: 85, impact: 84, market: 82, execution: 86, presentation: 88, uiux: 90, demo: 87, overall: 86.2 },
+        strengths: ["Clean microservice architecture", "Production security hardening"],
+        weaknesses: ["Potential API rate limit under high concurrency"],
+        scope_review: { status: "Scope Pruned", reason: "Cut secondary features to guarantee core working demo.", features_to_remove: ["Custom auth UI"], features_to_add: ["Pre-seeded guest mode"] },
+        risk_analysis: [{ risk: "LLM API latency", probability: "Medium", impact: "High", mitigation: "Pre-cache happy path demo responses." }],
+        architecture: { frontend: "Next.js, React, Tailwind CSS", backend: "Node.js, Express, TypeScript", database: "Supabase PostgreSQL", authentication: "Google OAuth", deployment: "Vercel + Railway", ai_pipeline: "Google Gemini 1.5 SDK" },
+        sprint_plan: [
+            { phase: "Sprint 1 (Hr 0-4)", title: "Core DB Schema & Server Express Setup", assignee: "Backend Lead", priority: "HIGH" },
+            { phase: "Sprint 2 (Hr 4-12)", title: "Interactive Glassmorphism Frontend Dashboard", assignee: "Frontend Lead", priority: "HIGH" },
+            { phase: "Sprint 3 (Hr 12-18)", title: "Gemini AI Pipeline Orchestration", assignee: "AI Engineer", priority: "HIGH" },
+            { phase: "Sprint 4 (Hr 18-24)", title: "Demo Script & Pre-Flight Check", assignee: "Pitch Lead", priority: "HIGH" }
         ],
-        risks: [
-            { title: "API Latency & Auth Blocker", desc: "Frontend waiting on complex user authentication.", action: "> COACH INTERVENTION: Hardcode 1-click Guest Demo mode.", isSlipping: true },
-            { title: "Deployment Cold Start Failure", desc: "Production environment variables missing.", action: "> COACH INTERVENTION: Deploy early to Vercel/Render at hour 4.", isSlipping: false }
-        ],
-        recoveryPlan: {
-            headline: "Emergency Scope Cut Protocol",
-            steps: ["Drop custom auth — use pre-authenticated guest user context.", "Freeze UI updates at Hour 18 — verify 1-click happy path demo flow."]
-        },
-        architecture: { score: 8.5, feedback: "Solid stack. DB connection pooling required to prevent cold start latency.", missing: ["Database Seed Script", "Fallback Error UI"] },
-        demoReadiness: { score: 8.6, checklist: ["Database pre-seeded with sample records?", "60s backup video recorded?", "1-click Guest Demo mode enabled?"] },
-        judgeSimulation: { overallScore: "8.7/10", feedback: "Judges will praise solving a real pain point if live demo delivers instantaneous visual impact.", sampleQuestions: [{ q: "How does your system handle network failures during live demo?", a: "We have an embedded local fallback engine that serves pre-cached data instantly." }] }
+        role_allocation: [{ role: "Tech Lead", tasks: "API & DB setup" }],
+        demo_flow: ["1. Open active workspace", "2. Enter idea and trigger pipeline", "3. Review 5-judge simulation", "4. Demonstrate 1-click scope cut"],
+        backup_demo_plan: ["60s backup video walkthrough"],
+        judge_questions: [{ q: "How do you handle rate limits?", a: "With pre-seeded response caching." }],
+        elevator_pitch: "KrishnaAI is the autonomous Hackathon Execution OS that turns raw ideas into winning demos.",
+        success_probability_reason: "Solid architecture and clear 3-minute live demo execution."
     };
+    // Add backward-compatible fields expected by frontend dashboard
+    result.winProbability = result.winning_probability || 88;
+    result.critiqueText = result.scope_review?.reason || `Scope critique for ${projectIdea.substring(0, 30)}`;
+    result.sprintPlan = (result.sprint_plan || []).map((s) => ({
+        phase: s.phase,
+        title: s.title,
+        desc: `Assigned to ${s.assignee}`,
+        assignee: s.assignee,
+        priority: s.priority || 'HIGH',
+        slipping: false,
+        isFat: false
+    }));
+    result.risks = (result.risk_analysis || []).map((r) => ({
+        title: r.risk,
+        desc: `Probability: ${r.probability} | Impact: ${r.impact}`,
+        action: `> MITIGATION: ${r.mitigation}`,
+        isSlipping: r.impact === 'High'
+    }));
     const newProject = {
         id: `proj_${Date.now()}`,
-        idea,
-        stack: stack || 'Next.js, Supabase',
-        team: team || '3 Developers',
-        duration: time || '24 Hours',
+        idea: projectIdea,
+        stack: projectStack,
+        team: projectTeam,
+        duration: projectTime,
         winProbability: result.winProbability,
         data: result,
         createdAt: new Date().toISOString()
@@ -94,7 +175,7 @@ router.post('/chat', async (req, res) => {
     if (!message)
         return res.status(400).json({ error: "message parameter is required." });
     const prompt = `
-    You are KrishnaAI, an elite Hackathon Coach and Senior Tech Lead.
+    You are KRISHNA COACH, an elite Hackathon Coach and Senior Tech Lead.
     Project context: "${context || 'General hackathon build'}"
     Team message: "${message}"
 
@@ -231,62 +312,15 @@ RETURN ONLY VALID JSON WITH THIS EXACT SCHEMA:
 }
   `;
     const aiJudgeResult = await (0, gemini_service_1.callGeminiStructured)(prompt);
-    if (aiJudgeResult) {
+    if (aiJudgeResult)
         return res.json(aiJudgeResult);
-    }
-    // Resilient fallback structure matching the exact schema
     res.json({
-        technical_judge: {
-            score: 84,
-            strengths: ["Strong Express + TypeScript architecture", "Proper CORS and Helmet security headers"],
-            weaknesses: ["Missing Redis cache layer for high-throughput AI requests"],
-            questions: ["How does your database connection pool scale when 1,000 teams hit the API at once?"],
-            recommendations: ["Add connection pooling and response caching."]
-        },
-        innovation_judge: {
-            score: 88,
-            strengths: ["Novel real-time intervention engine for hackathon teams"],
-            weaknesses: ["Prompts depend heavily on single LLM provider"],
-            questions: ["How does KrishnaAI differentiate from generic Jira/Trello boards?"],
-            recommendations: ["Incorporate multi-model fallback providers."]
-        },
-        business_judge: {
-            score: 82,
-            strengths: ["Direct applicability across thousands of hackathons globally"],
-            weaknesses: ["Unclear monetization strategy post-hackathon"],
-            questions: ["What is your projected API cost per project analysis?"],
-            recommendations: ["Offer freemium tier for participants and enterprise tier for event organizers."]
-        },
-        uiux_judge: {
-            score: 90,
-            strengths: ["Beautiful glassmorphism design system with responsive animations"],
-            weaknesses: ["High information density on lower resolution displays"],
-            questions: ["Is the interface fully accessible via keyboard navigation?"],
-            recommendations: ["Ensure ARIA labels on all modal and drawer toggles."]
-        },
-        presentation_judge: {
-            score: 87,
-            strengths: ["Sharp 5-slide pitch structure focused on live demo visual impact"],
-            weaknesses: ["Slide 3 technical architecture explanation contains dense text"],
-            questions: ["Can you demonstrate the 1-click scope cut feature live in under 30 seconds?"],
-            recommendations: ["Keep pitch slides bulleted and show live demo immediately."]
-        },
-        head_judge: {
-            overall_score: 85.7,
-            winning_probability: 86,
-            project_status: "Top 3 Finalist Contender",
-            mission_status: "PROCEED TO FINAL STAGE PITCH",
-            submission_ready: 95,
-            demo_ready: 90,
-            estimated_remaining_time: "1.5 Hours",
-            one_line_verdict: "An impressive, production-grade AI Coach OS that addresses real hackathon failure points.",
-            coach_summary: "Great technical foundation and UI presentation. Focus on 1-click live demo flow.",
-            next_best_action: "Record a 60-second backup demo video.",
-            top_strengths: ["Real-time AI scope pruning", "Production Node/Express TypeScript architecture"],
-            top_weaknesses: ["Potential API rate limits during live evaluation"],
-            top_risks: ["Network connection drops during live judge evaluation"],
-            top_improvements: ["Enable local offline caching for core happy path demo"]
-        }
+        technical_judge: { score: 84, strengths: ["Express + TypeScript architecture"], weaknesses: ["Missing Redis cache layer"], questions: ["How does your DB pool scale under load?"], recommendations: ["Add response caching."] },
+        innovation_judge: { score: 88, strengths: ["Real-time intervention engine"], weaknesses: ["Single LLM dependency"], questions: ["How does this differ from Trello?"], recommendations: ["Add multi-model fallback."] },
+        business_judge: { score: 82, strengths: ["Global hackathon market"], weaknesses: ["Unclear post-hackathon retention"], questions: ["What is your projected API cost?"], recommendations: ["Offer enterprise tiers."] },
+        uiux_judge: { score: 90, strengths: ["Glassmorphism design system"], weaknesses: ["Dense layout on small screens"], questions: ["Is it keyboard accessible?"], recommendations: ["Add explicit ARIA tags."] },
+        presentation_judge: { score: 87, strengths: ["Sharp 5-slide pitch structure"], weaknesses: ["Slide 3 technical text density"], questions: ["Can you demo in under 3 minutes?"], recommendations: ["Focus on 1-click live demo."] },
+        head_judge: { overall_score: 85.7, winning_probability: 86, project_status: "Top 3 Finalist Contender", mission_status: "PROCEED TO FINAL STAGE PITCH", submission_ready: 95, demo_ready: 90, estimated_remaining_time: "1.5 Hours", one_line_verdict: "An impressive, production-grade AI Coach OS.", coach_summary: "Great technical foundation and UI presentation.", next_best_action: "Record 60s backup video.", top_strengths: ["Scope pruning", "Production Node/Express TypeScript"], top_weaknesses: ["API rate limits"], top_risks: ["Network connection drops"], top_improvements: ["Enable offline fallback"] }
     });
 });
 // 6. POST /api/export — Generate Export PDF/PPT Metadata
