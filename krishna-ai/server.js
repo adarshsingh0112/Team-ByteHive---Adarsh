@@ -50,21 +50,27 @@ async function callGeminiAPI(prompt, apiKeyOverride) {
 
   const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
   try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 3500);
+
     const res = await fetch(endpoint, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         contents: [{ parts: [{ text: prompt }] }],
         generationConfig: { responseMimeType: "application/json" }
-      })
+      }),
+      signal: controller.signal
     });
+    clearTimeout(timeoutId);
+
     if (!res.ok) return null;
     const data = await res.json();
     const rawText = data.candidates?.[0]?.content?.parts?.[0]?.text;
     if (!rawText) return null;
     return JSON.parse(rawText.replace(/```json|```/g, '').trim());
   } catch (err) {
-    console.error("Gemini API call failed, falling back:", err.message);
+    console.error("Gemini API call failed or timed out, falling back:", err.message);
     return null;
   }
 }

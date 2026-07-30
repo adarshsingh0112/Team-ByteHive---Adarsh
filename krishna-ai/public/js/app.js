@@ -64,23 +64,28 @@ async function handleExecutePipeline() {
   const l3 = document.getElementById('l3');
   const l4 = document.getElementById('l4');
 
-  setTimeout(() => { if (l1) l1.style.opacity = 1; }, 200);
-  setTimeout(() => { if (l2) l2.style.opacity = 1; }, 600);
-  setTimeout(() => { if (l3) l3.style.opacity = 1; }, 1000);
-  setTimeout(() => { if (l4) l4.style.opacity = 1; }, 1400);
+  if (l1) l1.style.opacity = 1;
+  if (l2) l2.style.opacity = 1;
+  if (l3) l3.style.opacity = 1;
+  if (l4) l4.style.opacity = 1;
 
-  const data = await apiAnalyzeProject({ idea, stack, team, time, apiKey, mode: activePersonaMode });
-
-  setTimeout(() => {
+  try {
+    const data = await apiAnalyzeProject({ idea, stack, team, time, apiKey, mode: activePersonaMode });
     globalProjectData = data;
+
+    setTimeout(() => {
+      document.getElementById('view-loading').classList.remove('active');
+      document.getElementById('view-dash').classList.add('active');
+
+      const titleEl = document.getElementById('projTitle');
+      if (titleEl) titleEl.innerText = idea.split(' ').slice(0, 4).join(' ') + '...';
+
+      renderDashboardData(data, idea, stack);
+    }, 600);
+  } catch (err) {
     document.getElementById('view-loading').classList.remove('active');
     document.getElementById('view-dash').classList.add('active');
-
-    const titleEl = document.getElementById('projTitle');
-    if (titleEl) titleEl.innerText = idea.split(' ').slice(0, 4).join(' ') + '...';
-
-    renderDashboardData(data, idea, stack);
-  }, 1800);
+  }
 }
 
 function renderDashboardData(data, idea, stack) {

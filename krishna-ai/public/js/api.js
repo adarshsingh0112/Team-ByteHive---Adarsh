@@ -48,14 +48,25 @@ function getProjectsFromLocalStorage() {
   }
 }
 
-async function apiAnalyzeProject(idea, stack, team, time) {
+async function apiAnalyzeProject(ideaArg, stackArg, teamArg, timeArg) {
+  let idea = typeof ideaArg === 'object' && ideaArg ? ideaArg.idea : ideaArg;
+  let stack = typeof ideaArg === 'object' && ideaArg ? ideaArg.stack : stackArg;
+  let team = typeof ideaArg === 'object' && ideaArg ? ideaArg.team : teamArg;
+  let time = typeof ideaArg === 'object' && ideaArg ? ideaArg.time : timeArg;
+
   const winProb = calculateLocalWinProb(idea, stack, team, time);
   try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 3500);
+
     const res = await fetch(`${API_BASE}/api/analyze`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ idea, stack, team, time })
+      body: JSON.stringify({ idea, stack, team, time }),
+      signal: controller.signal
     });
+    clearTimeout(timeoutId);
+
     if (res.ok) {
       const data = await res.json();
       if (!data.winning_probability) data.winning_probability = winProb;
@@ -64,7 +75,7 @@ async function apiAnalyzeProject(idea, stack, team, time) {
       return data;
     }
   } catch (err) {
-    console.warn("API offline, utilizing local response engine:", err.message);
+    console.warn("API offline or timed out, utilizing local response engine:", err.message);
   }
 
   // Dynamic Fallback Data Generator
