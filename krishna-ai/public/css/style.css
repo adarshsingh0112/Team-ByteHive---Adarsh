@@ -1165,3 +1165,123 @@ header {
   font-family: 'Space Grotesk';
 }
 
+/* ============================================================================
+   ✨ MICRO-INTERACTION ANIMATIONS & UX POLISH
+   ============================================================================ */
+
+/* 1. Win Meter Shimmer / Moving Highlight */
+.win-meter-fill {
+  position: relative;
+  overflow: hidden;
+  height: 100%;
+  background: linear-gradient(90deg, var(--blue), var(--green));
+  border-radius: 4px;
+  transition: width 1s var(--ease-ios);
+}
+
+.win-meter-fill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.45) 50%, transparent 100%);
+  animation: meterShimmer 2.2s infinite linear;
+}
+
+@keyframes meterShimmer {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+/* 2. Card Micro-Interaction Hover Lift & Accent Glow */
+.glass-panel,
+.critique-box,
+.critique-item,
+.task-item,
+.risk-card,
+.recovery-card,
+.unit-econ-card,
+.score-card,
+.slide-card,
+.hero-judge-banner {
+  transition: transform 0.25s var(--ease-ios), border-color 0.25s var(--ease-ios), box-shadow 0.25s var(--ease-ios);
+}
+
+.critique-item:hover,
+.task-item:hover,
+.risk-card:hover,
+.recovery-card:hover,
+.unit-econ-card:hover,
+.score-card:hover,
+.slide-card:hover,
+.critique-box:hover {
+  transform: translateY(-2px);
+  border-color: rgba(56, 189, 248, 0.4) !important;
+  box-shadow: 0 8px 24px rgba(56, 189, 248, 0.15) !important;
+}
+
+/* 3. Stepper Checkmarks, Pulsing Active Glow & Gradient Connectors */
+.pipeline-step {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: 14px;
+  font-size: 11px;
+  font-family: 'Space Grotesk', sans-serif;
+  transition: all 0.3s;
+}
+
+.pipeline-step.done {
+  background: rgba(56, 189, 248, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  color: var(--cyan);
+}
+
+.pipeline-step.active {
+  background: rgba(168, 85, 247, 0.25);
+  border: 1px solid var(--purple);
+  color: #ffffff;
+  font-weight: 600;
+  animation: pulseGlow 1.8s infinite ease-in-out;
+}
+
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 0 4px rgba(168, 85, 247, 0.4); border-color: rgba(168, 85, 247, 0.6); }
+  50% { box-shadow: 0 0 16px rgba(56, 189, 248, 0.7); border-color: rgba(56, 189, 248, 0.9); }
+}
+
+.pipeline-arrow {
+  color: var(--purple);
+  font-weight: 700;
+  opacity: 0.8;
+}
+
+/* 4. AI Response Typing Indicator (3 Animated Dots) */
+.typing-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 6px;
+}
+
+.typing-dot {
+  width: 6px;
+  height: 6px;
+  background-color: var(--cyan);
+  border-radius: 50%;
+  display: inline-block;
+  animation: dotPulse 1.2s infinite ease-in-out both;
+}
+
+.typing-dot:nth-child(1) { animation-delay: 0s; }
+.typing-dot:nth-child(2) { animation-delay: 0.2s; }
+.typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes dotPulse {
+  0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
+  40% { transform: scale(1.1); opacity: 1; }
+}
+

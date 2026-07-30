@@ -88,11 +88,38 @@ async function handleExecutePipeline() {
   }
 }
 
+function animateWinProbCountUp(targetVal) {
+  const displayEl = document.getElementById('winProbDisplay');
+  if (!displayEl) return;
+
+  const targetNum = parseInt(targetVal, 10) || 85;
+  let startTimestamp = null;
+  const duration = 900; // 900ms count-up
+
+  function step(timestamp) {
+    if (!startTimestamp) startTimestamp = timestamp;
+    const progress = Math.min(1, (timestamp - startTimestamp) / duration);
+    // Cubic ease-out
+    const easeProgress = 1 - Math.pow(1 - progress, 3);
+    const currentVal = Math.round(easeProgress * targetNum);
+
+    displayEl.innerText = `${currentVal}%`;
+
+    if (progress < 1) {
+      window.requestAnimationFrame(step);
+    } else {
+      displayEl.innerText = `${targetNum}%`;
+    }
+  }
+
+  window.requestAnimationFrame(step);
+}
+
 function renderDashboardData(data, idea, stack) {
   const winProb = data.winning_probability || data.winProbability || 85;
 
-  // Panel 1: Win Probability & Scope Review
-  document.getElementById('winProbDisplay').innerText = `${winProb}%`;
+  // Panel 1: Win Probability & Scope Review (with animated count-up counter)
+  animateWinProbCountUp(winProb);
   const winFill = document.getElementById('winMeterFill');
   if (winFill) winFill.style.width = `${winProb}%`;
 
@@ -312,7 +339,15 @@ async function handleJudgeQaSubmit() {
   if (!q) return;
 
   replyBox.style.display = 'block';
-  replyBox.innerHTML = `<span style="font-size:11px; color:var(--text-dim);">Consulting International Judge Panel...</span>`;
+  replyBox.innerHTML = `
+    <div style="display:flex; align-items:center; gap:8px; font-size:12px; color:var(--cyan); padding:8px;">
+      <span>Consulting International Judge Panel</span>
+      <span class="typing-indicator">
+        <span class="typing-dot"></span>
+        <span class="typing-dot"></span>
+        <span class="typing-dot"></span>
+      </span>
+    </div>`;
 
   try {
     const res = await fetch('/api/judge-qa', {
@@ -865,7 +900,15 @@ async function handleSendMessage() {
 
   const coachDiv = document.createElement('div');
   coachDiv.className = 'chat-msg coach';
-  coachDiv.innerText = 'Consulting Krishna AI Coach...';
+  coachDiv.innerHTML = `
+    <div style="display:flex; align-items:center; gap:6px;">
+      <span>Krishna AI Coach is thinking</span>
+      <span class="typing-indicator">
+        <span class="typing-dot"></span>
+        <span class="typing-dot"></span>
+        <span class="typing-dot"></span>
+      </span>
+    </div>`;
   chatMessages.appendChild(coachDiv);
   chatMessages.scrollTop = chatMessages.scrollHeight;
 
