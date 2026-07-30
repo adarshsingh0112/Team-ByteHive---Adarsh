@@ -100,15 +100,7 @@
 
         <div class="prompt-footer" style="margin-top:16px;">
           <div class="api-key-wrap">
-            <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
-              <span class="api-status live" id="apiStatusBadge">System Operational</span>
-              <button type="button" class="btn btn-ghost" id="btnToggleApiKey" onclick="const d = document.getElementById('customApiKeyContainer'); d.style.display = d.style.display === 'none' ? 'block' : 'none';" style="font-size:11px; padding:4px 10px; border-radius:6px; color:var(--text-dim); border:1px solid rgba(255,255,255,0.08);">
-                🔑 API Key (Optional)
-              </button>
-            </div>
-            <div id="customApiKeyContainer" style="display:none; margin-top:8px;">
-              <input type="password" id="customApiKey" placeholder="Paste Claude / Gemini API Key" style="background:rgba(0,0,0,0.5); border:1px solid rgba(255,255,255,0.12); border-radius:6px; padding:6px 12px; color:#fff; font-size:11px; width:260px;">
-            </div>
+            <span class="api-status live" id="apiStatusBadge">System Operational</span>
           </div>
           <button class="btn btn-primary-glow" id="btnSubmit" style="font-size: 14px; padding:12px 24px;">Execute 12-Step Pipeline ↗</button>
         </div>
