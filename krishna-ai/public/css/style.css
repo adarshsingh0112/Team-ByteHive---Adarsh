@@ -1300,3 +1300,76 @@ header {
   40% { transform: scale(1.1); opacity: 1; }
 }
 
+/* ============================================================================
+   🤖 LIVE AGENT ACTIVITY TICKER & ACTIONABLE WEAKNESS ACCORDIONS
+   ============================================================================ */
+
+.agent-activity-ticker {
+  position: fixed;
+  bottom: 24px;
+  left: 24px;
+  z-index: 85;
+  background: rgba(6, 8, 20, 0.88);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  border-radius: 20px;
+  padding: 6px 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  backdrop-filter: blur(16px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--color-data);
+  max-width: 420px;
+  transition: opacity 0.4s ease;
+}
+
+.ticker-pulse-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--color-data);
+  box-shadow: 0 0 8px var(--color-data);
+  animation: pulse 1.5s infinite ease-in-out;
+  flex-shrink: 0;
+}
+
+.ticker-msg {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.ticker-msg.fade-out {
+  opacity: 0;
+  transform: translateY(-4px);
+}
+
+.weakness-item-wrap {
+  margin-top: 6px;
+}
+
+.weakness-trigger {
+  user-select: none;
+  transition: opacity 0.2s;
+}
+
+.weakness-trigger:hover {
+  opacity: 0.85;
+}
+
+.weakness-fix-box {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: max-height 0.35s ease, opacity 0.35s ease, margin-top 0.35s ease;
+}
+
+.weakness-fix-box.open {
+  max-height: 120px;
+  opacity: 1;
+  margin-top: 6px;
+}
+

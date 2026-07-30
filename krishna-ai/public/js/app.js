@@ -513,6 +513,46 @@ function generateRadarChartSVG(scores) {
   `;
 }
 
+window.toggleWeaknessFix = function(el) {
+  const fixBox = el.nextElementSibling;
+  if (!fixBox) return;
+  const isOpen = fixBox.classList.contains('open');
+  document.querySelectorAll('.weakness-fix-box.open').forEach(box => box.classList.remove('open'));
+  if (!isOpen) fixBox.classList.add('open');
+};
+
+function initAgentActivityTicker() {
+  const tickerMsg = document.getElementById('tickerMsg');
+  if (!tickerMsg) return;
+
+  const messages = [
+    "🤖 Technical Judge auditing connection pooling & DB resilience...",
+    "🤖 Innovation Judge benchmarking against 200+ top hackathon winners...",
+    "🤖 Risk Agent scanning for scope creep & secondary feature bloat...",
+    "🤖 Head Judge synthesizing 5-panel verdict & pitch deck alignment...",
+    "🤖 Business Judge evaluating VC CAC:LTV economics & ARR targets...",
+    "🤖 UI/UX Judge auditing glassmorphism hierarchy & accessibility...",
+    "🤖 Presentation Judge timing 60s elevator pitch hook pacing..."
+  ];
+
+  let idx = 0;
+  setInterval(() => {
+    tickerMsg.classList.add('fade-out');
+    setTimeout(() => {
+      idx = (idx + 1) % messages.length;
+      tickerMsg.innerText = messages[idx];
+      tickerMsg.classList.remove('fade-out');
+    }, 300);
+  }, 3500);
+}
+
+// Initialize Ticker on script load
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initAgentActivityTicker);
+} else {
+  initAgentActivityTicker();
+}
+
 // 5-Judge Simulation Panel Rendering Logic
 async function renderFiveJudgesSection(idea, stack) {
   const panel = document.getElementById('fiveJudgesPanelBody');
@@ -529,11 +569,11 @@ async function renderFiveJudgesSection(idea, stack) {
 
   if (!data) return;
 
-  const t = data.technical_judge || { score: 84 };
-  const i = data.innovation_judge || { score: 88 };
-  const b = data.business_judge || { score: 82 };
-  const u = data.uiux_judge || { score: 90 };
-  const p = data.presentation_judge || { score: 87 };
+  const t = data.technical_judge || { score: 84, weaknesses: ["Needs DB connection pooling"], fix_suggestion: "Implement Supabase connection bouncers and query caching to prevent DB connection limits during live demo peak loads." };
+  const i = data.innovation_judge || { score: 88, weaknesses: ["Generic market differentiation"], fix_suggestion: "Highlight 12-step autonomous execution loop as the primary core IP differentiator." };
+  const b = data.business_judge || { score: 82, weaknesses: ["High initial CAC assumptions"], fix_suggestion: "Adopt product-led viral loops and developer community channels to drive organic user acquisition." };
+  const u = data.uiux_judge || { score: 90, weaknesses: ["Dense metric display on tablet view"], fix_suggestion: "Use collapsible accordion drawers for secondary telemetry metrics on smaller viewports." };
+  const p = data.presentation_judge || { score: 87, weaknesses: ["Pitch hook exceeds 20 seconds"], fix_suggestion: "Lead directly with the 15-second elevator pitch hook before jumping into technical architecture." };
   const h = data.head_judge || { overall_score: 85.7, winning_probability: 86 };
 
   const radarSVG = generateRadarChartSVG({
@@ -570,7 +610,18 @@ async function renderFiveJudgesSection(idea, stack) {
           <span style="font-family:'JetBrains Mono', monospace; font-weight:700; color:var(--color-data); font-size:13px;">${t.score}/100</span>
         </div>
         <p style="font-size:11.5px; margin-bottom:6px; font-family:'Inter', sans-serif;"><strong>Strengths:</strong> ${(t.strengths || []).join(', ')}</p>
-        <p style="font-size:11.5px; color:var(--color-danger); font-family:'Inter', sans-serif;"><strong>Weakness:</strong> ${(t.weaknesses || []).join(', ')}</p>
+        <div class="weakness-item-wrap">
+          <div class="weakness-trigger" onclick="toggleWeaknessFix(this)">
+            <p style="font-size:11.5px; color:var(--color-danger); margin:0; cursor:pointer; font-family:'Inter', sans-serif;">
+              <strong>Weakness:</strong> ${(t.weaknesses || []).join(', ')} <span style="font-size:10px; color:var(--color-data); text-decoration:underline; margin-left:4px;">💡 Click for AI Fix ▾</span>
+            </p>
+          </div>
+          <div class="weakness-fix-box">
+            <div class="coach-action" style="margin-top:6px; padding:8px 10px; background:rgba(168,85,247,0.12); border-left:3px solid var(--color-primary); border-radius:6px; font-size:11px; font-family:'JetBrains Mono', monospace; color:var(--color-primary);">
+              💡 > COACH SUGGESTED FIX: ${t.fix_suggestion || `Implement Supabase connection bouncers and query caching to prevent DB connection limits.`}
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- Judge 2: Innovation (20%) -->
@@ -580,7 +631,18 @@ async function renderFiveJudgesSection(idea, stack) {
           <span style="font-family:'JetBrains Mono', monospace; font-weight:700; color:var(--color-data); font-size:13px;">${i.score}/100</span>
         </div>
         <p style="font-size:11.5px; margin-bottom:6px; font-family:'Inter', sans-serif;"><strong>Strengths:</strong> ${(i.strengths || []).join(', ')}</p>
-        <p style="font-size:11.5px; color:var(--color-warning); font-family:'Inter', sans-serif;"><strong>Weakness:</strong> ${(i.weaknesses || []).join(', ')}</p>
+        <div class="weakness-item-wrap">
+          <div class="weakness-trigger" onclick="toggleWeaknessFix(this)">
+            <p style="font-size:11.5px; color:var(--color-warning); margin:0; cursor:pointer; font-family:'Inter', sans-serif;">
+              <strong>Weakness:</strong> ${(i.weaknesses || []).join(', ')} <span style="font-size:10px; color:var(--color-data); text-decoration:underline; margin-left:4px;">💡 Click for AI Fix ▾</span>
+            </p>
+          </div>
+          <div class="weakness-fix-box">
+            <div class="coach-action" style="margin-top:6px; padding:8px 10px; background:rgba(168,85,247,0.12); border-left:3px solid var(--color-primary); border-radius:6px; font-size:11px; font-family:'JetBrains Mono', monospace; color:var(--color-primary);">
+              💡 > COACH SUGGESTED FIX: ${i.fix_suggestion || `Highlight 12-step autonomous execution loop as core differentiator.`}
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- Judge 3: Business (20%) -->
@@ -590,7 +652,18 @@ async function renderFiveJudgesSection(idea, stack) {
           <span style="font-family:'JetBrains Mono', monospace; font-weight:700; color:var(--color-data); font-size:13px;">${b.score}/100</span>
         </div>
         <p style="font-size:11.5px; margin-bottom:6px; font-family:'Inter', sans-serif;"><strong>Strengths:</strong> ${(b.strengths || []).join(', ')}</p>
-        <p style="font-size:11.5px; color:var(--color-warning); font-family:'Inter', sans-serif;"><strong>Weakness:</strong> ${(b.weaknesses || []).join(', ')}</p>
+        <div class="weakness-item-wrap">
+          <div class="weakness-trigger" onclick="toggleWeaknessFix(this)">
+            <p style="font-size:11.5px; color:var(--color-warning); margin:0; cursor:pointer; font-family:'Inter', sans-serif;">
+              <strong>Weakness:</strong> ${(b.weaknesses || []).join(', ')} <span style="font-size:10px; color:var(--color-data); text-decoration:underline; margin-left:4px;">💡 Click for AI Fix ▾</span>
+            </p>
+          </div>
+          <div class="weakness-fix-box">
+            <div class="coach-action" style="margin-top:6px; padding:8px 10px; background:rgba(168,85,247,0.12); border-left:3px solid var(--color-primary); border-radius:6px; font-size:11px; font-family:'JetBrains Mono', monospace; color:var(--color-primary);">
+              💡 > COACH SUGGESTED FIX: ${b.fix_suggestion || `Adopt product-led viral loops to lower initial CAC.`}
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- Judge 4: UI/UX (10%) -->
@@ -600,7 +673,18 @@ async function renderFiveJudgesSection(idea, stack) {
           <span style="font-family:'JetBrains Mono', monospace; font-weight:700; color:var(--color-data); font-size:13px;">${u.score}/100</span>
         </div>
         <p style="font-size:11.5px; margin-bottom:6px; font-family:'Inter', sans-serif;"><strong>Strengths:</strong> ${(u.strengths || []).join(', ')}</p>
-        <p style="font-size:11.5px; color:var(--color-warning); font-family:'Inter', sans-serif;"><strong>Weakness:</strong> ${(u.weaknesses || []).join(', ')}</p>
+        <div class="weakness-item-wrap">
+          <div class="weakness-trigger" onclick="toggleWeaknessFix(this)">
+            <p style="font-size:11.5px; color:var(--color-warning); margin:0; cursor:pointer; font-family:'Inter', sans-serif;">
+              <strong>Weakness:</strong> ${(u.weaknesses || []).join(', ')} <span style="font-size:10px; color:var(--color-data); text-decoration:underline; margin-left:4px;">💡 Click for AI Fix ▾</span>
+            </p>
+          </div>
+          <div class="weakness-fix-box">
+            <div class="coach-action" style="margin-top:6px; padding:8px 10px; background:rgba(168,85,247,0.12); border-left:3px solid var(--color-primary); border-radius:6px; font-size:11px; font-family:'JetBrains Mono', monospace; color:var(--color-primary);">
+              💡 > COACH SUGGESTED FIX: ${u.fix_suggestion || `Use collapsible drawers for telemetry on mobile.`}
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- Judge 5: Presentation (20%) -->
@@ -610,7 +694,18 @@ async function renderFiveJudgesSection(idea, stack) {
           <span style="font-family:'JetBrains Mono', monospace; font-weight:700; color:var(--color-data); font-size:13px;">${p.score}/100</span>
         </div>
         <p style="font-size:11.5px; margin-bottom:6px; font-family:'Inter', sans-serif;"><strong>Strengths:</strong> ${(p.strengths || []).join(', ')}</p>
-        <p style="font-size:11.5px; color:var(--color-danger); font-family:'Inter', sans-serif;"><strong>Weakness:</strong> ${(p.weaknesses || []).join(', ')}</p>
+        <div class="weakness-item-wrap">
+          <div class="weakness-trigger" onclick="toggleWeaknessFix(this)">
+            <p style="font-size:11.5px; color:var(--color-danger); margin:0; cursor:pointer; font-family:'Inter', sans-serif;">
+              <strong>Weakness:</strong> ${(p.weaknesses || []).join(', ')} <span style="font-size:10px; color:var(--color-data); text-decoration:underline; margin-left:4px;">💡 Click for AI Fix ▾</span>
+            </p>
+          </div>
+          <div class="weakness-fix-box">
+            <div class="coach-action" style="margin-top:6px; padding:8px 10px; background:rgba(168,85,247,0.12); border-left:3px solid var(--color-primary); border-radius:6px; font-size:11px; font-family:'JetBrains Mono', monospace; color:var(--color-primary);">
+              💡 > COACH SUGGESTED FIX: ${p.fix_suggestion || `Lead directly with 15-second pitch hook before architecture details.`}
+            </div>
+          </div>
+        </div>
       </div>
 
     </div>
