@@ -1,7 +1,7 @@
 // App State & Controller
 let globalProjectData = null;
 
-// Application Submission & 11-Step Pipeline Execution
+// Application Submission & 12-Step Pipeline Execution
 document.getElementById('btnSubmit').addEventListener('click', async () => {
   const idea = document.getElementById('mainPrompt').value.trim();
   const stack = document.getElementById('inTech').value.trim();
@@ -29,7 +29,7 @@ document.getElementById('btnSubmit').addEventListener('click', async () => {
     }
   });
 
-  // Call API for deep analysis across all 11 steps
+  // Call API for deep analysis across all 12 steps
   globalProjectData = await apiAnalyzeProject(idea, stack, team, time);
   renderDashboardData(globalProjectData, idea, stack);
 });
@@ -37,22 +37,33 @@ document.getElementById('btnSubmit').addEventListener('click', async () => {
 function renderDashboardData(data, idea, stack) {
   if (!data) return;
 
-  // 1 & 11: Win Probability & Scope Critique Panel
-  const winProb = data.winProbability || 88;
+  // 1 & 12: Win Probability & Scope Review
+  const winProb = data.winning_probability || data.winProbability || 88;
   document.getElementById('winProbDisplay').innerText = `${winProb}%`;
   document.getElementById('winMeterFill').style.width = `${winProb}%`;
 
+  const scope = data.scope_review || {};
   let critiqueHTML = `
     <div class="critique-box">
-      <h4>Scope & Execution Review</h4>
-      <p>${data.critiqueText}</p>
+      <h4>Scope Review — ${scope.status || 'Scope Pruned'}</h4>
+      <p>${data.critiqueText || scope.reason || 'Cut secondary features to guarantee core working demo.'}</p>
       <button class="btn-cut" id="cutFatBtn">✂️ 1-Click Cut Scope</button>
     </div>`;
+
+  if (scope.features_to_remove && scope.features_to_remove.length > 0) {
+    critiqueHTML += `
+      <div class="critique-item red" style="margin-top:10px;">
+        <h5 style="color:var(--red);">✂️ Features to Prune immediately:</h5>
+        <ul style="margin:4px 0 0; padding-left:18px; font-size:12px; color:var(--text-dim);">
+          ${scope.features_to_remove.map(f => `<li>${f}</li>`).join('')}
+        </ul>
+      </div>`;
+  }
   document.getElementById('scopeCritiqueBody').innerHTML = critiqueHTML;
 
-  // 3 & 4: Sprint Plan & Team Role Allocation Panel
+  // 4 & 5: Sprint Plan & Team Role Allocation
   let planHTML = '';
-  const sprintTasks = data.sprintPlan || data.tasks || [];
+  const sprintTasks = data.sprintPlan || data.sprint_plan || [];
   sprintTasks.forEach(t => {
     planHTML += `
       <div class="task-item" ${t.isFat ? 'id="bloatTask"' : ''}>
@@ -61,27 +72,39 @@ function renderDashboardData(data, idea, stack) {
             <div style="display:flex; align-items:center; gap:8px;">
               <h4>${t.title}</h4>
               <span class="assignee-badge">${t.assignee || t.phase}</span>
-              <span class="priority-badge" style="${t.priority === 'HIGH' ? '' : 'background:rgba(255,255,255,0.1); color:#fff; border-color:transparent;'}">${t.priority}</span>
+              <span class="priority-badge" style="${t.priority === 'HIGH' ? '' : 'background:rgba(255,255,255,0.1); color:#fff; border-color:transparent;'}">${t.priority || 'HIGH'}</span>
             </div>
-            <span class="time-badge ${t.slipping ? 'slipping' : ''}" ${t.isFat ? 'style="color:var(--red);"' : ''}>${t.time || t.phase}</span>
+            <span class="time-badge ${t.slipping ? 'slipping' : ''}">${t.phase || t.time || 'Hr 0-4'}</span>
           </div>
-          <p>${t.desc}</p>
+          <p>${t.desc || 'Core milestone task'}</p>
         </div>
       </div>`;
   });
+
+  if (data.role_allocation) {
+    planHTML += `<h5 style="color:var(--purple); margin:12px 0 6px;">👥 Team Member Responsibilities</h5>`;
+    data.role_allocation.forEach(r => {
+      planHTML += `
+        <div class="critique-item" style="margin-bottom:6px;">
+          <h5 style="color:var(--blue); margin:0;">${r.role}</h5>
+          <p style="font-size:11.5px; margin:2px 0 0;">${r.tasks}</p>
+        </div>`;
+    });
+  }
   document.getElementById('planPanelBody').innerHTML = planHTML;
 
-  // 5, 6, 7: Risk Detection, Active Interventions & Recovery Plan
+  // 6 & 8: Risk Detection & Recovery Interventions
   let radarHTML = '';
-  (data.risks || []).forEach(r => {
+  const risks = data.risks || data.risk_analysis || [];
+  risks.forEach(r => {
     radarHTML += `
-      <div class="risk-card ${r.isSlipping ? 'slipping' : ''}">
+      <div class="risk-card ${r.isSlipping || r.impact === 'High' ? 'slipping' : ''}">
         <div class="risk-head">
-          <span class="risk-tag ${r.isSlipping ? 'slipping' : ''}">${r.isSlipping ? 'VELOCITY RISK' : 'TECHNICAL BLOCKER'}</span>
+          <span class="risk-tag ${r.isSlipping || r.impact === 'High' ? 'slipping' : ''}">${r.probability || 'MEDIUM'} RISK</span>
         </div>
-        <h4>${r.title}</h4>
-        <p>${r.desc}</p>
-        <div class="coach-action">${r.action}</div>
+        <h4>${r.title || r.risk}</h4>
+        <p>${r.desc || `Impact: ${r.impact || 'High'}`}</p>
+        <div class="coach-action">${r.action || `> MITIGATION: ${r.mitigation}`}</div>
       </div>`;
   });
 
@@ -90,45 +113,105 @@ function renderDashboardData(data, idea, stack) {
     radarHTML += `
       <div class="recovery-card">
         <h4>🚨 ${rec.headline}</h4>
-        <ul>
-          ${rec.steps.map(s => `<li>${s}</li>`).join('')}
-        </ul>
+        <ul>${rec.steps.map(s => `<li>${s}</li>`).join('')}</ul>
       </div>`;
   }
   document.getElementById('radarPanelBody').innerHTML = radarHTML;
 
-  // Architecture Panel
-  const arch = data.architecture || { score: 8.5, feedback: "Solid stack.", missing: [] };
+  // Architecture & Database Schema
+  const arch = data.architecture || { frontend: "Next.js", backend: "Express", database: "Supabase PostgreSQL" };
   let archHTML = `
     <div class="score-card">
-      <h3>Architecture Score</h3>
-      <span class="score-val">${arch.score}<span style="font-size:14px; color:var(--text-dimmer);">/10</span></span>
+      <h3>Architecture Viability</h3>
+      <span class="score-val">${data.judge_score?.technical_depth || 85}<span style="font-size:14px; color:var(--text-dimmer);">/100</span></span>
     </div>
     <div class="critique-item">
-      <h5 style="color:var(--blue);">System Architecture Feedback</h5>
-      <p>${arch.feedback}</p>
-    </div>
-    <div class="critique-item red">
-      <h5 style="color:var(--red);">Missing Infrastructure</h5>
-      <ul style="margin:4px 0 0; padding-left:18px; font-size:12px; color:var(--text-dim);">
-        ${(arch.missing || []).map(m => `<li>${m}</li>`).join('')}
-      </ul>
+      <h5 style="color:var(--blue);">Production Tech Stack</h5>
+      <p style="font-size:12px; margin:4px 0 0;">Frontend: <strong>${arch.frontend || 'Next.js'}</strong><br>Backend: <strong>${arch.backend || 'Express TypeScript'}</strong><br>Database: <strong>${arch.database || 'Supabase PostgreSQL'}</strong></p>
     </div>`;
+
+  if (data.database_schema) {
+    archHTML += `
+      <div class="critique-item green">
+        <h5 style="color:var(--green);">🗄️ PostgreSQL Database Tables:</h5>
+        <ul style="margin:4px 0 0; padding-left:18px; font-size:11.5px; color:var(--text-dim);">
+          ${data.database_schema.map(db => `<li>${db}</li>`).join('')}
+        </ul>
+      </div>`;
+  }
   document.getElementById('archPanelBody').innerHTML = archHTML;
 
-  // 8: PPT & Pitch Script Generator
+  // Pitch Elevator Pitch & Slides
+  if (data.elevator_pitch) {
+    document.getElementById('elevatorPitchBox').innerHTML = `
+      <div class="critique-box" style="background:rgba(76,139,255,0.1); border-color:rgba(76,139,255,0.3);">
+        <h4 style="color:var(--blue);">⚡ 15-Second Elevator Pitch Hook</h4>
+        <p style="font-size:13px; font-style:italic;">"${data.elevator_pitch}"</p>
+      </div>`;
+  }
   renderPitchSection(idea, stack);
 
   // 9: 5-Judge Simulation Panel rendering
   renderFiveJudgesSection(idea, stack);
 
-  // 10: Demo Readiness Checklist
+  // 10: Demo Flow & Backup Fallback Plan Panel
+  let demoHTML = '';
+  const flow = data.demo_flow || [
+    "1. Open active workspace directly in guest mode",
+    "2. Enter raw project idea and trigger 12-step pipeline",
+    "3. Demonstrate 1-click scope cut and 5-judge simulation panel"
+  ];
+  demoHTML += `
+    <div class="critique-item">
+      <h5 style="color:var(--cyan);">🎬 Live Demo Flow (3 Minutes)</h5>
+      <ol style="margin:6px 0 0; padding-left:18px; font-size:12px; color:var(--text-dim); line-height:1.6;">
+        ${flow.map(step => `<li>${step}</li>`).join('')}
+      </ol>
+    </div>`;
+
+  const backupPlan = data.backup_demo_plan || ["Pre-recorded 60s HD video walkthrough", "Pre-cached local JSON response engine"];
+  demoHTML += `
+    <div class="critique-item red" style="margin-top:10px;">
+      <h5 style="color:var(--red);">🛡️ Offline Fallback Plan (If Wi-Fi Fails)</h5>
+      <ul style="margin:4px 0 0; padding-left:18px; font-size:12px; color:var(--text-dim);">
+        ${backupPlan.map(b => `<li>${b}</li>`).join('')}
+      </ul>
+    </div>`;
+  document.getElementById('demoFlowPanelBody').innerHTML = demoHTML;
+
+  // 11: Business Model & Future Scope Panel
+  let busHTML = '';
+  if (data.revenue_model) {
+    busHTML += `
+      <div class="critique-item green">
+        <h5 style="color:var(--green);">💰 Revenue & Pricing Model</h5>
+        <ul style="margin:4px 0 0; padding-left:18px; font-size:12px; color:var(--text-dim);">
+          ${(data.revenue_model || []).map(r => `<li>${r}</li>`).join('')}
+        </ul>
+      </div>`;
+  }
+  if (data.competitive_advantage) {
+    busHTML += `
+      <div class="critique-item" style="margin-top:10px;">
+        <h5 style="color:var(--purple);">⚡ Competitive Advantage & USP</h5>
+        <ul style="margin:4px 0 0; padding-left:18px; font-size:12px; color:var(--text-dim);">
+          ${(data.competitive_advantage || []).map(c => `<li>${c}</li>`).join('')}
+        </ul>
+      </div>`;
+  }
+  document.getElementById('businessPanelBody').innerHTML = busHTML;
+
+  // Demo Readiness Checklist Modal
   const demoReadiness = data.demoReadiness || {};
   const demoScoreVal = demoReadiness.score || data.demoScore || "8.5";
   document.getElementById('demoScoreDisplay').innerText = String(demoScoreVal).includes('/10') ? demoScoreVal : `${demoScoreVal}/10`;
 
   let chkHTML = '';
-  const chkList = demoReadiness.checklist || data.checklist || [];
+  const chkList = demoReadiness.checklist || data.checklist || [
+    "Database pre-seeded with sample records?",
+    "60s backup video recorded locally?",
+    "1-click guest demo mode verified?"
+  ];
   chkList.forEach(c => {
     chkHTML += `<label class="check-item"><input type="checkbox"> <span>${c}</span></label>`;
   });
@@ -176,7 +259,7 @@ async function renderFiveJudgesSection(idea, stack) {
     project_name: idea.substring(0, 30),
     problem_statement: idea,
     tech_stack: stack,
-    features: "Autonomous 11-step execution pipeline"
+    features: "Autonomous 12-step execution pipeline"
   });
 
   if (!data) return;
@@ -384,36 +467,25 @@ document.getElementById('btnExport').addEventListener('click', () => {
     </head>
     <body>
       <h1>KrishnaAI — Production Hackathon Execution Report</h1>
-      <p><strong>Winning Probability:</strong> ${globalProjectData.winProbability || 88}%</p>
-      <p><strong>Predicted Demo Score:</strong> ${globalProjectData.demoScore || 8.7}/10</p>
+      <p><strong>Winning Probability:</strong> ${globalProjectData.winning_probability || globalProjectData.winProbability || 88}%</p>
+      <p><strong>Elevator Pitch:</strong> "${globalProjectData.elevator_pitch || ''}"</p>
       
       <h2>1. Scope & Execution Strategy</h2>
-      <div class="card"><p>${(globalProjectData.critiqueText || '').replace(/<[^>]*>?/gm, '')}</p></div>
+      <div class="card"><p>${(globalProjectData.critiqueText || globalProjectData.scope_review?.reason || '').replace(/<[^>]*>?/gm, '')}</p></div>
 
       <h2>2. Sprint Plan & Role Allocation</h2>
-      ${(globalProjectData.sprintPlan || []).map(t => `
+      ${(globalProjectData.sprintPlan || globalProjectData.sprint_plan || []).map(t => `
         <div class="card">
-          <h4 style="margin:0 0 8px;">${t.title} <span class="tag">${t.assignee}</span> <span class="tag ${t.priority === 'HIGH' ? 'high-priority' : ''}">${t.priority}</span></h4>
-          <p style="margin:0;">${t.desc} <em>(${t.phase || t.time})</em></p>
+          <h4 style="margin:0 0 8px;">${t.title} <span class="tag">${t.assignee}</span></h4>
+          <p style="margin:0;">${t.desc || ''} <em>(${t.phase || t.time})</em></p>
         </div>
       `).join('')}
 
-      <h2>3. Blocker & Recovery Plan</h2>
-      ${(globalProjectData.risks || []).map(r => `
-        <div class="card risk">
-          <h4 style="margin:0 0 8px; color: #ef4444;">${r.title}</h4>
-          <p style="margin:0;">${r.desc}</p>
-          <p style="margin:8px 0 0; font-family:monospace; color: #6b21a8;">${r.action}</p>
-        </div>
-      `).join('')}
-
-      <h2>4. PPT Slide Outline</h2>
-      ${(globalPitchSlides || []).map(s => `
-        <div class="card">
-          <h4>${s.title}</h4>
-          <p>"${s.script}"</p>
-        </div>
-      `).join('')}
+      <h2>3. 5-Judge Simulation Verdict</h2>
+      <div class="card">
+        <p><strong>Head Judge Verdict:</strong> ${globalProjectData.head_judge?.one_line_verdict || 'A high-impact hackathon tool.'}</p>
+        <p><strong>Overall Score:</strong> ${globalProjectData.head_judge?.overall_score || 85.7}/100</p>
+      </div>
     </body>
     </html>
   `;
@@ -546,7 +618,7 @@ async function handleSendMessage() {
   const context = globalProjectData ? globalProjectData.critiqueText : '';
   const res = await apiCoachChat(text, context);
 
-  let replyText = res.reply.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+  let replyText = res.reply.replace(/\*\*(.*?)\*\*(.*?)/g, '<strong>$1</strong>');
   if (res.aiSource) {
     replyText += `<br><span style="font-size:10px; color:var(--text-dimmer); display:block; margin-top:4px;">🤖 Powered by ${res.aiSource}</span>`;
   }

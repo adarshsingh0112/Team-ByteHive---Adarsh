@@ -36,7 +36,7 @@
   <div class="view active" id="view-init">
     <div class="init-content">
       <h1 class="hero-title">Hackathon Execution OS</h1>
-      <p class="hero-sub">Enter your concept and team details. I will execute the 11-step production pipeline: critiquing scope, generating sprint plans, assigning roles, detecting risks, building recovery plans, producing pitch PPTs, running the 5-judge simulation, and predicting win probability.</p>
+      <p class="hero-sub">Enter your concept and team details. I will execute the 12-step production pipeline: critiquing scope, generating sprint plans, assigning roles, detecting risks, building recovery plans, producing pitch PPTs, running the 5-judge simulation, and predicting win probability.</p>
       
       <div class="prompt-box">
         <textarea class="prompt-input" id="mainPrompt" placeholder="What are you building? (e.g., An AI-powered crowdfunding app with automated milestone verification...)"></textarea>
@@ -71,7 +71,7 @@
               <span class="api-status live" id="apiStatusBadge">🟢 AI Connected (Gemini Engine)</span>
             </div>
           </div>
-          <button class="btn btn-primary" id="btnSubmit" style="font-size: 15px;">Execute 11-Step Pipeline ↗</button>
+          <button class="btn btn-primary" id="btnSubmit" style="font-size: 15px;">Execute 12-Step Pipeline ↗</button>
         </div>
       </div>
     </div>
@@ -91,19 +91,20 @@
   <!-- VIEW 3: DASHBOARD -->
   <div class="view" id="view-dash">
     
-    <!-- 11-Step Pipeline Status Header -->
+    <!-- 12-Step Pipeline Status Header -->
     <div class="pipeline-container" id="pipelineBar">
       <div class="pipeline-step done"><span>1. Idea Submitted</span></div> <span class="pipeline-arrow">›</span>
       <div class="pipeline-step done"><span>2. AI Reviews</span></div> <span class="pipeline-arrow">›</span>
-      <div class="pipeline-step done"><span>3. Sprint Plan</span></div> <span class="pipeline-arrow">›</span>
-      <div class="pipeline-step done"><span>4. Roles Assigned</span></div> <span class="pipeline-arrow">›</span>
-      <div class="pipeline-step done"><span>5. Risks Detected</span></div> <span class="pipeline-arrow">›</span>
-      <div class="pipeline-step active"><span>6. Active Interventions</span></div> <span class="pipeline-arrow">›</span>
-      <div class="pipeline-step done"><span>7. Recovery Plan</span></div> <span class="pipeline-arrow">›</span>
-      <div class="pipeline-step done"><span>8. PPT Prepared</span></div> <span class="pipeline-arrow">›</span>
+      <div class="pipeline-step done"><span>3. Scope Pruning</span></div> <span class="pipeline-arrow">›</span>
+      <div class="pipeline-step done"><span>4. Sprint Plan</span></div> <span class="pipeline-arrow">›</span>
+      <div class="pipeline-step done"><span>5. Roles Assigned</span></div> <span class="pipeline-arrow">›</span>
+      <div class="pipeline-step active"><span>6. Risk Interventions</span></div> <span class="pipeline-arrow">›</span>
+      <div class="pipeline-step done"><span>7. Architecture & DB</span></div> <span class="pipeline-arrow">›</span>
+      <div class="pipeline-step done"><span>8. PPT & Pitch</span></div> <span class="pipeline-arrow">›</span>
       <div class="pipeline-step done"><span>9. 5-Judge Simulation</span></div> <span class="pipeline-arrow">›</span>
-      <div class="pipeline-step done"><span>10. Demo Check</span></div> <span class="pipeline-arrow">›</span>
-      <div class="pipeline-step done"><span>11. Win Probability</span></div>
+      <div class="pipeline-step done"><span>10. Demo Flow</span></div> <span class="pipeline-arrow">›</span>
+      <div class="pipeline-step done"><span>11. Business Model</span></div> <span class="pipeline-arrow">›</span>
+      <div class="pipeline-step done"><span>12. Win Probability</span></div>
     </div>
 
     <div class="dash-header">
@@ -145,16 +146,17 @@
         <div class="panel-body" id="radarPanelBody"></div>
       </div>
       
-      <!-- Panel 4: System Architecture Review -->
+      <!-- Panel 4: System Architecture & Database Schema -->
       <div class="glass-panel panel-anim">
-        <div class="panel-header"><div class="panel-title">🏗️ Architecture Review</div></div>
+        <div class="panel-header"><div class="panel-title">🏗️ Architecture & PostgreSQL DB Schema</div></div>
         <div class="panel-body" id="archPanelBody"></div>
       </div>
 
-      <!-- Panel 5: PPT Outline & Pitch Evaluator -->
+      <!-- Panel 5: PPT Outline, Elevator Pitch & Deck Audit -->
       <div class="glass-panel panel-anim">
-        <div class="panel-header"><div class="panel-title">🎤 PPT Slide Outline & Deck Audit</div></div>
+        <div class="panel-header"><div class="panel-title">🎤 PPT Slide Script & Pitch Elevator</div></div>
         <div class="panel-body" id="pitchPanelBody" style="justify-content: flex-start; gap: 14px;">
+          <div id="elevatorPitchBox"></div>
           <div id="uploadZone" class="upload-zone">
             <input type="file" id="deckFileInput" accept=".pdf,.txt,.ppt,.pptx" style="display:none;">
             <div class="upload-icon" style="font-size:22px; margin-bottom:4px;">📄</div>
@@ -168,10 +170,22 @@
         </div>
       </div>
 
-      <!-- Panel 6: 5-Judge Simulation Panel -->
+      <!-- Panel 6: International 5-Judge Simulation Panel -->
       <div class="glass-panel panel-anim" style="grid-column: 1 / -1;">
         <div class="panel-header"><div class="panel-title">👨‍⚖️ International 5-Judge Simulation Panel</div></div>
         <div class="panel-body" id="fiveJudgesPanelBody"></div>
+      </div>
+
+      <!-- Panel 7: Demo Flow & Backup Fallback Plan -->
+      <div class="glass-panel panel-anim">
+        <div class="panel-header"><div class="panel-title">🎬 Demo Flow & Offline Fallback Plan</div></div>
+        <div class="panel-body" id="demoFlowPanelBody"></div>
+      </div>
+
+      <!-- Panel 8: GTM Business Model & Future Horizon -->
+      <div class="glass-panel panel-anim">
+        <div class="panel-header"><div class="panel-title">💼 Business Model & Future Horizon</div></div>
+        <div class="panel-body" id="businessPanelBody"></div>
       </div>
 
     </div>
