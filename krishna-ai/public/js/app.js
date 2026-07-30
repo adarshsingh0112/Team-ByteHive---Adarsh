@@ -741,8 +741,8 @@ async function renderFiveJudgesSection(idea, stack) {
       ${radarSVG}
 
       <!-- Judge 1: Technical (30%) -->
-      <div class="critique-item" style="border-radius:16px; padding:20px;">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+      <div class="critique-item" style="border-radius:14px; padding:16px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
           <h5 style="color:var(--color-data); margin:0; font-family:'Space Grotesk', sans-serif; font-size:13px;">Technical Evaluation (30%)</h5>
           <span style="font-family:'JetBrains Mono', monospace; font-weight:700; color:var(--color-data); font-size:13px;">${t.score}/100</span>
         </div>
@@ -750,20 +750,20 @@ async function renderFiveJudgesSection(idea, stack) {
         <div class="weakness-item-wrap">
           <div class="weakness-trigger" onclick="toggleWeaknessFix(this)">
             <p style="font-size:11.5px; color:var(--color-danger); margin:0; cursor:pointer; font-family:'Inter', sans-serif;">
-              <strong>Weakness:</strong> ${(t.weaknesses || []).join(', ')} <span style="font-size:10px; color:var(--color-data); text-decoration:underline; margin-left:4px;">Click for Suggested Fix ▾</span>
+              <strong>Weakness:</strong> ${(t.weaknesses || []).join(', ')} <span style="font-size:10px; color:var(--color-data); text-decoration:underline; margin-left:4px;">Suggested Mitigation ▾</span>
             </p>
           </div>
           <div class="weakness-fix-box">
-            <div class="coach-action" style="margin-top:6px; padding:8px 10px; background:rgba(168,85,247,0.12); border-left:3px solid var(--color-primary); border-radius:6px; font-size:11px; font-family:'JetBrains Mono', monospace; color:var(--color-primary);">
-              💡 > SUGGESTED FIX: ${t.fix_suggestion || `Implement Supabase connection bouncers and query caching to prevent DB connection limits.`}
+            <div class="coach-action" style="margin-top:6px; padding:8px 10px; background:rgba(79,140,255,0.08); border-left:3px solid var(--color-data); border-radius:6px; font-size:11px; font-family:'Inter', sans-serif; color:var(--text-main);">
+              <strong>Mitigation Strategy:</strong> ${t.fix_suggestion || `Implement Supabase connection bouncers and query caching to prevent DB connection limits.`}
             </div>
           </div>
         </div>
       </div>
 
       <!-- Judge 2: Innovation (20%) -->
-      <div class="critique-item" style="border-radius:16px; padding:20px;">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+      <div class="critique-item" style="border-radius:14px; padding:16px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
           <h5 style="color:var(--color-primary); margin:0; font-family:'Space Grotesk', sans-serif; font-size:13px;">Innovation Index (20%)</h5>
           <span style="font-family:'JetBrains Mono', monospace; font-weight:700; color:var(--color-data); font-size:13px;">${i.score}/100</span>
         </div>
@@ -771,75 +771,75 @@ async function renderFiveJudgesSection(idea, stack) {
         <div class="weakness-item-wrap">
           <div class="weakness-trigger" onclick="toggleWeaknessFix(this)">
             <p style="font-size:11.5px; color:var(--color-warning); margin:0; cursor:pointer; font-family:'Inter', sans-serif;">
-              <strong>Weakness:</strong> ${(i.weaknesses || []).join(', ')} <span style="font-size:10px; color:var(--color-data); text-decoration:underline; margin-left:4px;">Click for Suggested Fix ▾</span>
+              <strong>Weakness:</strong> ${(i.weaknesses || []).join(', ')} <span style="font-size:10px; color:var(--color-data); text-decoration:underline; margin-left:4px;">Suggested Mitigation ▾</span>
             </p>
           </div>
           <div class="weakness-fix-box">
-            <div class="coach-action" style="margin-top:6px; padding:8px 10px; background:rgba(168,85,247,0.12); border-left:3px solid var(--color-primary); border-radius:6px; font-size:11px; font-family:'JetBrains Mono', monospace; color:var(--color-primary);">
-              💡 > SUGGESTED FIX: ${i.fix_suggestion || `Highlight 12-step autonomous execution loop as core differentiator.`}
+            <div class="coach-action" style="margin-top:6px; padding:8px 10px; background:rgba(79,140,255,0.08); border-left:3px solid var(--color-data); border-radius:6px; font-size:11px; font-family:'Inter', sans-serif; color:var(--text-main);">
+              <strong>Mitigation Strategy:</strong> ${i.fix_suggestion || `Highlight 12-step autonomous execution loop as core differentiator.`}
             </div>
           </div>
         </div>
       </div>
 
       <!-- Judge 3: Business (20%) -->
-      <div class="critique-item" style="border-radius:16px; padding:20px;">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-          <h5 style="color:var(--color-success); margin:0; font-family:'Space Grotesk', sans-serif; font-size:13px;"><span class="panel-title-icon">💼</span> Business Judge (20%)</h5>
+      <div class="critique-item" style="border-radius:14px; padding:16px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+          <h5 style="color:var(--color-success); margin:0; font-family:'Space Grotesk', sans-serif; font-size:13px;">Business Strategy (20%)</h5>
           <span style="font-family:'JetBrains Mono', monospace; font-weight:700; color:var(--color-data); font-size:13px;">${b.score}/100</span>
         </div>
         <p style="font-size:11.5px; margin-bottom:6px; font-family:'Inter', sans-serif;"><strong>Strengths:</strong> ${(b.strengths || []).join(', ')}</p>
         <div class="weakness-item-wrap">
           <div class="weakness-trigger" onclick="toggleWeaknessFix(this)">
             <p style="font-size:11.5px; color:var(--color-warning); margin:0; cursor:pointer; font-family:'Inter', sans-serif;">
-              <strong>Weakness:</strong> ${(b.weaknesses || []).join(', ')} <span style="font-size:10px; color:var(--color-data); text-decoration:underline; margin-left:4px;">💡 Click for AI Fix ▾</span>
+              <strong>Weakness:</strong> ${(b.weaknesses || []).join(', ')} <span style="font-size:10px; color:var(--color-data); text-decoration:underline; margin-left:4px;">Suggested Mitigation ▾</span>
             </p>
           </div>
           <div class="weakness-fix-box">
-            <div class="coach-action" style="margin-top:6px; padding:8px 10px; background:rgba(168,85,247,0.12); border-left:3px solid var(--color-primary); border-radius:6px; font-size:11px; font-family:'JetBrains Mono', monospace; color:var(--color-primary);">
-              💡 > COACH SUGGESTED FIX: ${b.fix_suggestion || `Adopt product-led viral loops to lower initial CAC.`}
+            <div class="coach-action" style="margin-top:6px; padding:8px 10px; background:rgba(79,140,255,0.08); border-left:3px solid var(--color-data); border-radius:6px; font-size:11px; font-family:'Inter', sans-serif; color:var(--text-main);">
+              <strong>Mitigation Strategy:</strong> ${b.fix_suggestion || `Adopt product-led viral loops to lower initial CAC.`}
             </div>
           </div>
         </div>
       </div>
 
       <!-- Judge 4: UI/UX (10%) -->
-      <div class="critique-item" style="border-radius:16px; padding:20px;">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-          <h5 style="color:var(--color-data); margin:0; font-family:'Space Grotesk', sans-serif; font-size:13px;"><span class="panel-title-icon">🎨</span> UI/UX Judge (10%)</h5>
+      <div class="critique-item" style="border-radius:14px; padding:16px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+          <h5 style="color:var(--color-data); margin:0; font-family:'Space Grotesk', sans-serif; font-size:13px;">UI/UX Architecture (10%)</h5>
           <span style="font-family:'JetBrains Mono', monospace; font-weight:700; color:var(--color-data); font-size:13px;">${u.score}/100</span>
         </div>
         <p style="font-size:11.5px; margin-bottom:6px; font-family:'Inter', sans-serif;"><strong>Strengths:</strong> ${(u.strengths || []).join(', ')}</p>
         <div class="weakness-item-wrap">
           <div class="weakness-trigger" onclick="toggleWeaknessFix(this)">
             <p style="font-size:11.5px; color:var(--color-warning); margin:0; cursor:pointer; font-family:'Inter', sans-serif;">
-              <strong>Weakness:</strong> ${(u.weaknesses || []).join(', ')} <span style="font-size:10px; color:var(--color-data); text-decoration:underline; margin-left:4px;">💡 Click for AI Fix ▾</span>
+              <strong>Weakness:</strong> ${(u.weaknesses || []).join(', ')} <span style="font-size:10px; color:var(--color-data); text-decoration:underline; margin-left:4px;">Suggested Mitigation ▾</span>
             </p>
           </div>
           <div class="weakness-fix-box">
-            <div class="coach-action" style="margin-top:6px; padding:8px 10px; background:rgba(168,85,247,0.12); border-left:3px solid var(--color-primary); border-radius:6px; font-size:11px; font-family:'JetBrains Mono', monospace; color:var(--color-primary);">
-              💡 > COACH SUGGESTED FIX: ${u.fix_suggestion || `Use collapsible drawers for telemetry on mobile.`}
+            <div class="coach-action" style="margin-top:6px; padding:8px 10px; background:rgba(79,140,255,0.08); border-left:3px solid var(--color-data); border-radius:6px; font-size:11px; font-family:'Inter', sans-serif; color:var(--text-main);">
+              <strong>Mitigation Strategy:</strong> ${u.fix_suggestion || `Use collapsible drawers for telemetry on mobile.`}
             </div>
           </div>
         </div>
       </div>
 
       <!-- Judge 5: Presentation (20%) -->
-      <div class="critique-item" style="border-radius:16px; padding:20px;">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-          <h5 style="color:var(--color-warning); margin:0; font-family:'Space Grotesk', sans-serif; font-size:13px;"><span class="panel-title-icon">🎤</span> Presentation Judge (20%)</h5>
+      <div class="critique-item" style="border-radius:14px; padding:16px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+          <h5 style="color:var(--color-warning); margin:0; font-family:'Space Grotesk', sans-serif; font-size:13px;">Presentation Strategy (20%)</h5>
           <span style="font-family:'JetBrains Mono', monospace; font-weight:700; color:var(--color-data); font-size:13px;">${p.score}/100</span>
         </div>
         <p style="font-size:11.5px; margin-bottom:6px; font-family:'Inter', sans-serif;"><strong>Strengths:</strong> ${(p.strengths || []).join(', ')}</p>
         <div class="weakness-item-wrap">
           <div class="weakness-trigger" onclick="toggleWeaknessFix(this)">
             <p style="font-size:11.5px; color:var(--color-danger); margin:0; cursor:pointer; font-family:'Inter', sans-serif;">
-              <strong>Weakness:</strong> ${(p.weaknesses || []).join(', ')} <span style="font-size:10px; color:var(--color-data); text-decoration:underline; margin-left:4px;">💡 Click for AI Fix ▾</span>
+              <strong>Weakness:</strong> ${(p.weaknesses || []).join(', ')} <span style="font-size:10px; color:var(--color-data); text-decoration:underline; margin-left:4px;">Suggested Mitigation ▾</span>
             </p>
           </div>
           <div class="weakness-fix-box">
-            <div class="coach-action" style="margin-top:6px; padding:8px 10px; background:rgba(168,85,247,0.12); border-left:3px solid var(--color-primary); border-radius:6px; font-size:11px; font-family:'JetBrains Mono', monospace; color:var(--color-primary);">
-              💡 > COACH SUGGESTED FIX: ${p.fix_suggestion || `Lead directly with 15-second pitch hook before architecture details.`}
+            <div class="coach-action" style="margin-top:6px; padding:8px 10px; background:rgba(79,140,255,0.08); border-left:3px solid var(--color-data); border-radius:6px; font-size:11px; font-family:'Inter', sans-serif; color:var(--text-main);">
+              <strong>Mitigation Strategy:</strong> ${p.fix_suggestion || `Lead directly with 15-second pitch hook before architecture details.`}
             </div>
           </div>
         </div>
