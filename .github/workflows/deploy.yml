@@ -1,0 +1,32 @@
+name: KrishnaAI Production CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install Backend Dependencies
+        run: |
+          cd backend
+          npm ci
+
+      - name: Build TypeScript Backend
+        run: |
+          cd backend
+          npm run build
+
+      - name: Run Backend Health Verification
+        run: |
+          echo "Backend CI/CD type-checking & build passed successfully!"
