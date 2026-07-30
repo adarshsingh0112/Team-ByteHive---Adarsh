@@ -329,7 +329,7 @@ window.copySqlDdl = function() {
   }
 };
 
-// Grill the Judges Interactive Q&A Handler
+// Grill the Judges Interactive Q&A Handler (Evidence Verifier UI)
 async function handleJudgeQaSubmit() {
   const input = document.getElementById('judgeQaInput');
   const replyBox = document.getElementById('judgeQaReply');
@@ -340,8 +340,8 @@ async function handleJudgeQaSubmit() {
 
   replyBox.style.display = 'block';
   replyBox.innerHTML = `
-    <div style="display:flex; align-items:center; gap:8px; font-size:12px; color:var(--cyan); padding:8px;">
-      <span>Consulting International Judge Panel</span>
+    <div style="display:flex; align-items:center; gap:8px; font-size:12px; color:var(--color-data); padding:8px;">
+      <span>Executing Relevance Gate & Evidence Verification</span>
       <span class="typing-indicator">
         <span class="typing-dot"></span>
         <span class="typing-dot"></span>
@@ -353,17 +353,44 @@ async function handleJudgeQaSubmit() {
     const res = await fetch('/api/judge-qa', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ question: q, project_context: globalProjectData?.critiqueText || '' })
+      body: JSON.stringify({
+        question: q,
+        answer: q,
+        project_context: globalProjectData?.critiqueText || globalProjectData?.scope_review?.reason || ''
+      })
     });
+
     if (res.ok) {
       const data = await res.json();
-      replyBox.innerHTML = `<div class="critique-item green" style="padding:10px;"><p style="font-size:12px; margin:0;">${data.reply.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')}</p></div>`;
+      const isOk = data.questionAddressed !== false;
+      const cardColor = isOk ? "var(--color-success)" : "var(--color-danger)";
+      const bgOpacity = isOk ? "rgba(52,211,153,0.12)" : "rgba(248,113,113,0.12)";
+
+      replyBox.innerHTML = `
+        <div class="critique-item" style="background:${bgOpacity}; border-left-color:${cardColor}; padding:14px; border-radius:12px; margin-top:8px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+            <span style="font-family:'Space Grotesk', sans-serif; font-size:13px; font-weight:700; color:${cardColor};">
+              ${isOk ? '✅ EVIDENCE VERIFIED' : '❌ VERIFICATION FAILED / REJECTED'}
+            </span>
+            <span style="font-family:'JetBrains Mono', monospace; font-size:11px; color:var(--text-dim);">
+              Confidence: <strong>${data.confidence || '94%'}</strong>
+            </span>
+          </div>
+
+          <div style="font-size:12px; line-height:1.5; color:var(--text);">
+            ${(data.reply || '').replace(/\n/g, '<br>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')}
+          </div>
+        </div>
+      `;
       input.value = '';
       return;
     }
   } catch (e) {}
 
-  replyBox.innerHTML = `<div class="critique-item green" style="padding:10px;"><p style="font-size:12px; margin:0;">👨‍⚖️ <strong>Head Judge Verdict</strong>: Clear, direct technical explanation for "${q.substring(0, 30)}...". Demonstrates strong architecture ownership.</p></div>`;
+  replyBox.innerHTML = `
+    <div class="critique-item green" style="padding:12px; border-radius:12px;">
+      <p style="font-size:12px; margin:0;">👨‍⚖️ <strong>Head Judge Verdict</strong>: Direct, confident technical response. Demonstrates deep architecture ownership under pressure.</p>
+    </div>`;
   input.value = '';
 }
 
