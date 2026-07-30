@@ -29,14 +29,14 @@
     <div class="nav-actions">
       <!-- 3-Tier Persona Mode Switcher -->
       <div class="mode-pill-wrap" id="modeSelector">
-        <button class="mode-btn active" data-mode="hackathon" title="Speed-focused 12-step MVP pipeline">⚡ Hackathon</button>
-        <button class="mode-btn" data-mode="beginner" title="Guided explanations & step-by-step tooltips">🐣 Beginner</button>
-        <button class="mode-btn" data-mode="enterprise" title="VC metrics, unit economics & SOC2 compliance">💼 VC / Enterprise</button>
+        <button class="mode-btn active" data-mode="hackathon" title="Speed-focused 12-step MVP pipeline">Hackathon</button>
+        <button class="mode-btn" data-mode="beginner" title="Guided explanations & step-by-step tooltips">Beginner</button>
+        <button class="mode-btn" data-mode="enterprise" title="VC metrics, unit economics & SOC2 compliance">Enterprise</button>
       </div>
 
-      <button class="btn btn-ghost" id="btnToggleHistory" style="font-size:12px; padding:6px 12px;">📁 Saved Projects</button>
-      <div class="status-pill"><span class="status-dot"></span> 🟢 AI Connected</div>
-      <button class="btn btn-ghost" id="btnToggleCoach" style="font-size:12px; padding:6px 12px;">💬 Live Coach</button>
+      <button class="btn btn-ghost" id="btnToggleHistory" style="font-size:12px; padding:6px 12px;">Saved Projects</button>
+      <div class="status-pill"><span class="status-dot"></span> System Connected</div>
+      <button class="btn btn-ghost" id="btnToggleCoach" style="font-size:12px; padding:6px 12px;">Live Assistant</button>
     </div>
   </header>
 
@@ -340,26 +340,26 @@
   </div>
 </div>
 
-<!-- Floating AI Coach Chat Drawer -->
+<!-- Floating Project Assistant Chat Drawer -->
 <div class="coach-drawer">
   <div class="coach-chat-window" id="coachChatWindow">
     <div class="chat-header">
       <div style="display:flex; align-items:center; gap:8px;">
         <div class="logo-mark" style="width:18px; height:18px;"></div>
-        <span style="font-weight:600; font-size:13px;">Krishna AI Coach</span>
+        <span style="font-weight:600; font-size:13px;">Project Execution Assistant</span>
       </div>
       <button class="btn btn-ghost" id="btnCloseChat" style="padding:2px 8px; font-size:11px;">✕</button>
     </div>
     <div class="chat-messages" id="chatMessages">
-      <div class="chat-msg coach">👋 Hi! I'm your KrishnaAI Coach. Ask me anything about scope cuts, tech stack shortcuts, or live pitch tips!</div>
+      <div class="chat-msg coach">Hi! I'm your Project Execution Assistant. Ask me anything about scope optimization, technical architecture, or live pitch preparation!</div>
     </div>
     <div class="chat-input-area">
-      <input type="text" id="chatInput" placeholder="Ask your coach...">
+      <input type="text" id="chatInput" placeholder="Ask a question...">
       <button class="btn btn-primary" id="btnSendChat" style="padding:6px 12px; font-size:12px;">Send</button>
     </div>
   </div>
   <button class="coach-toggle-btn" id="coachToggleBtn">
-    <span>🤖</span> <span>Ask Krishna Coach</span>
+    <span>Ask Assistant</span>
   </button>
 </div>
 
