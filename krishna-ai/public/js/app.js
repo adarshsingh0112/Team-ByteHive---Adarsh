@@ -388,6 +388,96 @@ function setupVoicePitchTrainer() {
   });
 }
 
+function generateRadarChartSVG(scores) {
+  const axes = [
+    { name: 'Technical', score: scores.technical || 84, icon: '💻' },
+    { name: 'Innovation', score: scores.innovation || 88, icon: '💡' },
+    { name: 'Business', score: scores.business || 82, icon: '💼' },
+    { name: 'UI/UX', score: scores.uiux || 90, icon: '🎨' },
+    { name: 'Presentation', score: scores.presentation || 87, icon: '🎤' }
+  ];
+
+  const cx = 180, cy = 135, r = 85;
+  const numAxes = 5;
+
+  let gridHTML = '';
+  [0.2, 0.4, 0.6, 0.8, 1.0].forEach(level => {
+    let pts = [];
+    for (let k = 0; k < numAxes; k++) {
+      const angle = (Math.PI * 2 * k / numAxes) - (Math.PI / 2);
+      const x = cx + r * level * Math.cos(angle);
+      const y = cy + r * level * Math.sin(angle);
+      pts.push(`${x.toFixed(1)},${y.toFixed(1)}`);
+    }
+    gridHTML += `<polygon points="${pts.join(' ')}" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="1" stroke-dasharray="${level === 1 ? 'none' : '2,3'}" />`;
+  });
+
+  let axisHTML = '';
+  let labelHTML = '';
+  let scorePoints = [];
+
+  axes.forEach((item, k) => {
+    const angle = (Math.PI * 2 * k / numAxes) - (Math.PI / 2);
+    const xOuter = cx + r * Math.cos(angle);
+    const yOuter = cy + r * Math.sin(angle);
+
+    axisHTML += `<line x1="${cx}" y1="${cy}" x2="${xOuter.toFixed(1)}" y2="${yOuter.toFixed(1)}" stroke="rgba(255,255,255,0.12)" stroke-width="1" />`;
+
+    const ratio = Math.min(100, Math.max(0, item.score)) / 100;
+    const xScore = cx + r * ratio * Math.cos(angle);
+    const yScore = cy + r * ratio * Math.sin(angle);
+    scorePoints.push(`${xScore.toFixed(1)},${yScore.toFixed(1)}`);
+
+    const xLabel = cx + (r + 28) * Math.cos(angle);
+    const yLabel = cy + (r + 14) * Math.sin(angle);
+    const anchor = Math.abs(Math.cos(angle)) < 0.1 ? 'middle' : (Math.cos(angle) > 0 ? 'start' : 'end');
+
+    labelHTML += `
+      <text x="${xLabel.toFixed(1)}" y="${yLabel.toFixed(1)}" text-anchor="${anchor}" fill="#cbd5e1" font-size="11" font-family="'Space Grotesk', sans-serif" font-weight="600">
+        ${item.icon} ${item.name} <tspan fill="#38bdf8" font-family="'JetBrains Mono', monospace" font-weight="700">(${item.score}/100)</tspan>
+      </text>
+      <circle cx="${xScore.toFixed(1)}" cy="${yScore.toFixed(1)}" r="4.5" fill="#38bdf8" stroke="#060814" stroke-width="2" />
+    `;
+  });
+
+  const polyStr = scorePoints.join(' ');
+
+  return `
+    <div style="grid-column: 1 / -1; background: rgba(0,0,0,0.3); border: 1px solid rgba(56,189,248,0.25); border-radius: 16px; padding: 20px; margin-bottom: 4px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; flex-wrap:wrap; gap:8px;">
+        <span style="font-family:'Space Grotesk', sans-serif; font-size:13px; font-weight:600; color:var(--cyan); display:flex; align-items:center; gap:6px;">
+          📊 5-Axis Multidimensional Judging Radar (0-100 Scale)
+        </span>
+        <span style="font-family:'JetBrains Mono', monospace; font-size:10.5px; color:var(--text-dim);">Cyan-Purple Radar Pattern Visualizer</span>
+      </div>
+      <div style="width:100%; max-width:440px; margin:0 auto;">
+        <svg viewBox="0 0 360 270" style="width:100%; height:auto; overflow:visible; display:block;">
+          <defs>
+            <linearGradient id="radarGradCyanPurple" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.55" />
+              <stop offset="100%" stop-color="#a855f7" stop-opacity="0.4" />
+            </linearGradient>
+            <filter id="radarGlow" x="-20%" y="-20%" width="140%" height="140%">
+              <feGaussianBlur stdDeviation="3" result="blur" />
+              <feComposite in="SourceGraphic" in2="blur" operator="over" />
+            </filter>
+          </defs>
+
+          ${gridHTML}
+          ${axisHTML}
+
+          <!-- Radar Shape Fill & Outline -->
+          <polygon points="${polyStr}" fill="url(#radarGradCyanPurple)" stroke="#38bdf8" stroke-width="2.5" filter="url(#radarGlow)" style="transform-origin: 180px 135px;">
+            <animate attributeName="opacity" from="0" to="1" dur="0.6s" fill="freeze" />
+          </polygon>
+
+          ${labelHTML}
+        </svg>
+      </div>
+    </div>
+  `;
+}
+
 // 5-Judge Simulation Panel Rendering Logic
 async function renderFiveJudgesSection(idea, stack) {
   const panel = document.getElementById('fiveJudgesPanelBody');
@@ -411,6 +501,14 @@ async function renderFiveJudgesSection(idea, stack) {
   const p = data.presentation_judge || { score: 87 };
   const h = data.head_judge || { overall_score: 85.7, winning_probability: 86 };
 
+  const radarSVG = generateRadarChartSVG({
+    technical: t.score,
+    innovation: i.score,
+    business: b.score,
+    uiux: u.score,
+    presentation: p.score
+  });
+
   let html = `
     <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap:16px;">
       
@@ -426,6 +524,9 @@ async function renderFiveJudgesSection(idea, stack) {
           <div class="head-judge-win-muted">Win Probability: ${h.winning_probability || 86}%</div>
         </div>
       </div>
+
+      <!-- Prominent 5-Axis Spider/Radar Chart Visualization -->
+      ${radarSVG}
 
       <!-- Judge 1: Technical (30%) -->
       <div class="critique-item" style="border-radius:16px; padding:20px;">
