@@ -140,14 +140,14 @@
     <!-- FEATURED HERO BANNER: International 5-Judge Simulation Verdict & Grill-the-Judges Q&A -->
     <div class="hero-judge-banner panel-anim">
       <div class="panel-header" style="background:transparent; border:none; padding: 0 0 12px;">
-        <div class="panel-title" style="font-size:16px; color:var(--purple);">👨‍⚖️ International 5-Judge Simulation Panel & Live Q&A Simulator</div>
+        <div class="panel-title" style="font-size:16px; color:var(--purple);"><span class="panel-title-icon">👨‍⚖️</span> International 5-Judge Simulation Panel & Live Q&A Simulator</div>
       </div>
       <div id="fiveJudgesPanelBody"></div>
 
       <!-- Interactive "Grill the Judges" Q&A Bar -->
       <div class="judge-qa-box" style="margin-top:16px; padding-top:14px; border-top:1px solid rgba(255,255,255,0.08);">
         <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
-          <span style="font-size:12px; font-weight:600; color:var(--cyan);">🎤 Practice Judge Q&A / Answer Criticisms:</span>
+          <span style="font-size:12px; font-weight:600; color:var(--cyan);"><span class="panel-title-icon">🎤</span> Practice Judge Q&A / Answer Criticisms:</span>
         </div>
         <div style="display:flex; gap:8px;">
           <input type="text" id="judgeQaInput" placeholder="Type your answer to a judge critique (e.g. 'We handle DB connection pooling via Supabase bouncers')..." style="flex:1; background:rgba(0,0,0,0.4); border:1px solid var(--card-border); border-radius:8px; padding:8px 12px; color:#fff; font-size:12px;">
@@ -162,11 +162,11 @@
       
       <!-- Panel 1: Win Probability & Scope Review -->
       <div class="glass-panel panel-anim">
-        <div class="panel-header"><div class="panel-title">🏆 Win Probability & Scope Review</div></div>
+        <div class="panel-header"><div class="panel-title"><span class="panel-title-icon">🏆</span> Win Probability & Scope Review</div></div>
         <div class="panel-body" id="probPanelBody">
           <div class="win-prob-card">
             <p class="mono" style="font-size:11px; color:var(--text-dim); margin:0 0 4px;">Predicting Winning Probability</p>
-            <h1 style="font-size:38px; color:var(--cyan); margin:0;" id="winProbDisplay">85%</h1>
+            <h1 style="font-size:38px; color:var(--cyan); margin:0; font-family:'JetBrains Mono', monospace; font-weight:800;" id="winProbDisplay">85%</h1>
             <div class="win-meter-bg"><div class="win-meter-fill" id="winMeterFill" style="width: 85%;"></div></div>
           </div>
           <div id="scopeCritiqueBody"></div>
@@ -175,33 +175,33 @@
 
       <!-- Panel 2: Sprint Plan & Team Role Allocation -->
       <div class="glass-panel panel-anim">
-        <div class="panel-header"><div class="panel-title">🎯 Sprint Complete & Role Allocation</div></div>
+        <div class="panel-header"><div class="panel-title"><span class="panel-title-icon">🎯</span> Sprint Complete & Role Allocation</div></div>
         <div class="panel-body" id="planPanelBody"></div>
       </div>
 
       <!-- Panel 3: Risk Detection & Recovery Interventions -->
       <div class="glass-panel panel-anim">
-        <div class="panel-header"><div class="panel-title">⚠️ Risks & Recovery Plan</div></div>
+        <div class="panel-header"><div class="panel-title"><span class="panel-title-icon">⚠️</span> Risks & Recovery Plan</div></div>
         <div class="panel-body" id="radarPanelBody"></div>
       </div>
       
       <!-- Panel 4: Interactive System Architecture, Mermaid & PostgreSQL DB Schema -->
       <div class="glass-panel panel-anim">
         <div class="panel-header">
-          <div class="panel-title">🏗️ Architecture, Mermaid Diagram & DB Schema</div>
+          <div class="panel-title"><span class="panel-title-icon">🏗️</span> Architecture, Mermaid Diagram & DB Schema</div>
         </div>
         <div class="panel-body" id="archPanelBody"></div>
       </div>
 
       <!-- Panel 5: PPT Outline, Elevator Pitch, Deck Audit & Voice Pitch Trainer -->
       <div class="glass-panel panel-anim">
-        <div class="panel-header"><div class="panel-title">🎤 PPT Slide Script & Voice Pitch Trainer</div></div>
+        <div class="panel-header"><div class="panel-title"><span class="panel-title-icon">🎤</span> PPT Slide Script & Voice Pitch Trainer</div></div>
         <div class="panel-body" id="pitchPanelBody" style="justify-content: flex-start; gap: 14px;">
           <div id="elevatorPitchBox"></div>
 
           <!-- Live Voice Pitch Trainer -->
           <div class="voice-pitch-card" style="background:rgba(168,85,247,0.08); border:1px solid rgba(168,85,247,0.3); border-radius:12px; padding:12px; text-align:center;">
-            <div style="font-size:12px; font-weight:600; color:var(--purple); margin-bottom:6px;">🎙️ AI Voice Pitch Trainer</div>
+            <div style="font-size:12px; font-weight:600; color:var(--purple); margin-bottom:6px;"><span class="panel-title-icon">🎙️</span> AI Voice Pitch Trainer</div>
             <p style="font-size:11px; color:var(--text-dim); margin:0 0 10px;">Record your 60-second pitch via mic to analyze speech pacing & filler words.</p>
             <div style="display:flex; justify-content:center; gap:8px;">
               <button class="btn btn-ghost" id="btnRecordPitch" style="font-size:11px; padding:4px 10px;">🔴 Record Pitch (Mic)</button>
@@ -225,7 +225,7 @@
 
       <!-- Panel 6: Demo Flow, Offline Backup & Business Model -->
       <div class="glass-panel panel-anim">
-        <div class="panel-header"><div class="panel-title">💼 Business Model, Unit Economics & Demo Flow</div></div>
+        <div class="panel-header"><div class="panel-title"><span class="panel-title-icon">💼</span> Business Model, Unit Economics & Demo Flow</div></div>
         <div class="panel-body" id="demoAndBusinessBody">
           <div id="demoFlowPanelBody"></div>
           <hr style="border:none; border-top:1px solid rgba(255,255,255,0.05); margin: 6px 0;">
