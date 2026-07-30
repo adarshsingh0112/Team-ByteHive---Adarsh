@@ -1,225 +1,163 @@
-// API Service for KrishnaAI Production Engine
-
-const API_BASE = ''; 
+// ============================================================================
+// KRISHNA AI — CLIENT API & RESILIENCE FALLBACK ENGINE (VERSION B)
+// ============================================================================
 
 function calculateLocalWinProb(idea, stack, team, time) {
-  let score = 78;
+  let score = 75;
   const ideaLen = (idea || '').length;
-  if (ideaLen > 20) score += 4;
-  if (ideaLen > 120) score += 3;
+  if (ideaLen > 100) score += 8;
+  else if (ideaLen > 40) score += 4;
 
-  const techCount = (stack || '').split(',').filter(Boolean).length;
-  if (techCount >= 3) score += 3;
-  if (techCount > 6) score -= 6;
-
-  if ((team || '').includes('Solo')) score -= 4;
-  if ((team || '').includes('4+')) score += 3;
-
-  if ((time || '').includes('48')) score += 4;
-  if ((time || '').includes('24')) score -= 3;
-
-  let hash = 0;
-  for (let i = 0; i < ideaLen; i++) {
-    hash = (hash << 5) - hash + (idea || '').charCodeAt(i);
-    hash |= 0;
+  const stackLower = (stack || '').toLowerCase();
+  if (stackLower.includes('supabase') || stackLower.includes('express') || stackLower.includes('vercel') || stackLower.includes('next')) {
+    score += 6;
   }
-  score += Math.abs(hash % 11) - 5;
 
-  return Math.min(97, Math.max(58, score));
+  const teamLower = (team || '').toLowerCase();
+  if (teamLower.includes('3') || teamLower.includes('2')) score += 4;
+
+  const timeLower = (time || '').toLowerCase();
+  if (timeLower.includes('24')) score += 3;
+
+  return Math.min(96, Math.max(68, score));
 }
 
-function saveProjectToLocalStorage(project) {
-  try {
-    const list = JSON.parse(localStorage.getItem('krishna_saved_projects') || '[]');
-    // Filter out duplicates with same ID or idea
-    const filtered = list.filter(p => p.id !== project.id && p.idea !== project.idea);
-    filtered.unshift(project);
-    localStorage.setItem('krishna_saved_projects', JSON.stringify(filtered.slice(0, 25)));
-  } catch (e) {
-    console.warn("LocalStorage save error:", e);
-  }
-}
-
-function getProjectsFromLocalStorage() {
-  try {
-    return JSON.parse(localStorage.getItem('krishna_saved_projects') || '[]');
-  } catch (e) {
-    return [];
-  }
-}
-
-async function apiAnalyzeProject(idea, stack, team, time) {
-  const winProb = calculateLocalWinProb(idea, stack, team, time);
-  try {
-    const res = await fetch(`${API_BASE}/api/analyze`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ idea, stack, team, time })
-    });
-    if (res.ok) {
-      const data = await res.json();
-      if (!data.winning_probability) data.winning_probability = winProb;
-      const projRecord = { id: `proj_${Date.now()}`, idea, stack, winProbability: winProb, data };
-      saveProjectToLocalStorage(projRecord);
-      return data;
-    }
-  } catch (err) {
-    console.warn("API offline, utilizing local response engine:", err.message);
-  }
-
-  // Dynamic Fallback Data Generator
-  const mainTech = (stack || 'React, Node').split(',')[0].trim();
+function generateLocalMissionData(idea, stack, team, time) {
+  const winOdds = calculateLocalWinProb(idea, stack, team, time);
+  const mainTech = (stack || 'React, Express').split(',')[0].trim();
   const shortIdea = (idea || 'Hackathon Project').substring(0, 35);
+  const tableName = shortIdea.toLowerCase().replace(/[^a-z0-9]/g, '_').substring(0, 15);
 
-  const fallbackData = {
-    winning_probability: winProb,
-    confidence_score: 91,
-    critiqueText: `Building custom auth & analytics for <b>${shortIdea}</b> with <b>${stack || 'your stack'}</b> in <b>${time || '24h'}</b> will burn critical demo prep time. <b>Cut secondary bloat features immediately!</b> Focus 100% on the core interactive user loop.`,
-    scope_review: { status: "Scope Pruned & MVP Ready", reason: `Pruned non-essential tabs to guarantee working ${mainTech} core demo.` },
-    sprint_plan: [
-      { phase: "Sprint 1 (Hr 0-4)", title: "Core DB Schema & Server Setup", assignee: "Backend Lead", priority: "HIGH" },
-      { phase: "Sprint 2 (Hr 4-12)", title: `Interactive UI for ${shortIdea}`, assignee: "Frontend Lead", priority: "HIGH" },
-      { phase: "Sprint 3 (Hr 12-18)", title: `${mainTech} Integration & Pipeline`, assignee: "AI Lead", priority: "HIGH" },
-      { phase: "Sprint 4 (Hr 18-24)", title: "Demo Script & Pre-Flight Verification", assignee: "Pitch Lead", priority: "HIGH" }
-    ],
-    risks: [
-      { title: "API Latency & Integration Blocker", desc: "Frontend waiting on real backend endpoints.", action: "> COACH: Implement mock JSON fallback engine in frontend client.", isSlipping: true },
-      { title: "Deployment Configuration Failure", desc: "Host environment variables unverified.", action: "> COACH: Deploy early to Vercel/Render at Hour 4 to test CORS.", isSlipping: false }
-    ],
+  return {
+    winOdds: winOdds,
+    scoreLabel: `${winOdds}%`,
+    missionDna: {
+      buildability: Math.min(98, winOdds + 2),
+      wow: Math.min(96, winOdds + 4),
+      resilience: Math.min(94, winOdds - 1)
+    },
+    critique: `Building authentication & custom multi-tenant analytics for <b>${shortIdea}</b> in <b>${time || '24h'}</b> will burn critical demo prep time. <b>Cut bloat features immediately!</b> Focus 100% on the core interactive loop.`,
+    scopeReview: { status: "Scope Pruned & MVP Ready", reason: `Pruned secondary administrative screens to protect primary ${mainTech} MVP build.` },
     architecture: {
       frontend: mainTech,
       backend: "Node.js Express",
-      database: "Supabase PostgreSQL"
+      database: "Supabase PostgreSQL",
+      mermaid: `graph TD\n  Client[User Browser UI] -->|API Request| Express[Express Node.js Server]\n  Express -->|Query| DB[(Supabase PostgreSQL)]\n  Express -->|LLM Prompt| AI[Claude 3.5 / Gemini Engine]\n  AI -->|Structured JSON| Express\n  Express -->|Real-time Sync| Client`,
+      sql: `-- PostgreSQL Schema for ${shortIdea}\nCREATE TABLE ${tableName}_projects (\n  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),\n  title VARCHAR(255) NOT NULL,\n  tech_stack TEXT[],\n  win_probability INT DEFAULT ${winOdds},\n  created_at TIMESTAMPTZ DEFAULT NOW()\n);\n\nCREATE INDEX idx_${tableName}_created ON ${tableName}_projects(created_at DESC);`
     },
-    elevator_pitch: `Introducing ${shortIdea}: an intelligent engine powered by ${mainTech} that automates complex decisions in real time.`,
-    demo_flow: ["1. Open active workspace directly in guest mode", "2. Enter raw project idea and trigger execution pipeline", "3. Show 5-judge simulation panel & win score"],
-    backup_demo_plan: ["Pre-recorded 60s HD video walkthrough saved locally"],
-    revenue_model: ["Freemium individual access tier", "Enterprise event tier ($499/event)"],
-    head_judge: {
-      overall_score: (winProb * 0.97).toFixed(1),
-      winning_probability: winProb,
-      one_line_verdict: `High impact concept with ${winProb}% predicted win chance if live demo stays focused.`,
-      project_status: "Top Contender",
-      mission_status: "PROCEED TO PITCH"
-    }
+    demoFlow: [
+      "1. Open active workspace directly in guest mode (0s - 15s)",
+      "2. Enter raw project idea and trigger 12-step pipeline (15s - 90s)",
+      "3. Demonstrate 1-click scope cut and 5-judge simulation panel (90s - 180s)"
+    ],
+    sprints: [
+      { phase: "Sprint 1 (Hr 0-4)", title: "Core DB Schema & Server Setup", assignee: "Backend Lead", priority: "HIGH" },
+      { phase: "Sprint 2 (Hr 4-12)", title: `Interactive UI for ${shortIdea}`, assignee: "Frontend Lead", priority: "HIGH" },
+      { phase: "Sprint 3 (Hr 12-18)", title: "Core AI Engine Integration", assignee: "AI Lead", priority: "HIGH" },
+      { phase: "Sprint 4 (Hr 18-24)", title: "Demo Script & Pre-Flight Verification", assignee: "Pitch Lead", priority: "HIGH" }
+    ],
+    risks: [
+      { title: "API Delay & Mocking Blocker", desc: "Frontend waiting on real backend endpoints.", action: "> COACH INTERVENTION: Implement mock JSON responses directly in frontend service.", isSlipping: true },
+      { title: "Deployment Cold Start Failure", desc: "Host environment variables unconfigured.", action: "> COACH INTERVENTION: Deploy early to Vercel at Hour 4 to test CORS.", isSlipping: false }
+    ]
   };
-
-  const projRecord = { id: `proj_${Date.now()}`, idea, stack, winProbability: winProb, data: fallbackData };
-  saveProjectToLocalStorage(projRecord);
-
-  // Sync with backend memory if possible
-  fetch(`${API_BASE}/api/projects`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(projRecord)
-  }).catch(() => {});
-
-  return fallbackData;
 }
 
-async function apiSimulate5Judges(projectPayload) {
+async function apiAnalyzeProject(payload) {
   try {
-    const res = await fetch(`${API_BASE}/api/judge`, {
+    const res = await fetch('/api/analyze', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(projectPayload)
+      body: JSON.stringify(payload)
     });
-    if (res.ok) return await res.json();
-  } catch (err) {}
+    if (res.ok) {
+      const data = await res.json();
+      return data;
+    }
+  } catch (e) {
+    console.warn("Backend API offline, utilizing client-side fallback engine:", e);
+  }
 
-  const win = calculateLocalWinProb(projectPayload.problem_statement || projectPayload.project_name, projectPayload.tech_stack, "3", "24");
+  // Resilient Client-Side Fallback
+  return generateLocalMissionData(payload.idea, payload.stack, payload.team, payload.time);
+}
+
+async function apiSimulate5Judges(payload) {
+  try {
+    const res = await fetch('/api/judge', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    if (res.ok) {
+      return await res.json();
+    }
+  } catch (e) {
+    console.warn("Judge API offline, using local simulation:", e);
+  }
+
+  const win = calculateLocalWinProb(payload.problem_statement || payload.project_name, payload.tech_stack, "3", "24");
   return {
-    technical_judge: { score: Math.min(98, win + 2), strengths: ["Low latency architecture", "Clean code structure"], weaknesses: ["Needs DB connection pooling"] },
-    innovation_judge: { score: Math.min(96, win + 4), strengths: ["Novel AI agent orchestration"], weaknesses: ["Niche target market"] },
-    business_judge: { score: Math.max(60, win - 3), strengths: ["Clear Freemium tier model"], weaknesses: ["High user acquisition cost"] },
-    uiux_judge: { score: Math.min(99, win + 5), strengths: ["Glassmorphism visual hierarchy"], weaknesses: ["Mobile navbar spacing"] },
+    technical_judge: { score: Math.min(98, win + 2), strengths: ["Low latency architecture", "Clean code modularity"], weaknesses: ["Needs DB connection pooling"] },
+    innovation_judge: { score: Math.min(96, win + 4), strengths: ["Novel AI agent orchestration"], weaknesses: ["Niche target market size"] },
+    business_judge: { score: Math.max(65, win - 3), strengths: ["Clear Freemium event tier"], weaknesses: ["High user acquisition cost"] },
+    uiux_judge: { score: Math.min(99, win + 5), strengths: ["Glassmorphic dark aesthetic", "Instant feedback"], weaknesses: ["Mobile navbar padding"] },
     presentation_judge: { score: win, strengths: ["Strong elevator pitch hook"], weaknesses: ["Pacing during live demo"] },
     head_judge: {
       overall_score: (win * 0.98).toFixed(1),
       winning_probability: win,
-      one_line_verdict: `Strong execution potential with ${win}% predicted win chance.`,
+      one_line_verdict: `High impact project with ${win}% predicted win chance if core demo stays tight.`,
       project_status: "Top Contender",
       mission_status: "PROCEED TO PITCH"
     }
   };
 }
 
-async function apiGeneratePitch(idea, stack) {
+async function apiGeneratePitch(payload) {
   try {
-    const res = await fetch(`${API_BASE}/api/pitch`, {
+    const res = await fetch('/api/pitch', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ idea, stack })
+      body: JSON.stringify(payload)
     });
     if (res.ok) return await res.json();
-  } catch (err) {}
+  } catch (e) {
+    console.warn("Pitch API offline, using local fallback generator:", e);
+  }
 
+  const idea = payload.idea || 'Project';
+  const stack = payload.stack || 'Tech Stack';
   return {
     slides: [
-      { num: 1, title: "Slide 1: Hook & Pain Point", script: `Every team building ${(idea || 'project').substring(0,30)} faces massive friction. We waste hours on manual overhead instead of executing.` },
-      { num: 2, title: "Slide 2: Solution & Value Prop", script: `Introducing our platform: an intelligent engine that automates complex decisions in real time using ${stack || 'modern tech'}.` },
-      { num: 3, title: "Slide 3: System Architecture", script: `Powered by ${stack || 'our stack'}. Designed for low-latency API execution with resilient fallback engines.` },
+      { num: 1, title: "Slide 1: Hook & Pain Point", script: `Every team building ${idea.substring(0, 30)} faces massive friction. We waste hours on manual overhead instead of executing.` },
+      { num: 2, title: "Slide 2: Solution & Value Prop", script: `Introducing our platform: an intelligent engine that automates complex decisions in real time using ${stack}.` },
+      { num: 3, title: "Slide 3: System Architecture", script: `Powered by ${stack}. Designed for low-latency API execution with resilient fallback engines.` },
       { num: 4, title: "Slide 4: Live Demo Flow", script: "Start directly in the active execution workspace. Show 1-click action, instant analysis, and dynamic output." },
       { num: 5, title: "Slide 5: Future Horizon & Wrap", script: "From hackathon MVP to production scale — our modular design allows seamless expansion to enterprise workflows." }
     ]
   };
 }
 
-async function apiAuditPitchDeck(deckText) {
+async function apiCoachChat(message, context) {
   try {
-    const res = await fetch(`${API_BASE}/api/judge`, {
+    const res = await fetch('/api/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ deckText })
+      body: JSON.stringify({ message, context })
     });
     if (res.ok) return await res.json();
-  } catch (err) {}
+  } catch (e) {}
 
   return {
-    storyScore: "8.2",
-    critiques: [
-      { type: "red", title: "🔴 Paragraph Overload", desc: "Slide 2 contains too much prose. Convert long sentences into 3 punchy bullet points." },
-      { type: "orange", title: "⚠️ Missing Tech Stack Callout", desc: "Be explicit about why your backend architecture solves latency or scaling challenges." },
-      { type: "green", title: "🟢 Strong Demo Hook", desc: "Your planned demo flow focuses straight on the core value proposition without setup fluff." }
-    ]
+    reply: `🤖 **Krishna AI Local Strategy for "${message.substring(0, 35)}..."**:\n\n• **Scope Focus**: Cut non-essential bloat features immediately.\n• **Pitch Hook**: Show the working live demo within the first 45 seconds.\n• **Resilience**: Pre-seed guest demo data so network issues don't ruin your judge presentation.`,
+    aiSource: "Krishna Local AI Engine"
   };
-}
-
-async function apiCoachChat(message, context) {
-  if (!message || message.trim() === '') {
-    return { reply: "👋 Hi! I'm your KrishnaAI Coach. Ask me anything about scope cuts, tech stack shortcuts, or live pitch tips!", aiSource: "Krishna AI Engine" };
-  }
-
-  const customKey = document.getElementById('customApiKey') ? document.getElementById('customApiKey').value : '';
-
-  try {
-    const res = await fetch(`${API_BASE}/api/chat`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ message, context, apiKey: customKey, claudeApiKey: customKey })
-    });
-    if (res.ok) return await res.json();
-  } catch (err) {}
-
-  const topicWords = message.split(' ').filter(w => w.length > 3).slice(0, 5).join(' ');
-  const dynamicReply = `🤖 **Krishna AI Strategy for "${topicWords || message.substring(0, 30)}..."**:\n\n` +
-    `• **Scope Focus**: For '${message.substring(0, 40)}...', cut all non-essential features and prioritize 1 clean working interactive loop.\n` +
-    `• **Pitch Hook**: Open your presentation with the core pain point in the first 15 seconds, then show the live demo by second 45.\n` +
-    `• **Demo Defense**: Pre-seed a guest-mode button with local data so backend latency or network issues never ruin your judge demonstration.`;
-
-  return { reply: dynamicReply, aiSource: "Krishna Dynamic AI Engine" };
 }
 
 async function apiFetchSavedProjects() {
   try {
-    const res = await fetch(`${API_BASE}/api/projects`);
-    if (res.ok) {
-      const serverList = await res.json();
-      if (serverList && Array.isArray(serverList) && serverList.length > 0) {
-        return serverList;
-      }
-    }
-  } catch (err) {}
-
-  return getProjectsFromLocalStorage();
+    const res = await fetch('/api/projects');
+    if (res.ok) return await res.json();
+  } catch (e) {}
+  return [];
 }

@@ -3,308 +3,334 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>KrishnaAI — Hackathon & Enterprise Execution OS</title>
+<title>KrishnaAI — Hackathon Command Center</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,400;0,500;1,400&family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
 <link rel="stylesheet" href="css/style.css">
 </head>
-<body>
+<body class="command-center-body">
 
-<div class="bg-glow">
-  <div class="orb orb-1"></div>
-  <div class="orb orb-2"></div>
-</div>
-<canvas id="particle-canvas"></canvas>
+<div class="grain"></div>
+<div class="orb-one"></div>
+<div class="orb-two"></div>
 
-<div class="app-container">
-  <header>
-    <div class="logo">
-      <div class="logo-mark"></div>
-      Krishna<span style="color:var(--text-dimmer);font-weight:400;">AI</span>
-    </div>
-    <div class="nav-actions">
-      <!-- 3-Tier Persona Mode Switcher -->
-      <div class="mode-pill-wrap" id="modeSelector">
-        <button class="mode-btn active" data-mode="hackathon" title="Speed-focused 12-step MVP pipeline">⚡ Hackathon</button>
-        <button class="mode-btn" data-mode="beginner" title="Guided explanations & step-by-step tooltips">🐣 Beginner</button>
-        <button class="mode-btn" data-mode="enterprise" title="VC metrics, unit economics & SOC2 compliance">💼 VC / Enterprise</button>
+<div class="app-shell">
+  
+  <!-- 1. SIDEBAR NAVIGATION SHELL -->
+  <aside class="sidebar">
+    <div class="sidebar-top">
+      <div class="logo">
+        <div class="logo-mark"></div>
+        <span class="logo-text">Krishna<span class="accent">AI</span></span>
       </div>
 
-      <button class="btn btn-ghost" id="btnToggleHistory" style="font-size:12px; padding:6px 12px;">📁 Saved Projects</button>
-      <div class="status-pill"><span class="status-dot"></span> 🟢 AI Connected</div>
-      <button class="btn btn-ghost" id="btnToggleCoach" style="font-size:12px; padding:6px 12px;">💬 Live Coach</button>
-    </div>
-  </header>
+      <div class="timer-box">
+        <span class="timer-label">HACKATHON CLOCK</span>
+        <h2 id="timeLeft" class="timer-value">24:00:00</h2>
+      </div>
 
-  <!-- VIEW 1: INIT LANDING -->
-  <div class="view active" id="view-init">
-    <div class="init-content">
-      <h1 class="hero-title">Execution & Intelligence OS</h1>
-      <p class="hero-sub" id="modeHeroSub">Enter your concept and team details. I will execute the 12-step production pipeline: critiquing scope, generating sprint plans, assigning roles, detecting risks, building recovery plans, producing pitch PPTs, running the 5-judge simulation, and predicting win probability.</p>
-      
-      <div class="prompt-box">
-        <div id="promptError" style="display:none; color:var(--red); font-weight:600; font-size:12px; margin-bottom:8px;">⚠️ Please enter your project idea before executing the 12-step pipeline.</div>
-        <textarea class="prompt-input" id="mainPrompt" placeholder="What are you building? (e.g., An AI-powered crowdfunding app with automated milestone verification...)"></textarea>
+      <nav class="station-nav">
+        <button class="nav-item active" data-target="mission">
+          <span class="nav-icon">🚀</span> <span class="nav-text">Mission Control</span> <span class="nav-shortcut">1</span>
+        </button>
+        <button class="nav-item" data-target="pitch">
+          <span class="nav-icon">🎤</span> <span class="nav-text">Pitch Lab</span> <span class="nav-shortcut">2</span>
+        </button>
+        <button class="nav-item" data-target="judges">
+          <span class="nav-icon">👨‍⚖️</span> <span class="nav-text">Judge Room</span> <span class="nav-shortcut">3</span>
+        </button>
+        <button class="nav-item" data-target="warroom">
+          <span class="nav-icon">💬</span> <span class="nav-text">Coach War Room</span> <span class="nav-shortcut">4</span>
+        </button>
+        <button class="nav-item" data-target="vault">
+          <span class="nav-icon">📁</span> <span class="nav-text">Project Vault</span> <span class="nav-shortcut">5</span>
+        </button>
+      </nav>
+    </div>
+
+    <div class="sidebar-bottom">
+      <div class="status-badge" id="sidebarStatusBadge">
+        <span class="status-dot"></span> 🟢 AI Connected
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN WORKSPACE CONTENT -->
+  <main class="main-content">
+    
+    <!-- 2. TOPBAR HEADER -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="btn-icon mobile-menu-toggle" id="mobileMenuBtn">☰</button>
+        <div>
+          <span class="eyebrow">HACKATHON OPERATING SYSTEM</span>
+          <h1 id="viewTitle" class="view-title">Mission Control</h1>
+        </div>
+      </div>
+
+      <div class="topbar-actions">
+        <button class="btn btn-ghost" id="commandBtn"><span class="kbd">⌘ K</span> Command</button>
+        <button class="btn btn-ghost" id="themeBtn">◐ Focus Mode</button>
+        <button class="btn btn-primary" id="quickAnalyze">✦ Analyze Project</button>
+      </div>
+    </header>
+
+    <!-- 3. STATIONS & PANELS (5 VIEWS) -->
+    <div class="view-container">
+
+      <!-- STATION 1: MISSION CONTROL (#mission) -->
+      <section class="view active" id="mission">
         
-        <!-- Sample Suggestion Chips -->
-        <div class="sample-chips">
-          <span class="chip-label">Try Example:</span>
-          <button class="chip-btn" onclick="useSamplePrompt('AI Crowdfunding App with automated milestone verification and smart contract escrow', 'Next.js, Supabase, Node, Solidity', '3 Developers', '24 Hours')">⚡ AI Crowdfunding</button>
-          <button class="chip-btn" onclick="useSamplePrompt('Web3 Multiplayer Gaming Arcade with real-time zero-knowledge verification', 'Solana, Rust, React, WebSockets', '4+ Developers', '48 Hours')">🎮 Web3 Gaming</button>
-          <button class="chip-btn" onclick="useSamplePrompt('HealthTech AI Diagnostics Assistant with offline patient record sync', 'React Native, Python, PyTorch, FastAPI', '2 Developers', '36 Hours')">🏥 HealthTech AI</button>
-        </div>
-
-        <div class="meta-inputs">
-          <div class="meta-group">
-            <label>Tech Stack</label>
-            <input type="text" id="inTech" value="Next.js, Supabase, Node, Vercel" placeholder="e.g. React, Python, FastAPI">
-          </div>
-          <div class="meta-group">
-            <label>Team Size</label>
-            <select id="inTeam">
-              <option value="Solo Developer">Solo Developer</option>
-              <option value="2 Developers">2 Developers</option>
-              <option value="3 Developers" selected>3 Developers</option>
-              <option value="4+ Developers">4+ Developers</option>
-            </select>
-          </div>
-          <div class="meta-group">
-            <label>Hackathon Duration</label>
-            <select id="inTime">
-              <option value="24 Hours" selected>24 Hours</option>
-              <option value="36 Hours">36 Hours</option>
-              <option value="48 Hours">48 Hours</option>
-            </select>
+        <!-- Hero Radar Banner -->
+        <div class="radar-hero">
+          <div class="radar-sweep"></div>
+          <div class="hero-text-wrap">
+            <h2>Hackathon Command Center</h2>
+            <p>Submit your project concept. I will execute brutal scope pruning, buildability DNA mapping, hour-by-hour sprint allocation, and live risk mitigation.</p>
           </div>
         </div>
 
-        <div class="prompt-footer">
-          <div class="api-key-wrap">
-            <div style="display:flex; align-items:center; gap: 10px; flex-wrap:wrap;">
-              <span class="api-status live" id="apiStatusBadge">🟢 AI Connected (Claude & Gemini API)</span>
-              <input type="password" id="customApiKey" placeholder="Paste Claude / Gemini API Key (optional)" style="background:rgba(0,0,0,0.4); border:1px solid rgba(255,255,255,0.12); border-radius:6px; padding:6px 12px; color:#fff; font-size:11px; width:240px;">
+        <div class="mission-grid">
+          
+          <!-- Intake Form Panel -->
+          <div class="command-card">
+            <div class="card-head">
+              <h3>⚡ Project Intake & Meta Config</h3>
+              <span class="badge-mini">STEP 1</span>
+            </div>
+            
+            <form id="analyzeForm" onsubmit="return false;">
+              <div class="form-group">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+                  <label for="idea">Project Idea & Concept</label>
+                  <span id="ideaCount" class="char-count">0 chars</span>
+                </div>
+                <textarea id="idea" class="input-ctrl" placeholder="Describe your hackathon concept (e.g. AI Crowdfunding Platform with automated smart contract milestone releases...)" required></textarea>
+                
+                <div class="seed-btns">
+                  <span class="seed-label">Quick Seed:</span>
+                  <button type="button" class="btn-seed" onclick="seedProject('retail')">Retail AI</button>
+                  <button type="button" class="btn-seed" onclick="seedProject('accessibility')">Accessibility</button>
+                  <button type="button" class="btn-seed" onclick="seedProject('web3')">Web3 Gaming</button>
+                </div>
+              </div>
+
+              <div class="form-row-3">
+                <div class="form-group">
+                  <label for="stack">Tech Stack</label>
+                  <input type="text" id="stack" class="input-ctrl" value="Next.js, Supabase, Express, Vercel" placeholder="e.g. React, Python">
+                </div>
+                <div class="form-group">
+                  <label for="team">Team Size</label>
+                  <select id="team" class="input-ctrl">
+                    <option value="Solo Developer">Solo Developer</option>
+                    <option value="2 Developers">2 Developers</option>
+                    <option value="3 Developers" selected>3 Developers</option>
+                    <option value="4+ Developers">4+ Developers</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="time">Time Window</label>
+                  <select id="time" class="input-ctrl">
+                    <option value="24 Hours" selected>24 Hours</option>
+                    <option value="36 Hours">36 Hours</option>
+                    <option value="48 Hours">48 Hours</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="apiKey">Claude / Gemini API Key (Optional)</label>
+                <input type="password" id="apiKey" class="input-ctrl" placeholder="Paste custom API Key to run live LLM models...">
+              </div>
+
+              <button type="submit" class="btn btn-primary btn-block" style="font-size:14px; padding:12px;">🚀 Execute Mission Analysis</button>
+            </form>
+          </div>
+
+          <!-- Signal Board Panel -->
+          <div class="command-card">
+            <div class="card-head">
+              <h3>📊 Mission Signal Board</h3>
+              <span class="badge-mini">LIVE STATS</span>
+            </div>
+
+            <div class="signal-board-wrap">
+              <div class="ring-meter-wrap">
+                <svg class="ring-meter" viewBox="0 0 120 120">
+                  <circle class="ring-bg" cx="60" cy="60" r="50"></circle>
+                  <circle class="ring-fill" id="scoreCircle" cx="60" cy="60" r="50" style="stroke-dashoffset: 314;"></circle>
+                </svg>
+                <div class="ring-value-box">
+                  <h1 id="scoreValue">--%</h1>
+                  <span>WIN ODDS</span>
+                </div>
+              </div>
+
+              <div class="mini-stats">
+                <div class="stat-pill"><span class="stat-lbl">Scope Status</span> <strong id="scopeStat">Pending</strong></div>
+                <div class="stat-pill"><span class="stat-lbl">Risk Profile</span> <strong id="riskStat" style="color:var(--orange);">Medium</strong></div>
+                <div class="stat-pill"><span class="stat-lbl">Sprint Plan</span> <strong id="sprintStat">4 Sprints</strong></div>
+              </div>
+            </div>
+
+            <!-- Coach Rule Callout -->
+            <div class="coach-rule-card">
+              <h4>💡 COACH RULE #1: THE 45-SECOND DEMO</h4>
+              <p>Judges tune out within 60 seconds. Show your primary working feature in the first 45 seconds before explaining technical stack setup.</p>
             </div>
           </div>
-          <button class="btn btn-primary" id="btnSubmit" style="font-size: 15px;">Execute 12-Step Pipeline ↗</button>
+
         </div>
-      </div>
-    </div>
-  </div>
 
-  <!-- VIEW 2: LOADING -->
-  <div class="view" id="view-loading">
-    <div class="loader-ring"></div>
-    <div class="term-loader">
-      <p id="l1">> 1. Idea Submitted & Scope Critique Running...</p>
-      <p id="l2">> 2. Creating Sprint Plan & Assigning Team Roles...</p>
-      <p id="l3">> 3. Detecting Risks & Generating Recovery Interventions...</p>
-      <p id="l4">> 4. Preparing Pitch PPT & Simulating 5 Independent International Judges...</p>
-    </div>
-  </div>
-
-  <!-- VIEW 3: DASHBOARD WORKSPACE -->
-  <div class="view" id="view-dash">
-    
-    <!-- 12-Step Pipeline Progress Bar -->
-    <div class="pipeline-container" id="pipelineBar">
-      <div class="pipeline-step done"><span>1. Idea Submitted</span></div> <span class="pipeline-arrow">›</span>
-      <div class="pipeline-step done"><span>2. AI Reviews</span></div> <span class="pipeline-arrow">›</span>
-      <div class="pipeline-step done"><span>3. Scope Pruning</span></div> <span class="pipeline-arrow">›</span>
-      <div class="pipeline-step done"><span>4. Sprint Plan</span></div> <span class="pipeline-arrow">›</span>
-      <div class="pipeline-step done"><span>5. Roles Assigned</span></div> <span class="pipeline-arrow">›</span>
-      <div class="pipeline-step active"><span>6. Risk Interventions</span></div> <span class="pipeline-arrow">›</span>
-      <div class="pipeline-step done"><span>7. Architecture & DB</span></div> <span class="pipeline-arrow">›</span>
-      <div class="pipeline-step done"><span>8. PPT & Pitch</span></div> <span class="pipeline-arrow">›</span>
-      <div class="pipeline-step done"><span>9. 5-Judge Simulation</span></div> <span class="pipeline-arrow">›</span>
-      <div class="pipeline-step done"><span>10. Demo Flow</span></div> <span class="pipeline-arrow">›</span>
-      <div class="pipeline-step done"><span>11. Business Model</span></div> <span class="pipeline-arrow">›</span>
-      <div class="pipeline-step done"><span>12. Win Probability</span></div>
-    </div>
-
-    <div class="dash-header">
-      <div class="dash-title">
-        <p>● Autonomous Coach Pipeline Active <span id="dashModeBadge" class="mode-badge-pill">⚡ Hackathon Mode</span></p>
-        <h2 id="projTitle">Project Workspace</h2>
-      </div>
-      <div class="dash-actions">
-        <button class="btn btn-ghost" id="btnReset">🔄 New Idea</button>
-        <button class="btn btn-ghost" id="btnExport">⬇ Export Report & PPT</button>
-        <button class="btn btn-primary" id="btnPreflight">🚀 Pre-Flight Demo Check</button>
-      </div>
-    </div>
-
-    <!-- FEATURED HERO BANNER: International 5-Judge Simulation Verdict & Grill-the-Judges Q&A -->
-    <div class="hero-judge-banner panel-anim">
-      <div class="panel-header" style="background:transparent; border:none; padding: 0 0 12px;">
-        <div class="panel-title" style="font-size:16px; color:var(--purple);">👨‍⚖️ International 5-Judge Simulation Panel & Live Q&A Simulator</div>
-      </div>
-      <div id="fiveJudgesPanelBody"></div>
-
-      <!-- Interactive "Grill the Judges" Q&A Bar -->
-      <div class="judge-qa-box" style="margin-top:16px; padding-top:14px; border-top:1px solid rgba(255,255,255,0.08);">
-        <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
-          <span style="font-size:12px; font-weight:600; color:var(--cyan);">🎤 Practice Judge Q&A / Answer Criticisms:</span>
-        </div>
-        <div style="display:flex; gap:8px;">
-          <input type="text" id="judgeQaInput" placeholder="Type your answer to a judge critique (e.g. 'We handle DB connection pooling via Supabase bouncers')..." style="flex:1; background:rgba(0,0,0,0.4); border:1px solid var(--card-border); border-radius:8px; padding:8px 12px; color:#fff; font-size:12px;">
-          <button class="btn btn-primary" id="btnSendJudgeQa" style="padding:6px 14px; font-size:12px;">Ask Judges</button>
-        </div>
-        <div id="judgeQaReply" style="margin-top:8px; display:none;"></div>
-      </div>
-    </div>
-
-    <!-- BALANCED 3-COLUMN DASHBOARD GRID (Symmetrical 2x3 Layout) -->
-    <div class="panel-grid">
-      
-      <!-- Panel 1: Win Probability & Scope Review -->
-      <div class="glass-panel panel-anim">
-        <div class="panel-header"><div class="panel-title">🏆 Win Probability & Scope Review</div></div>
-        <div class="panel-body" id="probPanelBody">
-          <div class="win-prob-card">
-            <p class="mono" style="font-size:11px; color:var(--text-dim); margin:0 0 4px;">Predicting Winning Probability</p>
-            <h1 style="font-size:38px; color:var(--cyan); margin:0;" id="winProbDisplay">85%</h1>
-            <div class="win-meter-bg"><div class="win-meter-fill" id="winMeterFill" style="width: 85%;"></div></div>
+        <!-- Mission DNA Map -->
+        <div class="command-card" style="margin-top:20px;">
+          <div class="card-head">
+            <h3>🧬 Mission DNA Signal Rails</h3>
+            <span class="badge-mini">FEASIBILITY</span>
           </div>
-          <div id="scopeCritiqueBody"></div>
-        </div>
-      </div>
 
-      <!-- Panel 2: Sprint Plan & Team Role Allocation -->
-      <div class="glass-panel panel-anim">
-        <div class="panel-header"><div class="panel-title">🎯 Sprint Complete & Role Allocation</div></div>
-        <div class="panel-body" id="planPanelBody"></div>
-      </div>
-
-      <!-- Panel 3: Risk Detection & Recovery Interventions -->
-      <div class="glass-panel panel-anim">
-        <div class="panel-header"><div class="panel-title">⚠️ Risks & Recovery Plan</div></div>
-        <div class="panel-body" id="radarPanelBody"></div>
-      </div>
-      
-      <!-- Panel 4: Interactive System Architecture, Mermaid & PostgreSQL DB Schema -->
-      <div class="glass-panel panel-anim">
-        <div class="panel-header">
-          <div class="panel-title">🏗️ Architecture, Mermaid Diagram & DB Schema</div>
-        </div>
-        <div class="panel-body" id="archPanelBody"></div>
-      </div>
-
-      <!-- Panel 5: PPT Outline, Elevator Pitch, Deck Audit & Voice Pitch Trainer -->
-      <div class="glass-panel panel-anim">
-        <div class="panel-header"><div class="panel-title">🎤 PPT Slide Script & Voice Pitch Trainer</div></div>
-        <div class="panel-body" id="pitchPanelBody" style="justify-content: flex-start; gap: 14px;">
-          <div id="elevatorPitchBox"></div>
-
-          <!-- Live Voice Pitch Trainer -->
-          <div class="voice-pitch-card" style="background:rgba(168,85,247,0.08); border:1px solid rgba(168,85,247,0.3); border-radius:12px; padding:12px; text-align:center;">
-            <div style="font-size:12px; font-weight:600; color:var(--purple); margin-bottom:6px;">🎙️ AI Voice Pitch Trainer</div>
-            <p style="font-size:11px; color:var(--text-dim); margin:0 0 10px;">Record your 60-second pitch via mic to analyze speech pacing & filler words.</p>
-            <div style="display:flex; justify-content:center; gap:8px;">
-              <button class="btn btn-ghost" id="btnRecordPitch" style="font-size:11px; padding:4px 10px;">🔴 Record Pitch (Mic)</button>
-              <button class="btn btn-ghost" id="btnStopPitch" style="font-size:11px; padding:4px 10px; display:none;">⏹️ Stop & Analyze</button>
+          <div class="dna-rails-wrap" id="missionDna">
+            <div class="dna-rail-group">
+              <div class="rail-head"><span>Buildability Rail</span> <strong id="buildRailVal">88%</strong></div>
+              <div class="rail-bg"><div class="rail-fill" id="buildRail" style="width:88%;"></div></div>
             </div>
-            <div id="voicePitchResult" style="font-size:11px; margin-top:8px; display:none;"></div>
+            <div class="dna-rail-group">
+              <div class="rail-head"><span>Judge Wow Rail</span> <strong id="wowRailVal">92%</strong></div>
+              <div class="rail-bg"><div class="rail-fill purple" id="wowRail" style="width:92%;"></div></div>
+            </div>
+            <div class="dna-rail-group">
+              <div class="rail-head"><span>Demo Resilience Rail</span> <strong id="demoRailVal">85%</strong></div>
+              <div class="rail-bg"><div class="rail-fill cyan" id="demoRail" style="width:85%;"></div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Result Cards Grid -->
+        <div class="results-grid" style="margin-top:20px;">
+          
+          <!-- Brutal Scope Review Card -->
+          <div class="command-card">
+            <div class="card-head"><h3 style="color:var(--red);">🔴 BRUTAL SCOPE REVIEW</h3></div>
+            <div id="critique" class="card-body-content"><p class="placeholder-text">Submit your project concept to execute scope review.</p></div>
+            <div id="scopeReview" style="margin-top:8px;"></div>
           </div>
 
-          <div id="uploadZone" class="upload-zone">
-            <input type="file" id="deckFileInput" accept=".pdf,.txt,.ppt,.pptx,.md" style="display:none;">
-            <div class="upload-icon" style="font-size:22px; margin-bottom:4px;">📄</div>
-            <h4>Audit Pitch Deck Document</h4>
-            <p style="font-size:11px; color:var(--text-dim); margin-top:4px;">Click or drag PDF/PPT text files to scan slides for storytelling gaps and wordiness.</p>
+          <!-- Architecture Card -->
+          <div class="command-card">
+            <div class="card-head"><h3 style="color:var(--blue);">🏗️ ARCHITECTURE & TECH STACK</h3></div>
+            <div id="architecture" class="card-body-content"><p class="placeholder-text">Waiting for input...</p></div>
           </div>
-          <div id="evalResult" class="eval-result"></div>
-          <hr style="border:none; border-top:1px solid rgba(255,255,255,0.05); margin: 2px 0;">
-          <h4 style="font-size:13px; color:var(--purple);">📊 Generated PPT 5-Slide Outline</h4>
-          <div id="pitchScriptBody"></div>
+
+          <!-- Demo Path Card -->
+          <div class="command-card">
+            <div class="card-head"><h3 style="color:var(--cyan);">🎬 DEMO PATH (3-MIN)</h3></div>
+            <div id="demoFlow" class="card-body-content"><p class="placeholder-text">Waiting for input...</p></div>
+          </div>
+
+          <!-- Critical Path Sprints Card -->
+          <div class="command-card">
+            <div class="card-head"><h3 style="color:var(--green);">🎯 CRITICAL PATH SPRINTS</h3></div>
+            <div id="sprints" class="card-body-content"><p class="placeholder-text">Waiting for input...</p></div>
+          </div>
+
+          <!-- Failure Modes & Risks Card -->
+          <div class="command-card danger-card">
+            <div class="card-head"><h3 style="color:var(--orange);">⚠️ FAILURE MODES & RISKS</h3></div>
+            <div id="risks" class="card-body-content"><p class="placeholder-text">Waiting for input...</p></div>
+          </div>
+
         </div>
-      </div>
 
-      <!-- Panel 6: Demo Flow, Offline Backup & Business Model -->
-      <div class="glass-panel panel-anim">
-        <div class="panel-header"><div class="panel-title">💼 Business Model, Unit Economics & Demo Flow</div></div>
-        <div class="panel-body" id="demoAndBusinessBody">
-          <div id="demoFlowPanelBody"></div>
-          <hr style="border:none; border-top:1px solid rgba(255,255,255,0.05); margin: 6px 0;">
-          <div id="businessPanelBody"></div>
+      </section>
+
+      <!-- STATION 2: PITCH LAB (#pitch) -->
+      <section class="view" id="pitch">
+        <div class="command-card">
+          <div class="card-head">
+            <h3>🎤 YC-Style 5-Slide Pitch Generator</h3>
+            <button class="btn btn-primary" id="generatePitch">✦ Generate Pitch Script</button>
+          </div>
+          <p class="section-sub">Auto-generates a 15-second hook and structured 5-slide script for hackathon presentations.</p>
+
+          <div id="slides" class="slides-grid" style="margin-top:20px;">
+            <p class="placeholder-text">Click "Generate Pitch Script" to construct your slide cards.</p>
+          </div>
         </div>
-      </div>
+      </section>
 
+      <!-- STATION 3: JUDGE ROOM (#judges) -->
+      <section class="view" id="judges">
+        <div class="command-card">
+          <div class="card-head">
+            <h3>👨‍⚖️ 5-Judge Simulation Panel & Head Verdict</h3>
+            <button class="btn btn-primary" id="runJudges">👨‍⚖️ Run 5-Judge Simulation</button>
+          </div>
+          <p class="section-sub">Simulates Technical, Innovation, Business, UI/UX, and Presentation judges with a Head Judge Verdict.</p>
+
+          <div id="judgesContainer" style="margin-top:20px;">
+            <p class="placeholder-text">Click "Run 5-Judge Simulation" to evaluate project viability.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- STATION 4: COACH WAR ROOM (#warroom) -->
+      <section class="view" id="warroom">
+        <div class="command-card chat-card-shell">
+          <div class="card-head">
+            <h3>💬 Coach War Room & Real-time Assistant</h3>
+            <span class="badge-mini">CLAUDE 3.5 & GEMINI ENGINE</span>
+          </div>
+
+          <div id="chatLog" class="chat-log-window">
+            <div class="chat-msg coach">👋 Welcome to the Coach War Room. Ask me anything about scope cuts, tech stack shortcuts, or live pitch tips!</div>
+          </div>
+
+          <form id="chatForm" class="chat-input-bar" onsubmit="return false;">
+            <input type="text" id="chatMessage" class="input-ctrl" placeholder="Ask your Krishna Coach..." required>
+            <button type="submit" id="sendChat" class="btn btn-primary">Send</button>
+          </form>
+        </div>
+      </section>
+
+      <!-- STATION 5: PROJECT VAULT (#vault) -->
+      <section class="view" id="vault">
+        <div class="command-card">
+          <div class="card-head">
+            <h3>📁 Saved Project Vault Snapshots</h3>
+            <button class="btn btn-ghost" id="refreshProjects">🔄 Refresh Vault</button>
+          </div>
+
+          <div id="vaultGrid" class="vault-grid" style="margin-top:20px;">
+            <p class="placeholder-text">Loading saved project snapshots...</p>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+</div>
+
+<!-- 4. COMMAND PALETTE OVERLAY -->
+<div class="modal-overlay" id="commandPalette">
+  <div class="command-modal-box">
+    <div class="command-modal-head">
+      <span>⌘ Command Palette</span>
+      <span class="kbd">ESC to Close</span>
+    </div>
+    <div class="command-list">
+      <button class="command-item" onclick="switchStation('mission')"><span>🚀 Switch to Station 1: Mission Control</span> <span class="kbd">1</span></button>
+      <button class="command-item" onclick="switchStation('pitch')"><span>🎤 Switch to Station 2: Pitch Lab</span> <span class="kbd">2</span></button>
+      <button class="command-item" onclick="switchStation('judges')"><span>👨‍⚖️ Switch to Station 3: Judge Room</span> <span class="kbd">3</span></button>
+      <button class="command-item" onclick="switchStation('warroom')"><span>💬 Switch to Station 4: Coach War Room</span> <span class="kbd">4</span></button>
+      <button class="command-item" onclick="switchStation('vault')"><span>📁 Switch to Station 5: Project Vault</span> <span class="kbd">5</span></button>
     </div>
   </div>
 </div>
 
-<!-- Modal: Demo Pre-Flight Check -->
-<div class="modal-overlay" id="modalPreflight">
-  <div class="modal-box">
-    <div class="modal-head">
-      <h2 style="margin:0; font-size:22px;">Demo Readiness Pre-Flight</h2>
-      <button class="btn btn-ghost" id="btnCloseModal" style="padding:4px 10px;">✕</button>
-    </div>
-    <p style="color:var(--text-dim); font-size:13px; margin-bottom:20px;">Verify these critical steps to ensure your live 3-minute demo doesn't fail under pressure.</p>
-    
-    <div class="check-list" id="checklistBody">
-      <!-- Dynamically filled -->
-    </div>
-
-    <div class="final-score-box">
-      <p class="mono" style="color:var(--purple); font-size:11px; margin: 0 0 6px;">Predicted Viability Score</p>
-      <h1 style="margin:0; font-size:36px;" id="demoScoreDisplay">Pending Run</h1>
-      <p style="color:var(--text-dim); font-size:12px; margin: 8px 0 0;">Based on scope realism & architecture resilience.</p>
-    </div>
-  </div>
-</div>
-
-<!-- Drawer: Saved Projects History -->
-<div class="coach-chat-window" id="historyDrawer" style="position:fixed; top:70px; right:28px; z-index:95; width:340px; height:460px;">
-  <div class="chat-header">
-    <div style="display:flex; align-items:center; gap:8px;">
-      <span style="font-weight:600; font-size:13px;">📁 Saved Projects History</span>
-    </div>
-    <button class="btn btn-ghost" id="btnCloseHistory" style="padding:2px 8px; font-size:11px;">✕</button>
-  </div>
-  <div class="chat-messages" id="historyList">
-    <p style="font-size:12px; color:var(--text-dim); text-align:center;">Loading saved projects...</p>
-  </div>
-</div>
-
-<!-- Floating AI Coach Chat Drawer -->
-<div class="coach-drawer">
-  <div class="coach-chat-window" id="coachChatWindow">
-    <div class="chat-header">
-      <div style="display:flex; align-items:center; gap:8px;">
-        <div class="logo-mark" style="width:18px; height:18px;"></div>
-        <span style="font-weight:600; font-size:13px;">Krishna AI Coach</span>
-      </div>
-      <button class="btn btn-ghost" id="btnCloseChat" style="padding:2px 8px; font-size:11px;">✕</button>
-    </div>
-    <div class="chat-messages" id="chatMessages">
-      <div class="chat-msg coach">👋 Hi! I'm your KrishnaAI Coach. Ask me anything about scope cuts, tech stack shortcuts, or live pitch tips!</div>
-    </div>
-    <div class="chat-input-area">
-      <input type="text" id="chatInput" placeholder="Ask your coach...">
-      <button class="btn btn-primary" id="btnSendChat" style="padding:6px 12px; font-size:12px;">Send</button>
-    </div>
-  </div>
-  <button class="coach-toggle-btn" id="coachToggleBtn">
-    <span>🤖</span> <span>Ask Krishna Coach</span>
-  </button>
-</div>
-
-<script>
-function useSamplePrompt(idea, stack, team, time) {
-  document.getElementById('mainPrompt').value = idea;
-  if (stack) document.getElementById('inTech').value = stack;
-  if (team) document.getElementById('inTeam').value = team;
-  if (time) document.getElementById('inTime').value = time;
-  document.getElementById('mainPrompt').focus();
-}
-</script>
-
-<script src="js/three-bg.js"></script>
 <script src="js/api.js"></script>
 <script src="js/pitch.js"></script>
 <script src="js/app.js"></script>
