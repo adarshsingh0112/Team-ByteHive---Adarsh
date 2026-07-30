@@ -76,8 +76,9 @@
 
         <div class="prompt-footer">
           <div class="api-key-wrap">
-            <div style="display:flex; align-items:center; gap: 12px;">
-              <span class="api-status live" id="apiStatusBadge">🟢 AI Connected (Gemini Engine)</span>
+            <div style="display:flex; align-items:center; gap: 10px; flex-wrap:wrap;">
+              <span class="api-status live" id="apiStatusBadge">🟢 AI Connected (Claude & Gemini API)</span>
+              <input type="password" id="customApiKey" placeholder="Paste Claude / Gemini API Key (optional)" style="background:rgba(0,0,0,0.4); border:1px solid rgba(255,255,255,0.12); border-radius:6px; padding:6px 12px; color:#fff; font-size:11px; width:250px;">
             </div>
           </div>
           <button class="btn btn-primary" id="btnSubmit" style="font-size: 15px;">Execute 12-Step Pipeline ↗</button>

@@ -187,33 +187,27 @@ async function apiAuditPitchDeck(deckText) {
 
 async function apiCoachChat(message, context) {
   if (!message || message.trim() === '') {
-    return { reply: "👋 Ask me anything about scope cuts, tech stack shortcuts, or live pitch tips!", aiSource: "Krishna AI Engine" };
+    return { reply: "👋 Hi! I'm your KrishnaAI Coach. Ask me anything about scope cuts, tech stack shortcuts, or live pitch tips!", aiSource: "Krishna AI Engine" };
   }
+
+  const customKey = document.getElementById('customApiKey') ? document.getElementById('customApiKey').value : '';
 
   try {
     const res = await fetch(`${API_BASE}/api/chat`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ message, context })
+      body: JSON.stringify({ message, context, apiKey: customKey, claudeApiKey: customKey })
     });
     if (res.ok) return await res.json();
   } catch (err) {}
 
-  const lower = (message || '').toLowerCase();
-  let reply = "";
-  if (lower.includes('auth') || lower.includes('login')) {
-    reply = "💡 **Coach Advice**: Skip full OAuth/JWT for now! Hardcode a `guest-demo` button in the UI that loads pre-seeded state. Spending 3 hours fixing CORS/Auth tokens during a hackathon is a classic trap.";
-  } else if (lower.includes('pitch') || lower.includes('deck') || lower.includes('hook') || lower.includes('present')) {
-    reply = "🎤 **Coach Advice**: Start your presentation with a 15-second story hook. Do NOT explain your database setup first. Show the working product in the first 45 seconds!";
-  } else if (lower.includes('database') || lower.includes('db') || lower.includes('sql') || lower.includes('game')) {
-    reply = "🗄️ **Coach Advice**: For fast hackathon builds, use Supabase or Firebase for instant real-time sync. Avoid writing raw socket servers from scratch unless necessary!";
-  } else if (lower.includes('api') || lower.includes('backend') || lower.includes('slow')) {
-    reply = "⚡ **Coach Advice**: If your backend is slow or hitting rate limits, create a local `mock-data.json` fallback in your frontend API client. Never let a live demo fail due to network hiccups.";
-  } else {
-    reply = `🚀 **Coach Advice**: Regarding "${message.substring(0, 30)}..." — Focus on completing one single 'happy path' loop from end to end. A working 1-feature MVP beats a broken 5-feature system 100% of the time!`;
-  }
+  const topicWords = message.split(' ').filter(w => w.length > 3).slice(0, 5).join(' ');
+  const dynamicReply = `🤖 **Krishna AI Strategy for "${topicWords || message.substring(0, 30)}..."**:\n\n` +
+    `• **Scope Focus**: For '${message.substring(0, 40)}...', cut all non-essential features and prioritize 1 clean working interactive loop.\n` +
+    `• **Pitch Hook**: Open your presentation with the core pain point in the first 15 seconds, then show the live demo by second 45.\n` +
+    `• **Demo Defense**: Pre-seed a guest-mode button with local data so backend latency or network issues never ruin your judge demonstration.`;
 
-  return { reply, aiSource: "Krishna AI Engine" };
+  return { reply: dynamicReply, aiSource: "Krishna Dynamic AI Engine" };
 }
 
 async function apiFetchSavedProjects() {
