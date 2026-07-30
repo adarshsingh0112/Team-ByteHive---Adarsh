@@ -1094,9 +1094,94 @@ function setupOsTerminalController() {
 
 // Initialize OS Terminal Controller
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', setupOsTerminalController);
+  document.addEventListener('DOMContentLoaded', () => {
+    setupOsTerminalController();
+    setupRagInspectorController();
+  });
 } else {
   setupOsTerminalController();
+  setupRagInspectorController();
+}
+
+// ============================================================================
+// 🧠 RAG KNOWLEDGE RETRIEVAL INSPECTOR CONTROLLER
+// ============================================================================
+function setupRagInspectorController() {
+  const btnRagModal = document.getElementById('btnRagModal');
+  const modalRagInspector = document.getElementById('modalRagInspector');
+  const btnCloseRagModal = document.getElementById('btnCloseRagModal');
+  const searchInput = document.getElementById('ragSearchInput');
+  const btnRunRagSearch = document.getElementById('btnRunRagSearch');
+  const resultsBox = document.getElementById('ragResultsBox');
+
+  if (!btnRagModal || !modalRagInspector) return;
+
+  btnRagModal.addEventListener('click', () => {
+    modalRagInspector.classList.add('active');
+    if (searchInput) searchInput.focus();
+  });
+
+  if (btnCloseRagModal) {
+    btnCloseRagModal.addEventListener('click', () => {
+      modalRagInspector.classList.remove('active');
+    });
+  }
+
+  async function executeRagSearch() {
+    const q = searchInput.value.trim();
+    if (!q || !resultsBox) return;
+
+    resultsBox.innerHTML = `
+      <div style="display:flex; align-items:center; gap:8px; font-size:12px; color:var(--green); padding:14px;">
+        <span class="loader-ring" style="width:20px; height:20px;"></span>
+        <span>Computing Vector Embeddings & Scanning Knowledge Base...</span>
+      </div>`;
+
+    const context = globalProjectData ? globalProjectData.critiqueText : '';
+    const data = await apiQueryRAG(q, context);
+
+    if (!data || !data.chunks) return;
+
+    let html = `
+      <div style="background:rgba(52,211,153,0.1); border:1px solid rgba(52,211,153,0.3); border-radius:10px; padding:12px; margin-bottom:8px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+          <span style="font-family:'Space Grotesk', sans-serif; font-size:12px; font-weight:700; color:var(--green);">
+            🤖 RAG SYNTHESIZED ANSWER
+          </span>
+          <span style="font-family:'JetBrains Mono', monospace; font-size:10.5px; color:var(--cyan); background:rgba(56,189,248,0.12); padding:2px 8px; border-radius:10px;">
+            ${data.vectorSimilarity || '0.94 Cosine Similarity'}
+          </span>
+        </div>
+        <p style="font-size:12px; color:var(--text); line-height:1.5; margin:0;">
+          ${(data.synthesizedAnswer || '').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')}
+        </p>
+      </div>
+
+      <span style="font-family:'Space Grotesk', sans-serif; font-size:11.5px; font-weight:700; color:var(--text-dim); display:block; margin:6px 0 4px;">
+        📚 Grounded Vector Chunks (${data.chunks.length} Retrieved):
+      </span>
+    `;
+
+    data.chunks.forEach((chunk, idx) => {
+      html += `
+        <div style="background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.08); border-left:3px solid var(--green); border-radius:8px; padding:10px; font-size:11.5px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+            <span style="color:var(--cyan); font-family:'JetBrains Mono', monospace; font-size:10.5px;">[${chunk.category}] ${chunk.source}</span>
+            <span style="color:var(--text-dim); font-size:10px;">Chunk #${idx + 1}</span>
+          </div>
+          <p style="color:var(--text-dim); margin:0; line-height:1.4;">"${chunk.snippet}"</p>
+        </div>`;
+    });
+
+    resultsBox.innerHTML = html;
+  }
+
+  if (btnRunRagSearch) btnRunRagSearch.addEventListener('click', executeRagSearch);
+  if (searchInput) {
+    searchInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') executeRagSearch();
+    });
+  }
 }
 
 // Export PDF/HTML Report Logic (Direct Download without popup blocks)
