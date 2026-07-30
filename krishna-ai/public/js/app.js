@@ -156,10 +156,10 @@ function renderDashboardData(data, idea, stack) {
             </div>
 
             <div style="display:inline-block; background:rgba(16,185,129,0.15); border:1px solid rgba(16,185,129,0.3); border-radius:12px; padding:3px 10px; font-size:10.5px; color:#10B981; font-weight:600; margin-bottom:6px;">
-              High Probability of Success ↑
+              High Probability of Success
             </div>
             <div style="font-size:11.5px; font-weight:600; color:#e2e8f0; display:flex; align-items:center; justify-content:center; gap:4px;">
-              🏆 Strong Market Fit Detected
+              Strong Market Demand Detected
             </div>
           </div>
 
@@ -175,17 +175,17 @@ function renderDashboardData(data, idea, stack) {
               <!-- Green Checkmark High Impact Features -->
               <div style="display:flex; flex-direction:column; gap:6px; margin-bottom:10px;">
                 <div style="display:flex; align-items:center; gap:6px; font-size:11.5px; color:#34d399; font-family:'Inter', sans-serif;">
-                  <span style="font-weight:700;">✓</span> <span>Core AI Chat Functionality</span>
+                  <span style="font-weight:700;">✓</span> <span>Core Application Workflows</span>
                 </div>
                 <div style="display:flex; align-items:center; gap:6px; font-size:11.5px; color:#34d399; font-family:'Inter', sans-serif;">
-                  <span style="font-weight:700;">✓</span> <span>Intelligent Knowledge Base</span>
+                  <span style="font-weight:700;">✓</span> <span>Knowledge Base Vector Indexing</span>
                 </div>
               </div>
 
               <!-- Purple Strikethrough Low Impact Features -->
               <div style="display:flex; flex-direction:column; gap:6px; margin-bottom:10px;">
                 <div style="display:flex; align-items:center; gap:6px; font-size:11.5px; color:#a855f7; text-decoration:line-through; font-family:'Inter', sans-serif;">
-                  <span style="font-weight:700;">✕</span> <span>Custom Authentication System</span>
+                  <span style="font-weight:700;">✕</span> <span>Custom Authentication Pipeline</span>
                 </div>
                 <div style="display:flex; align-items:center; gap:6px; font-size:11.5px; color:#a855f7; text-decoration:line-through; font-family:'Inter', sans-serif;">
                   <span style="font-weight:700;">✕</span> <span>Advanced Analytics Dashboard</span>
@@ -193,16 +193,15 @@ function renderDashboardData(data, idea, stack) {
               </div>
             </div>
 
-            <!-- Tip Card with Sparkle Icon -->
-            <div style="background:rgba(56,189,248,0.08); border:1px solid rgba(56,189,248,0.2); border-radius:8px; padding:8px 10px; font-size:11px; color:var(--text-dim); display:flex; align-items:flex-start; gap:6px;">
-              <span style="color:#38bdf8; font-size:13px;">✨</span>
-              <span><strong>Feature Tip:</strong> Pruning low-impact bloat cuts 14 hours of integration risk before live demo judging.</span>
+            <!-- Tip Card -->
+            <div style="background:rgba(56,189,248,0.08); border:1px solid rgba(56,189,248,0.2); border-radius:8px; padding:8px 10px; font-size:11px; color:var(--text-dim);">
+              <span><strong>Engineering Note:</strong> Pruning low-impact features eliminates 14 hours of integration risk before live demo judging.</span>
             </div>
           </div>
 
         </div>
 
-        <!-- Bottom Bar: 3 Key Metrics + Glowing Purple-Pink Gradient CTA Button -->
+        <!-- Bottom Bar: 3 Key Metrics + Clean Sleek CTA Button -->
         <div style="border-top:1px solid rgba(255,255,255,0.08); padding-top:12px;">
           
           <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:8px; margin-bottom:12px; text-align:center;">
@@ -221,7 +220,7 @@ function renderDashboardData(data, idea, stack) {
           </div>
 
           <button class="btn-optimize-purple-pink" id="cutFatBtn">
-            <span>✂ OPTIMIZE PROJECT: 1-Click Cut Secondary Bloat</span>
+            <span>Refine Scope (Cut Non-Essential Features)</span>
             <span>→</span>
           </button>
         </div>
@@ -237,15 +236,16 @@ function renderDashboardData(data, idea, stack) {
   let planHTML = '';
   sprintPlan.forEach((task, idx) => {
     planHTML += `
-      <div class="task-item" ${idx === 2 ? 'id="bloatTask"' : ''}>
+      <div class="task-item" ${idx === 2 ? 'id="bloatTask"' : ''} style="padding:14px; border-radius:12px;">
         <div class="task-info">
-          <div class="task-head">
-            <h4>${task.title}</h4>
-            <span class="assignee-badge">${task.assignee || 'Developer'}</span>
+          <div class="task-head" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+            <h4 style="font-size:13px; font-weight:600;">${task.title}</h4>
+            <span class="assignee-badge" style="font-size:10px; padding:2px 8px;">${task.assignee || 'Developer'}</span>
           </div>
-          <p>${task.desc || task.phase || 'Core milestone task'}</p>
-          <span class="priority-badge">${task.priority || 'HIGH'}</span>
-          <span class="time-badge">${task.phase || task.time || 'Sprint ' + (idx + 1)}</span>
+          <p style="font-size:11.5px; margin:0 0 6px;">${task.desc || 'Core milestone task'}</p>
+          <div style="display:flex; gap:8px; align-items:center;">
+            <span class="time-badge">${task.phase || 'Sprint ' + (idx + 1)}</span>
+          </div>
         </div>
       </div>`;
   });
@@ -255,14 +255,15 @@ function renderDashboardData(data, idea, stack) {
   const risks = data.risks || [];
   let radarHTML = '';
   risks.forEach(r => {
+    const cleanAction = (r.action || '').replace('> COACH:', 'Mitigation:').replace('🤖', '').trim();
     radarHTML += `
-      <div class="risk-card ${r.isSlipping ? 'slipping' : ''}">
+      <div class="risk-card ${r.isSlipping ? 'slipping' : ''}" style="padding:14px; border-radius:12px;">
         <div class="risk-head">
           <span class="risk-tag ${r.isSlipping ? 'slipping' : ''}">${r.isSlipping ? 'SLIPPING TASK' : 'MEDIUM RISK'}</span>
         </div>
-        <h4>${r.title}</h4>
-        <p>${r.desc}</p>
-        <div class="coach-action">${r.action}</div>
+        <h4 style="font-size:13px; margin:4px 0;">${r.title}</h4>
+        <p style="font-size:11.5px;">${r.desc}</p>
+        <div class="coach-action" style="font-size:11px; margin-top:8px; padding-top:8px; color:var(--cyan);">${cleanAction}</div>
       </div>`;
   });
   document.getElementById('radarPanelBody').innerHTML = radarHTML;
@@ -297,26 +298,26 @@ CREATE INDEX idx_${sanitizedIdea}_user ON ${sanitizedIdea}_records(user_id);
   D -->|Structured JSON| B`;
 
   let archHTML = `
-    <div class="score-card">
-      <h3>Architecture Viability</h3>
-      <span class="score-val">${data.confidence_score || 91}<span style="font-size:14px; color:var(--text-dimmer);">/100</span></span>
+    <div class="score-card" style="padding:12px 16px; border-radius:10px;">
+      <h3 style="font-size:13px;">Architecture Viability</h3>
+      <span class="score-val" style="font-size:22px;">${data.confidence_score || 91}<span style="font-size:12px; color:var(--text-dimmer);">/100</span></span>
     </div>
-    <div class="critique-item">
-      <h5 style="color:var(--blue);">Production Tech Stack</h5>
-      <p style="font-size:12px; margin:4px 0 0;">Frontend: <strong>${arch.frontend || 'Next.js'}</strong><br>Backend: <strong>${arch.backend || 'Express TypeScript'}</strong><br>Database: <strong>${arch.database || 'Supabase PostgreSQL'}</strong></p>
+    <div class="critique-item" style="padding:12px; border-radius:10px;">
+      <h5 style="color:var(--blue); font-size:11.5px;">Production Tech Stack</h5>
+      <p style="font-size:11.5px; margin:4px 0 0;">Frontend: <strong>${arch.frontend || 'Next.js'}</strong> | Backend: <strong>${arch.backend || 'Express TypeScript'}</strong> | Database: <strong>${arch.database || 'Supabase PostgreSQL'}</strong></p>
     </div>
     <div style="margin-top:10px;">
-      <span style="font-size:11px; font-weight:600; color:var(--purple); display:block; margin-bottom:4px;">📊 Interactive System Flowchart (Mermaid):</span>
+      <span style="font-size:11px; font-weight:600; color:var(--cyan); display:block; margin-bottom:4px;">System Architecture Flowchart:</span>
       <div class="mermaid-box"><pre class="mermaid">${mermaidCode}</pre></div>
     </div>
     <div style="margin-top:10px;">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
-        <span style="font-size:11px; font-weight:600; color:var(--cyan);">🗄️ PostgreSQL DDL Schema (Copy to Supabase):</span>
+        <span style="font-size:11px; font-weight:600; color:var(--cyan);">PostgreSQL DDL Schema:</span>
       </div>
-      <div class="sql-ddl-box" id="sqlDdlContent">${dynamicSqlDdl}<button class="btn-copy-code" onclick="copySqlDdl()">📋 Copy SQL</button></div>
+      <div class="sql-ddl-box" id="sqlDdlContent">${dynamicSqlDdl}<button class="btn-copy-code" onclick="copySqlDdl()">Copy SQL</button></div>
     </div>
     <div style="margin-top:12px; text-align:center;">
-      <a href="/api/starter-code" download="krishna_starter_codebase.zip" class="btn btn-ghost" style="font-size:11px; text-decoration:none; display:inline-flex; align-items:center; gap:6px; border-color:var(--purple); color:var(--purple);">📦 Download Starter Codebase (.zip)</a>
+      <a href="/api/starter-code" download="krishna_starter_codebase.zip" class="btn btn-ghost" style="font-size:11px; text-decoration:none; display:inline-flex; align-items:center; gap:6px; border-color:var(--purple); color:var(--purple);">Download Starter Codebase (.zip)</a>
     </div>`;
 
   document.getElementById('archPanelBody').innerHTML = archHTML;
@@ -333,9 +334,9 @@ CREATE INDEX idx_${sanitizedIdea}_user ON ${sanitizedIdea}_records(user_id);
   // Panel 5: Pitch Elevator Pitch & Slides
   if (data.elevator_pitch) {
     document.getElementById('elevatorPitchBox').innerHTML = `
-      <div class="critique-box" style="background:rgba(76,139,255,0.1); border-color:rgba(76,139,255,0.3);">
-        <h4 style="color:var(--blue);">⚡ 15-Second Elevator Pitch Hook</h4>
-        <p style="font-size:13px; font-style:italic;">"${data.elevator_pitch}"</p>
+      <div class="critique-box" style="background:rgba(76,139,255,0.08); border-color:rgba(76,139,255,0.25); padding:12px; border-radius:10px;">
+        <h4 style="color:var(--blue); font-size:11px;">Elevator Pitch Hook</h4>
+        <p style="font-size:12.5px; font-style:italic; margin:0;">"${data.elevator_pitch}"</p>
       </div>`;
   }
   renderPitchSection(idea, stack);
@@ -347,18 +348,18 @@ CREATE INDEX idx_${sanitizedIdea}_user ON ${sanitizedIdea}_records(user_id);
   let demoHTML = '';
   const flow = data.demo_flow || ["1. Open active workspace in guest mode", "2. Enter raw project idea and trigger pipeline", "3. Show 5-judge simulation panel"];
   demoHTML += `
-    <div class="critique-item">
-      <h5 style="color:var(--cyan);">🎬 Live Demo Flow (3 Minutes)</h5>
-      <ol style="margin:6px 0 0; padding-left:18px; font-size:12px; color:var(--text-dim); line-height:1.6;">
+    <div class="critique-item" style="padding:12px; border-radius:10px;">
+      <h5 style="color:var(--cyan); font-size:12px;">Live Demo Sequence (3 Minutes)</h5>
+      <ol style="margin:6px 0 0; padding-left:18px; font-size:11.5px; color:var(--text-dim); line-height:1.6;">
         ${flow.map(step => `<li>${step}</li>`).join('')}
       </ol>
     </div>`;
 
   const backupPlan = data.backup_demo_plan || ["Pre-recorded 60s HD video walkthrough", "Pre-cached local JSON response engine"];
   demoHTML += `
-    <div class="critique-item red" style="margin-top:10px;">
-      <h5 style="color:var(--red);">🛡️ Offline Fallback Plan (If Wi-Fi Fails)</h5>
-      <ul style="margin:4px 0 0; padding-left:18px; font-size:12px; color:var(--text-dim);">
+    <div class="critique-item red" style="margin-top:10px; padding:12px; border-radius:10px;">
+      <h5 style="color:var(--red); font-size:12px;">Offline Fallback Plan</h5>
+      <ul style="margin:4px 0 0; padding-left:18px; font-size:11.5px; color:var(--text-dim);">
         ${backupPlan.map(b => `<li>${b}</li>`).join('')}
       </ul>
     </div>`;

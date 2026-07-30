@@ -92,6 +92,65 @@
   animation: marquee 25s linear infinite;
 }
 
+/* Dark Theme Mermaid Diagram Overrides */
+.mermaid-box {
+  background: #060814;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 16px;
+  overflow-x: auto;
+  text-align: center;
+}
+
+.mermaid .node rect, .mermaid .node circle, .mermaid .node polygon, .mermaid rect {
+  fill: #0F172A !important;
+  stroke: rgba(79, 140, 255, 0.4) !important;
+  stroke-width: 1.5px !important;
+  rx: 8px !important;
+  ry: 8px !important;
+}
+
+.mermaid .node .label, .mermaid span, .mermaid text {
+  fill: #FFFFFF !important;
+  color: #FFFFFF !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+}
+
+.mermaid .edgePath .path, .mermaid path {
+  stroke: #4F8CFF !important;
+  stroke-width: 1.5px !important;
+}
+
+.mermaid .marker {
+  fill: #4F8CFF !important;
+  stroke: #4F8CFF !important;
+}
+
+.btn-optimize-purple-pink {
+  width: 100%;
+  background: rgba(79, 140, 255, 0.1);
+  border: 1px solid rgba(79, 140, 255, 0.3);
+  color: #4F8CFF;
+  padding: 12px 18px;
+  border-radius: 10px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.25s ease;
+}
+
+.btn-optimize-purple-pink:hover {
+  background: rgba(79, 140, 255, 0.2);
+  border-color: rgba(79, 140, 255, 0.6);
+  transform: translateY(-1px);
+}
+
 * { box-sizing: border-box; }
 
 body {
