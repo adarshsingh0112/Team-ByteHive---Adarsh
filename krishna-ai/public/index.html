@@ -128,37 +128,37 @@
     <div class="dash-header">
       <div class="dash-title">
         <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:4px;">
-          <p style="margin:0;">● Autonomous Coach Pipeline Active <span id="dashModeBadge" class="mode-badge-pill">⚡ Hackathon Mode</span></p>
-          <span style="font-family:'JetBrains Mono', monospace; font-size:10px; color:var(--cyan); background:rgba(56,189,248,0.1); border:1px solid rgba(56,189,248,0.25); padding:2px 8px; border-radius:12px; display:inline-flex; align-items:center; gap:5px;">
-            <span style="width:5px; height:5px; border-radius:50%; background:var(--cyan); box-shadow:0 0 6px var(--cyan);"></span> KRISHNA OS v2.4 | AGENTS: 5/5 ONLINE | LATENCY: 12ms
+          <p style="margin:0; font-size:12px; color:var(--text-dim);">Project Execution Command Center <span id="dashModeBadge" class="mode-badge-pill">Hackathon Mode</span></p>
+          <span style="font-family:'Space Grotesk', sans-serif; font-size:10px; color:var(--cyan); background:rgba(56,189,248,0.08); border:1px solid rgba(56,189,248,0.2); padding:2px 8px; border-radius:12px; display:inline-flex; align-items:center; gap:5px;">
+            <span style="width:5px; height:5px; border-radius:50%; background:var(--cyan);"></span> System Active | Latency: 12ms
           </span>
         </div>
         <h2 id="projTitle">Project Workspace</h2>
       </div>
       <div class="dash-actions">
-        <button class="btn btn-ghost" id="btnRagModal" style="border-color:rgba(52,211,153,0.4); color:var(--green);">🧠 RAG Knowledge Store</button>
-        <button class="btn btn-ghost" id="btnOsTerminal" style="border-color:rgba(56,189,248,0.4); color:var(--cyan);">💻 OS Terminal</button>
-        <button class="btn btn-ghost" id="btnReset">🔄 New Idea</button>
-        <button class="btn btn-ghost" id="btnExport">⬇ Export Report & PPT</button>
-        <button class="btn btn-primary" id="btnPreflight">🚀 Pre-Flight Demo Check</button>
+        <button class="btn btn-ghost" id="btnRagModal">Knowledge Base</button>
+        <button class="btn btn-ghost" id="btnOsTerminal">Terminal</button>
+        <button class="btn btn-ghost" id="btnReset">New Execution</button>
+        <button class="btn btn-ghost" id="btnExport">Export Report</button>
+        <button class="btn btn-primary" id="btnPreflight">Pre-Flight Check</button>
       </div>
     </div>
 
-    <!-- FEATURED HERO BANNER: International 5-Judge Simulation Verdict & Grill-the-Judges Q&A -->
+    <!-- FEATURED HERO BANNER: International 5-Judge Simulation Verdict & Q&A Defense Matrix -->
     <div class="hero-judge-banner panel-anim">
       <div class="panel-header" style="background:transparent; border:none; padding: 0 0 12px;">
-        <div class="panel-title" style="font-size:16px; color:var(--purple);"><span class="panel-title-icon">👨‍⚖️</span> International 5-Judge Simulation Panel & Live Q&A Simulator</div>
+        <div class="panel-title" style="font-size:15px; color:var(--purple);">Judges Evaluation & Q&A Defense Matrix</div>
       </div>
       <div id="fiveJudgesPanelBody"></div>
 
-      <!-- Interactive "Grill the Judges" Q&A Bar -->
+      <!-- Practice Q&A Defense Bar -->
       <div class="judge-qa-box" style="margin-top:16px; padding-top:14px; border-top:1px solid rgba(255,255,255,0.08);">
         <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
-          <span style="font-size:12px; font-weight:600; color:var(--cyan);"><span class="panel-title-icon">🎤</span> Practice Judge Q&A / Answer Criticisms:</span>
+          <span style="font-size:12px; font-weight:600; color:var(--cyan);">Practice Q&A Defense:</span>
         </div>
         <div style="display:flex; gap:8px;">
-          <input type="text" id="judgeQaInput" placeholder="Type your answer to a judge critique (e.g. 'We handle DB connection pooling via Supabase bouncers')..." style="flex:1; background:rgba(0,0,0,0.4); border:1px solid var(--card-border); border-radius:8px; padding:8px 12px; color:#fff; font-size:12px;">
-          <button class="btn btn-primary" id="btnSendJudgeQa" style="padding:6px 14px; font-size:12px;">Ask Judges</button>
+          <input type="text" id="judgeQaInput" placeholder="Type your response to a judge critique (e.g. 'We handle database scaling via transaction poolers')..." style="flex:1; background:rgba(0,0,0,0.4); border:1px solid var(--card-border); border-radius:8px; padding:8px 12px; color:#fff; font-size:12px;">
+          <button class="btn btn-primary" id="btnSendJudgeQa" style="padding:6px 14px; font-size:12px;">Submit Response</button>
         </div>
         <div id="judgeQaReply" style="margin-top:8px; display:none;"></div>
       </div>
@@ -171,9 +171,9 @@
       <div class="glass-panel panel-anim" style="background:#0B0F17; border-color:rgba(255,255,255,0.08);">
         <div class="panel-header">
           <div class="panel-title" style="display:flex; justify-content:space-between; align-items:center; width:100%;">
-            <span style="display:flex; align-items:center; gap:6px;"><span class="panel-title-icon">🏆</span> AI PROJECT VIABILITY</span>
+            <span style="display:flex; align-items:center; gap:6px;">Project Viability Analysis</span>
             <span style="font-size:10.5px; color:#10B981; font-family:'JetBrains Mono', monospace; font-weight:600; display:flex; align-items:center; gap:4px; background:rgba(16,185,129,0.12); border:1px solid rgba(16,185,129,0.25); padding:2px 8px; border-radius:14px;">
-              <span style="width:5px; height:5px; border-radius:50%; background:#10B981; box-shadow:0 0 6px #10B981;"></span> Analysis Complete
+              <span style="width:5px; height:5px; border-radius:50%; background:#10B981;"></span> Analysis Complete
             </span>
           </div>
         </div>
@@ -184,57 +184,57 @@
 
       <!-- Panel 2: Sprint Plan & Team Role Allocation -->
       <div class="glass-panel panel-anim">
-        <div class="panel-header"><div class="panel-title"><span class="panel-title-icon">🎯</span> Sprint Complete & Role Allocation</div></div>
+        <div class="panel-header"><div class="panel-title">Sprint Roadmap & Role Allocation</div></div>
         <div class="panel-body" id="planPanelBody"></div>
       </div>
 
       <!-- Panel 3: Risk Detection & Recovery Interventions -->
       <div class="glass-panel panel-anim">
-        <div class="panel-header"><div class="panel-title"><span class="panel-title-icon">⚠️</span> Risks & Recovery Plan</div></div>
+        <div class="panel-header"><div class="panel-title">Risk Matrix & Mitigation Plan</div></div>
         <div class="panel-body" id="radarPanelBody"></div>
       </div>
       
       <!-- Panel 4: Interactive System Architecture, Mermaid & PostgreSQL DB Schema -->
       <div class="glass-panel panel-anim">
         <div class="panel-header">
-          <div class="panel-title"><span class="panel-title-icon">🏗️</span> Architecture, Mermaid Diagram & DB Schema</div>
+          <div class="panel-title">System Architecture & Database Schema</div>
         </div>
         <div class="panel-body" id="archPanelBody"></div>
       </div>
 
       <!-- Panel 5: PPT Outline, Elevator Pitch, Deck Audit & Voice Pitch Trainer -->
       <div class="glass-panel panel-anim">
-        <div class="panel-header"><div class="panel-title"><span class="panel-title-icon">🎤</span> PPT Slide Script & Voice Pitch Trainer</div></div>
+        <div class="panel-header"><div class="panel-title">Pitch Script & Presentation Audit</div></div>
         <div class="panel-body" id="pitchPanelBody" style="justify-content: flex-start; gap: 14px;">
           <div id="elevatorPitchBox"></div>
 
           <!-- Live Voice Pitch Trainer -->
-          <div class="voice-pitch-card" style="background:rgba(168,85,247,0.08); border:1px solid rgba(168,85,247,0.3); border-radius:12px; padding:12px; text-align:center;">
-            <div style="font-size:12px; font-weight:600; color:var(--purple); margin-bottom:6px;"><span class="panel-title-icon">🎙️</span> AI Voice Pitch Trainer</div>
-            <p style="font-size:11px; color:var(--text-dim); margin:0 0 10px;">Record your 60-second pitch via mic to analyze speech pacing & filler words.</p>
+          <div class="voice-pitch-card" style="background:rgba(168,85,247,0.08); border:1px solid rgba(168,85,247,0.25); border-radius:12px; padding:12px; text-align:center;">
+            <div style="font-size:12px; font-weight:600; color:var(--purple); margin-bottom:6px;">Voice Pitch Practice</div>
+            <p style="font-size:11px; color:var(--text-dim); margin:0 0 10px;">Record your 60-second pitch to analyze speech pacing & filler word frequency.</p>
             <div style="display:flex; justify-content:center; gap:8px;">
-              <button class="btn btn-ghost" id="btnRecordPitch" style="font-size:11px; padding:4px 10px;">🔴 Record Pitch (Mic)</button>
-              <button class="btn btn-ghost" id="btnStopPitch" style="font-size:11px; padding:4px 10px; display:none;">⏹️ Stop & Analyze</button>
+              <button class="btn btn-ghost" id="btnRecordPitch" style="font-size:11px; padding:4px 10px;">Record Pitch (Mic)</button>
+              <button class="btn btn-ghost" id="btnStopPitch" style="font-size:11px; padding:4px 10px; display:none;">Stop & Analyze</button>
             </div>
             <div id="voicePitchResult" style="font-size:11px; margin-top:8px; display:none;"></div>
           </div>
 
           <div id="uploadZone" class="upload-zone">
             <input type="file" id="deckFileInput" accept=".pdf,.txt,.ppt,.pptx,.md" style="display:none;">
-            <div class="upload-icon" style="font-size:22px; margin-bottom:4px;">📄</div>
-            <h4>Audit Pitch Deck Document</h4>
-            <p style="font-size:11px; color:var(--text-dim); margin-top:4px;">Click or drag PDF/PPT text files to scan slides for storytelling gaps and wordiness.</p>
+            <div class="upload-icon" style="font-size:20px; margin-bottom:4px;">📄</div>
+            <h4>Audit Pitch Deck Presentation</h4>
+            <p style="font-size:11px; color:var(--text-dim); margin-top:4px;">Click or upload PDF/PPT presentation files to scan slides for storytelling clarity.</p>
           </div>
           <div id="evalResult" class="eval-result"></div>
           <hr style="border:none; border-top:1px solid rgba(255,255,255,0.05); margin: 2px 0;">
-          <h4 style="font-size:13px; color:var(--purple);">📊 Generated PPT 5-Slide Outline</h4>
+          <h4 style="font-size:13px; color:var(--purple);">Presentation Outline</h4>
           <div id="pitchScriptBody"></div>
         </div>
       </div>
 
       <!-- Panel 6: Demo Flow, Offline Backup & Business Model -->
       <div class="glass-panel panel-anim">
-        <div class="panel-header"><div class="panel-title"><span class="panel-title-icon">💼</span> Business Model, Unit Economics & Demo Flow</div></div>
+        <div class="panel-header"><div class="panel-title">Business Model & Demo Sequence</div></div>
         <div class="panel-body" id="demoAndBusinessBody">
           <div id="demoFlowPanelBody"></div>
           <hr style="border:none; border-top:1px solid rgba(255,255,255,0.05); margin: 6px 0;">

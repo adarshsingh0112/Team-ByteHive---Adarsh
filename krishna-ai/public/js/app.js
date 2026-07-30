@@ -662,13 +662,13 @@ function initAgentActivityTicker() {
   if (!tickerMsg) return;
 
   const messages = [
-    "🤖 Technical Judge auditing connection pooling & DB resilience...",
-    "🤖 Innovation Judge benchmarking against 200+ top hackathon winners...",
-    "🤖 Risk Agent scanning for scope creep & secondary feature bloat...",
-    "🤖 Head Judge synthesizing 5-panel verdict & pitch deck alignment...",
-    "🤖 Business Judge evaluating VC CAC:LTV economics & ARR targets...",
-    "🤖 UI/UX Judge auditing glassmorphism hierarchy & accessibility...",
-    "🤖 Presentation Judge timing 60s elevator pitch hook pacing..."
+    "Auditing PostgreSQL connection pooling & database resilience...",
+    "Benchmarking project architecture against 200+ top hackathon winners...",
+    "Scanning project roadmap for scope creep & secondary feature bloat...",
+    "Synthesizing 5-panel verdict & pitch deck alignment...",
+    "Evaluating business model unit economics & projected ARR targets...",
+    "Auditing UI design system hierarchy & accessibility standards...",
+    "Timing presentation pitch hook & speech pacing..."
   ];
 
   let idx = 0;
@@ -726,7 +726,7 @@ async function renderFiveJudgesSection(idea, stack) {
       <!-- Head Judge Summary Banner -->
       <div style="grid-column: 1 / -1; background: linear-gradient(135deg, rgba(168,85,247,0.15), rgba(76,139,255,0.15)); border: 1px solid rgba(168,85,247,0.3); border-radius:16px; padding:24px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px;">
         <div>
-          <span style="font-family:'JetBrains Mono', monospace; font-size:11px; color:var(--purple); text-transform:uppercase; letter-spacing:0.05em;">👑 Head Judge Final Verdict</span>
+          <span style="font-family:'JetBrains Mono', monospace; font-size:11px; color:var(--purple); text-transform:uppercase; letter-spacing:0.05em;">Head Judge Summary Verdict</span>
           <h3 style="margin:6px 0 4px; font-size:20px; font-family:'Space Grotesk', sans-serif;">"${h.one_line_verdict || "A high-impact hackathon tool."}"</h3>
           <p style="margin:0; font-size:12px; color:var(--text-dim); font-family:'Inter', sans-serif;">Status: <strong style="color:var(--text);">${h.project_status || 'Top Contender'}</strong> | Mission: <strong style="color:var(--cyan);">${h.mission_status || 'PROCEED TO PITCH'}</strong></p>
         </div>
@@ -742,19 +742,19 @@ async function renderFiveJudgesSection(idea, stack) {
       <!-- Judge 1: Technical (30%) -->
       <div class="critique-item" style="border-radius:16px; padding:20px;">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-          <h5 style="color:var(--color-data); margin:0; font-family:'Space Grotesk', sans-serif; font-size:13px;"><span class="panel-title-icon">💻</span> Technical Judge (30%)</h5>
+          <h5 style="color:var(--color-data); margin:0; font-family:'Space Grotesk', sans-serif; font-size:13px;">Technical Evaluation (30%)</h5>
           <span style="font-family:'JetBrains Mono', monospace; font-weight:700; color:var(--color-data); font-size:13px;">${t.score}/100</span>
         </div>
         <p style="font-size:11.5px; margin-bottom:6px; font-family:'Inter', sans-serif;"><strong>Strengths:</strong> ${(t.strengths || []).join(', ')}</p>
         <div class="weakness-item-wrap">
           <div class="weakness-trigger" onclick="toggleWeaknessFix(this)">
             <p style="font-size:11.5px; color:var(--color-danger); margin:0; cursor:pointer; font-family:'Inter', sans-serif;">
-              <strong>Weakness:</strong> ${(t.weaknesses || []).join(', ')} <span style="font-size:10px; color:var(--color-data); text-decoration:underline; margin-left:4px;">💡 Click for AI Fix ▾</span>
+              <strong>Weakness:</strong> ${(t.weaknesses || []).join(', ')} <span style="font-size:10px; color:var(--color-data); text-decoration:underline; margin-left:4px;">Click for Suggested Fix ▾</span>
             </p>
           </div>
           <div class="weakness-fix-box">
             <div class="coach-action" style="margin-top:6px; padding:8px 10px; background:rgba(168,85,247,0.12); border-left:3px solid var(--color-primary); border-radius:6px; font-size:11px; font-family:'JetBrains Mono', monospace; color:var(--color-primary);">
-              💡 > COACH SUGGESTED FIX: ${t.fix_suggestion || `Implement Supabase connection bouncers and query caching to prevent DB connection limits.`}
+              💡 > SUGGESTED FIX: ${t.fix_suggestion || `Implement Supabase connection bouncers and query caching to prevent DB connection limits.`}
             </div>
           </div>
         </div>
@@ -763,19 +763,19 @@ async function renderFiveJudgesSection(idea, stack) {
       <!-- Judge 2: Innovation (20%) -->
       <div class="critique-item" style="border-radius:16px; padding:20px;">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-          <h5 style="color:var(--color-primary); margin:0; font-family:'Space Grotesk', sans-serif; font-size:13px;"><span class="panel-title-icon">💡</span> Innovation Judge (20%)</h5>
+          <h5 style="color:var(--color-primary); margin:0; font-family:'Space Grotesk', sans-serif; font-size:13px;">Innovation Index (20%)</h5>
           <span style="font-family:'JetBrains Mono', monospace; font-weight:700; color:var(--color-data); font-size:13px;">${i.score}/100</span>
         </div>
         <p style="font-size:11.5px; margin-bottom:6px; font-family:'Inter', sans-serif;"><strong>Strengths:</strong> ${(i.strengths || []).join(', ')}</p>
         <div class="weakness-item-wrap">
           <div class="weakness-trigger" onclick="toggleWeaknessFix(this)">
             <p style="font-size:11.5px; color:var(--color-warning); margin:0; cursor:pointer; font-family:'Inter', sans-serif;">
-              <strong>Weakness:</strong> ${(i.weaknesses || []).join(', ')} <span style="font-size:10px; color:var(--color-data); text-decoration:underline; margin-left:4px;">💡 Click for AI Fix ▾</span>
+              <strong>Weakness:</strong> ${(i.weaknesses || []).join(', ')} <span style="font-size:10px; color:var(--color-data); text-decoration:underline; margin-left:4px;">Click for Suggested Fix ▾</span>
             </p>
           </div>
           <div class="weakness-fix-box">
             <div class="coach-action" style="margin-top:6px; padding:8px 10px; background:rgba(168,85,247,0.12); border-left:3px solid var(--color-primary); border-radius:6px; font-size:11px; font-family:'JetBrains Mono', monospace; color:var(--color-primary);">
-              💡 > COACH SUGGESTED FIX: ${i.fix_suggestion || `Highlight 12-step autonomous execution loop as core differentiator.`}
+              💡 > SUGGESTED FIX: ${i.fix_suggestion || `Highlight 12-step autonomous execution loop as core differentiator.`}
             </div>
           </div>
         </div>
