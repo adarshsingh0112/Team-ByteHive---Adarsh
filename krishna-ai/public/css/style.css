@@ -1373,3 +1373,31 @@ header {
   margin-top: 6px;
 }
 
+/* ============================================================================
+   🏆 AI PROJECT VIABILITY ANALYSIS COMPONENT STYLES
+   ============================================================================ */
+
+.btn-optimize-purple-pink {
+  width: 100%;
+  background: linear-gradient(135deg, #a855f7, #ec4899);
+  border: none;
+  border-radius: 12px;
+  padding: 12px 18px;
+  color: #ffffff;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 4px 20px rgba(168, 85, 247, 0.4);
+  transition: all 0.25s ease;
+}
+
+.btn-optimize-purple-pink:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(236, 72, 153, 0.5);
+  filter: brightness(1.1);
+}
+

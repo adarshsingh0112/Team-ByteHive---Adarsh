@@ -160,16 +160,18 @@
     <!-- BALANCED 3-COLUMN DASHBOARD GRID (Symmetrical 2x3 Layout) -->
     <div class="panel-grid">
       
-      <!-- Panel 1: Win Probability & Scope Review -->
-      <div class="glass-panel panel-anim">
-        <div class="panel-header"><div class="panel-title"><span class="panel-title-icon">🏆</span> Win Probability & Scope Review</div></div>
-        <div class="panel-body" id="probPanelBody">
-          <div class="win-prob-card">
-            <p class="mono" style="font-size:11px; color:var(--text-dim); margin:0 0 4px;">Predicting Winning Probability</p>
-            <h1 style="font-size:38px; color:var(--cyan); margin:0; font-family:'JetBrains Mono', monospace; font-weight:800;" id="winProbDisplay">85%</h1>
-            <div class="win-meter-bg"><div class="win-meter-fill" id="winMeterFill" style="width: 85%;"></div></div>
+      <!-- Panel 1: AI Project Viability Analysis Dashboard Component -->
+      <div class="glass-panel panel-anim" style="background:#0B0F17; border-color:rgba(255,255,255,0.08);">
+        <div class="panel-header">
+          <div class="panel-title" style="display:flex; justify-content:space-between; align-items:center; width:100%;">
+            <span style="display:flex; align-items:center; gap:6px;"><span class="panel-title-icon">🏆</span> AI PROJECT VIABILITY</span>
+            <span style="font-size:10.5px; color:#10B981; font-family:'JetBrains Mono', monospace; font-weight:600; display:flex; align-items:center; gap:4px; background:rgba(16,185,129,0.12); border:1px solid rgba(16,185,129,0.25); padding:2px 8px; border-radius:14px;">
+              <span style="width:5px; height:5px; border-radius:50%; background:#10B981; box-shadow:0 0 6px #10B981;"></span> Analysis Complete
+            </span>
           </div>
-          <div id="scopeCritiqueBody"></div>
+        </div>
+        <div class="panel-body" id="probPanelBody" style="padding:16px;">
+          <!-- Dynamically populated in app.js -->
         </div>
       </div>
 

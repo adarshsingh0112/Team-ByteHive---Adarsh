@@ -116,29 +116,121 @@ function animateWinProbCountUp(targetVal) {
 }
 
 function renderDashboardData(data, idea, stack) {
-  const winProb = data.winning_probability || data.winProbability || 85;
+  const winProb = data.winning_probability || data.winProbability || 87;
 
-  // Panel 1: Win Probability & Scope Review (with animated count-up counter)
-  animateWinProbCountUp(winProb);
-  const winFill = document.getElementById('winMeterFill');
-  if (winFill) winFill.style.width = `${winProb}%`;
+  // Calculate SVG stroke offset based on winProb (264 is max circumference for r=42)
+  const strokeOffset = Math.round(264 - (264 * Math.min(100, winProb)) / 100);
 
-  let scopeHTML = `<div class="critique-box">
-    <h4>SCOPE REVIEW — SCOPE PRUNED & MVP READY</h4>
-    <p>${data.critiqueText || 'Building non-essential features burns demo prep. Focus 100% on the core interactive loop.'}</p>
-    <button class="btn-cut" id="cutFatBtn">✂ 1-Click Cut Secondary Bloat</button>
-  </div>`;
+  // Panel 1: AI Project Viability Analysis Dashboard Component
+  const probPanel = document.getElementById('probPanelBody');
+  if (probPanel) {
+    probPanel.innerHTML = `
+      <div style="display:flex; flex-direction:column; gap:16px;">
+        
+        <!-- Main Grid: Left Panel (Score Display) & Right Panel (Scope Review) -->
+        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:16px; align-items:stretch;">
+          
+          <!-- Left Panel: Score Display with Radial Progress SVG & Particle Glow -->
+          <div style="text-align:center; padding:18px 14px; background:rgba(0,0,0,0.35); border-radius:14px; border:1px solid rgba(56,189,248,0.2); position:relative; display:flex; flex-direction:column; justify-content:center; align-items:center;">
+            
+            <!-- Radial Progress Circle SVG -->
+            <div style="position:relative; width:135px; height:135px; margin:0 auto 10px;">
+              <svg viewBox="0 0 100 100" style="width:100%; height:100%; transform:rotate(-90deg); overflow:visible;">
+                <defs>
+                  <linearGradient id="radialCyanGreenGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#38bdf8" />
+                    <stop offset="100%" stop-color="#10B981" />
+                  </linearGradient>
+                  <filter id="glowCircleFilter" x="-20%" y="-20%" width="140%" height="140%">
+                    <feGaussianBlur stdDeviation="3" result="blur" />
+                    <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                  </filter>
+                </defs>
+                <circle cx="50" cy="50" r="42" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="8" />
+                <circle cx="50" cy="50" r="42" fill="none" stroke="url(#radialCyanGreenGrad)" stroke-width="8" stroke-dasharray="264" stroke-dashoffset="${strokeOffset}" stroke-linecap="round" filter="url(#glowCircleFilter)" style="transition: stroke-dashoffset 1s ease;" />
+              </svg>
+              <div style="position:absolute; inset:0; display:flex; flex-direction:column; justify-content:center; align-items:center;">
+                <span id="winProbDisplay" style="font-family:'JetBrains Mono', monospace; font-size:34px; font-weight:800; color:#38bdf8; line-height:1;">${winProb}%</span>
+                <span style="font-size:9px; font-family:'JetBrains Mono', monospace; color:var(--text-dim); text-transform:uppercase; letter-spacing:0.06em; margin-top:4px;">WIN PROBABILITY</span>
+              </div>
+            </div>
 
-  if (activePersonaMode === 'beginner' && data.beginner_glossary) {
-    scopeHTML += `<div class="critique-item" style="margin-top:10px; border-left-color:var(--cyan);">
-      <h5 style="color:var(--cyan);">🐣 Beginner Concept Glossary:</h5>
-      <ul style="margin:4px 0 0; padding-left:18px; font-size:11.5px; color:var(--text-dim);">
-        ${data.beginner_glossary.map(g => `<li><strong>${g.term}:</strong> ${g.def}</li>`).join('')}
-      </ul>
-    </div>`;
+            <div style="display:inline-block; background:rgba(16,185,129,0.15); border:1px solid rgba(16,185,129,0.3); border-radius:12px; padding:3px 10px; font-size:10.5px; color:#10B981; font-weight:600; margin-bottom:6px;">
+              High Probability of Success ↑
+            </div>
+            <div style="font-size:11.5px; font-weight:600; color:#e2e8f0; display:flex; align-items:center; justify-content:center; gap:4px;">
+              🏆 Strong Market Fit Detected
+            </div>
+          </div>
+
+          <!-- Right Panel: Scope Review & Features Impact Analysis -->
+          <div style="display:flex; flex-direction:column; justify-content:space-between; background:rgba(0,0,0,0.25); border:1px solid rgba(255,255,255,0.06); border-radius:14px; padding:14px;">
+            <div>
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                <h4 style="font-family:'Space Grotesk', sans-serif; font-size:12px; font-weight:700; color:var(--cyan); margin:0; text-transform:uppercase; letter-spacing:0.04em;">
+                  SCOPE REVIEW & FEATURES IMPACT
+                </h4>
+              </div>
+
+              <!-- Green Checkmark High Impact Features -->
+              <div style="display:flex; flex-direction:column; gap:6px; margin-bottom:10px;">
+                <div style="display:flex; align-items:center; gap:6px; font-size:11.5px; color:#34d399; font-family:'Inter', sans-serif;">
+                  <span style="font-weight:700;">✓</span> <span>Core AI Chat Functionality</span>
+                </div>
+                <div style="display:flex; align-items:center; gap:6px; font-size:11.5px; color:#34d399; font-family:'Inter', sans-serif;">
+                  <span style="font-weight:700;">✓</span> <span>Intelligent Knowledge Base</span>
+                </div>
+              </div>
+
+              <!-- Purple Strikethrough Low Impact Features -->
+              <div style="display:flex; flex-direction:column; gap:6px; margin-bottom:10px;">
+                <div style="display:flex; align-items:center; gap:6px; font-size:11.5px; color:#a855f7; text-decoration:line-through; font-family:'Inter', sans-serif;">
+                  <span style="font-weight:700;">✕</span> <span>Custom Authentication System</span>
+                </div>
+                <div style="display:flex; align-items:center; gap:6px; font-size:11.5px; color:#a855f7; text-decoration:line-through; font-family:'Inter', sans-serif;">
+                  <span style="font-weight:700;">✕</span> <span>Advanced Analytics Dashboard</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Tip Card with Sparkle Icon -->
+            <div style="background:rgba(56,189,248,0.08); border:1px solid rgba(56,189,248,0.2); border-radius:8px; padding:8px 10px; font-size:11px; color:var(--text-dim); display:flex; align-items:flex-start; gap:6px;">
+              <span style="color:#38bdf8; font-size:13px;">✨</span>
+              <span><strong>Feature Tip:</strong> Pruning low-impact bloat cuts 14 hours of integration risk before live demo judging.</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Bottom Bar: 3 Key Metrics + Glowing Purple-Pink Gradient CTA Button -->
+        <div style="border-top:1px solid rgba(255,255,255,0.08); padding-top:12px;">
+          
+          <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:8px; margin-bottom:12px; text-align:center;">
+            <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.06); padding:8px 4px; border-radius:8px;">
+              <span style="font-family:'JetBrains Mono', monospace; font-size:14px; font-weight:800; color:#10B981; display:block;">3.2x</span>
+              <span style="font-size:9.5px; color:var(--text-dim);">Higher Success</span>
+            </div>
+            <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.06); padding:8px 4px; border-radius:8px;">
+              <span style="font-family:'JetBrains Mono', monospace; font-size:14px; font-weight:800; color:#38bdf8; display:block;">-68%</span>
+              <span style="font-size:9.5px; color:var(--text-dim);">Time to Market</span>
+            </div>
+            <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.06); padding:8px 4px; border-radius:8px;">
+              <span style="font-family:'JetBrains Mono', monospace; font-size:14px; font-weight:800; color:#a855f7; display:block;">-54%</span>
+              <span style="font-size:9.5px; color:var(--text-dim);">Dev Cost Savings</span>
+            </div>
+          </div>
+
+          <button class="btn-optimize-purple-pink" id="cutFatBtn">
+            <span>✂ OPTIMIZE PROJECT: 1-Click Cut Secondary Bloat</span>
+            <span>→</span>
+          </button>
+        </div>
+
+      </div>
+    `;
+
+    animateWinProbCountUp(winProb);
   }
-
-  document.getElementById('scopeCritiqueBody').innerHTML = scopeHTML;
 
   // Panel 2: Sprint Plan & Team Role Allocation
   const sprintPlan = data.sprint_plan || data.sprintPlan || [];
