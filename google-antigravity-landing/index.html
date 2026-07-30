@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Google Antigravity — Next-Gen Agent Platform</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Dynamic Particle Physics Canvas -->
+  <canvas id="antigravityCanvas"></canvas>
+
+  <!-- 1. Sticky Translucent Header -->
+  <header class="nav-header">
+    <div class="nav-container">
+      <a href="#" class="brand-logo">
+        <div class="logo-icon-dots">
+          <div class="dot dot-blue"></div>
+          <div class="dot dot-red"></div>
+          <div class="dot dot-yellow"></div>
+          <div class="dot dot-green"></div>
+        </div>
+        <span>Google Antigravity</span>
+      </a>
+
+      <nav>
+        <ul class="nav-links">
+          <li><a href="#features">Features</a></li>
+          <li><a href="#architecture">Architecture</a></li>
+          <li><a href="#showcase">Showcase</a></li>
+          <li><a href="#docs">Docs</a></li>
+        </ul>
+      </nav>
+
+      <a href="#get-started" class="btn-pill btn-pill-primary">Get Started</a>
+    </div>
+  </header>
+
+  <!-- 2. Hero Section -->
+  <section class="hero-section">
+    <div class="badge-tag">
+      <span class="material-symbols-outlined" style="font-size:16px; color:var(--google-blue);">rocket_launch</span>
+      <span>Antigravity 2.0 Engine Live</span>
+    </div>
+
+    <h1 class="hero-headline">Experience liftoff with the next-gen agent platform</h1>
+
+    <div class="typing-container">
+      <span>Built for</span>
+      <span class="typing-text" id="typingText"></span>
+      <span class="cursor-blink">|</span>
+    </div>
+
+    <!-- Media Player Hero Container with Custom Floating Glass Cursor -->
+    <div class="hero-media-wrapper" id="heroMediaWrapper">
+      <div class="custom-cursor" id="customCursor"></div>
+      <div class="hero-media-bg">
+        <div class="glass-play-btn">
+          <span class="material-symbols-outlined" style="font-size:36px;">play_arrow</span>
+        </div>
+        <div style="position:absolute; bottom:24px; left:24px; text-align:left; color:#FFFFFF;">
+          <span style="font-size:12px; font-weight:600; text-transform:uppercase; letter-spacing:0.1em; color:var(--google-blue);">KEYNOTE DEMO</span>
+          <h3 style="font-family:var(--font-title); font-size:20px; font-weight:700; margin-top:4px;">Watch Antigravity Autonomous Loop in Action</h3>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. Feature Explorer Grid -->
+  <section class="section-container" id="features">
+    <div class="section-head">
+      <h2 class="section-title">Re-architected for autonomous velocity</h2>
+      <p class="section-desc">Designed from the ground up for multi-agent collaboration, instantaneous code generation, and self-healing environments.</p>
+    </div>
+
+    <!-- Feature Row 1 -->
+    <div class="feature-row">
+      <div class="feature-card">
+        <div class="feature-icon-box">
+          <span class="material-symbols-outlined">auto_awesome</span>
+        </div>
+        <h3>12-Step Autonomous Loop</h3>
+        <p>Agents plan, decompose tasks, view diffs, verify lint rules, and run automated unit test suites without human micro-management.</p>
+      </div>
+      <div class="feature-preview-box">
+        <div class="code-snippet">
+          <span class="code-keyword">const</span> agent = <span class="code-keyword">new</span> Antigravity.<span class="code-fn">Agent</span>({<br>
+          &nbsp;&nbsp;model: <span class="code-str">'gemini-2.5-pro'</span>,<br>
+          &nbsp;&nbsp;mode: <span class="code-str">'planning_mode'</span>,<br>
+          &nbsp;&nbsp;autonomy: <span class="code-str">'full_execution'</span><br>
+          });<br><br>
+          <span class="code-keyword">await</span> agent.<span class="code-fn">executeTask</span>(<span class="code-str">"Build production dashboard"</span>);
+        </div>
+      </div>
+    </div>
+
+    <!-- Feature Row 2 (Reverse) -->
+    <div class="feature-row reverse">
+      <div class="feature-card">
+        <div class="feature-icon-box" style="background:rgba(0,185,92,0.1); color:var(--google-green);">
+          <span class="material-symbols-outlined">bolt</span>
+        </div>
+        <h3>Zero-Latency Sandbox Execution</h3>
+        <p>Run sandboxed bash commands, node servers, and background daemons in isolated Linux and PowerShell environments with real-time log streaming.</p>
+      </div>
+      <div class="feature-preview-box" style="background:#0a0d14;">
+        <div class="code-snippet" style="color:#A7F3D0;">
+          <span style="color:#6EE7B7;">$</span> agy run --daemon "node server.js"<br>
+          <span style="color:#94A3B8;">[TASK-1024] Listening on http://localhost:3005</span><br>
+          <span style="color:#34D399;">✔ Playwright automated tests passed (8/8)</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. Interactive Component Carousel -->
+  <section class="section-container" id="showcase">
+    <div class="section-head">
+      <h2 class="section-title">Built for creative & enterprise workflows</h2>
+      <p class="section-desc">Explore pre-configured agent roles tailored to your stack.</p>
+    </div>
+
+    <div class="carousel-wrapper">
+      <div class="carousel-track" id="carouselTrack">
+        <div class="carousel-slide">
+          <span class="material-symbols-outlined" style="font-size:32px; color:var(--google-blue); margin-bottom:12px;">terminal</span>
+          <h4 style="font-size:18px; font-weight:700; margin-bottom:6px;">Full-Stack Architect</h4>
+          <p style="font-size:14px; color:var(--text-secondary);">Generates Next.js app routers, Supabase schema migrations, and RESTful APIs automatically.</p>
+        </div>
+
+        <div class="carousel-slide">
+          <span class="material-symbols-outlined" style="font-size:32px; color:var(--google-green); margin-bottom:12px;">palette</span>
+          <h4 style="font-size:18px; font-weight:700; margin-bottom:6px;">Design System Craftsman</h4>
+          <p style="font-size:14px; color:var(--text-secondary);">Enforces strict Material You 3 color tokens, WCAG contrast accessibility, and smooth micro-interactions.</p>
+        </div>
+
+        <div class="carousel-slide">
+          <span class="material-symbols-outlined" style="font-size:32px; color:var(--google-red); margin-bottom:12px;">bug_report</span>
+          <h4 style="font-size:18px; font-weight:700; margin-bottom:6px;">QA & Test Automation</h4>
+          <p style="font-size:14px; color:var(--text-secondary);">Executes Playwright end-to-end integration tests and captures visual regression artifacts.</p>
+        </div>
+      </div>
+
+      <div class="carousel-controls">
+        <button class="control-btn" id="prevBtn">
+          <span class="material-symbols-outlined">chevron_left</span>
+        </button>
+        <button class="control-btn" id="nextBtn">
+          <span class="material-symbols-outlined">chevron_right</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. Dark Call To Action (CTA) Banner -->
+  <section style="padding:0 24px;">
+    <div class="cta-banner" id="get-started">
+      <h2>Ready to experience liftoff?</h2>
+      <p>Join thousands of creative developers building the next generation of software with Google Antigravity.</p>
+      <button class="btn-glowing-accent" onclick="alert('Google Antigravity SDK Download Initialized!')">Download Antigravity CLI</button>
+    </div>
+  </section>
+
+  <!-- 6. Footer -->
+  <footer class="footer-section">
+    <div class="footer-container">
+      <div class="footer-brand">
+        <h4>Google Antigravity</h4>
+        <p style="font-size:13.5px; line-height:1.6; margin-top:8px;">The next-generation autonomous AI agent platform powered by Google DeepMind.</p>
+      </div>
+
+      <div class="footer-links">
+        <h5>Product</h5>
+        <ul>
+          <li><a href="#">Antigravity CLI</a></li>
+          <li><a href="#">Agent SDK</a></li>
+          <li><a href="#">Pricing</a></li>
+          <li><a href="#">Changelog</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-links">
+        <h5>Resources</h5>
+        <ul>
+          <li><a href="#">Documentation</a></li>
+          <li><a href="#">API Reference</a></li>
+          <li><a href="#">GitHub Repository</a></li>
+          <li><a href="#">Community Forum</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-links">
+        <h5>Legal</h5>
+        <ul>
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Terms of Service</a></li>
+          <li><a href="#">Security Audit</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div style="max-width:1280px; margin:40px auto 0; padding-top:24px; border-top:1px solid var(--border-dark); text-align:center; font-size:12.5px;">
+      © 2026 Google LLC. All rights reserved. Google Antigravity is a trademark of Google DeepMind.
+    </div>
+  </footer>
+
+  <script src="js/app.js"></script>
+</body>
+</html>

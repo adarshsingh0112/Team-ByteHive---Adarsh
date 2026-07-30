@@ -1,0 +1,566 @@
+/* ============================================================================
+   🌌 GOOGLE ANTIGRAVITY — ULTRA-PREMIUM MATERIAL YOU LANDING PAGE
+   ============================================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0');
+
+:root {
+  /* Google Material You Brand Tokens */
+  --google-blue: #3186FF;
+  --google-yellow: #FFE432;
+  --google-red: #FC413D;
+  --google-green: #00B95C;
+
+  /* Theme Surfaces */
+  --bg-light: #F8F9FA;
+  --bg-white: #FFFFFF;
+  --bg-dark: #0F0F11;
+  --bg-dark-card: #18181C;
+  --bg-dark-elevated: #222227;
+
+  /* Borders & Strokes */
+  --border-light: #E0E2E7;
+  --border-subtle: rgba(0, 0, 0, 0.08);
+  --border-dark: rgba(255, 255, 255, 0.12);
+
+  /* Text Colors */
+  --text-primary: #1F1F23;
+  --text-secondary: #5F6368;
+  --text-light: #F8F9FA;
+  --text-light-dim: #9CA3AF;
+
+  /* Fonts */
+  --font-title: 'Outfit', 'Google Sans', sans-serif;
+  --font-body: 'Inter', 'Google Sans', sans-serif;
+  --font-code: 'JetBrains Mono', monospace;
+
+  /* Radii */
+  --radius-xl: 24px;
+  --radius-xxl: 32px;
+  --radius-pill: 999px;
+
+  --ease-google: cubic-bezier(0.2, 0, 0, 1);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--bg-light);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  overflow-x: hidden;
+  position: relative;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Dynamic Particle Physics Canvas */
+#antigravityCanvas {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.85;
+}
+
+/* ============================================================================
+   🏷️ 1. STICKY TRANSLUCENT HEADER
+   ============================================================================ */
+
+.nav-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border-subtle);
+  transition: all 0.3s ease;
+}
+
+.nav-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 16px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.brand-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  font-family: var(--font-title);
+  font-weight: 700;
+  font-size: 19px;
+  color: var(--text-primary);
+}
+
+.logo-icon-dots {
+  display: flex;
+  gap: 3px;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+.dot-blue { background: var(--google-blue); }
+.dot-red { background: var(--google-red); }
+.dot-yellow { background: var(--google-yellow); }
+.dot-green { background: var(--google-green); }
+
+.nav-links {
+  display: flex;
+  gap: 32px;
+  list-style: none;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: var(--text-secondary);
+  font-size: 14px;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.nav-links a:hover {
+  color: var(--google-blue);
+}
+
+.btn-pill {
+  border-radius: var(--radius-pill);
+  padding: 12px 24px;
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: all 0.25s var(--ease-google);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+}
+
+.btn-pill-primary {
+  background: var(--text-primary);
+  color: #FFFFFF;
+}
+
+.btn-pill-primary:hover {
+  background: var(--google-blue);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(49, 134, 255, 0.3);
+}
+
+/* ============================================================================
+   🚀 2. HERO SECTION
+   ============================================================================ */
+
+.hero-section {
+  position: relative;
+  z-index: 10;
+  padding: 90px 24px 60px;
+  max-width: 1280px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.badge-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #FFFFFF;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-pill);
+  padding: 6px 16px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin-bottom: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.hero-headline {
+  font-family: var(--font-title);
+  font-size: 56px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  color: var(--text-primary);
+  max-width: 900px;
+  margin: 0 auto 20px;
+}
+
+.typing-container {
+  font-size: 20px;
+  color: var(--text-secondary);
+  height: 32px;
+  margin-bottom: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.typing-text {
+  color: var(--google-blue);
+  font-weight: 600;
+  font-family: var(--font-code);
+}
+
+.cursor-blink {
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* Video Hero Container with Floating Glass Play Button & Custom Cursor */
+.hero-media-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 1020px;
+  margin: 40px auto 0;
+  aspect-ratio: 16 / 9;
+  background: var(--bg-dark);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.12);
+  cursor: none; /* Controlled by custom-cursor */
+}
+
+.hero-media-bg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background: radial-gradient(circle at 50% 50%, #1c1c24 0%, #0a0a0d 100%);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.glass-play-btn {
+  position: absolute;
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #FFFFFF;
+  transition: transform 0.3s var(--ease-google);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+/* Custom Interactive Cursor Inside Media Container */
+.custom-cursor {
+  position: absolute;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(49, 134, 255, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  transition: width 0.2s, height 0.2s, background 0.2s;
+  z-index: 50;
+  display: none;
+}
+
+.hero-media-wrapper:hover .custom-cursor {
+  display: block;
+}
+
+/* ============================================================================
+   🧩 3. FEATURE EXPLORER GRID
+   ============================================================================ */
+
+.section-container {
+  max-width: 1280px;
+  margin: 100px auto;
+  padding: 0 24px;
+  position: relative;
+  z-index: 10;
+}
+
+.section-head {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.section-title {
+  font-family: var(--font-title);
+  font-size: 38px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 12px;
+}
+
+.section-desc {
+  font-size: 16px;
+  color: var(--text-secondary);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.feature-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  align-items: center;
+  margin-bottom: 80px;
+}
+
+.feature-row.reverse {
+  direction: rtl;
+}
+.feature-row.reverse > * {
+  direction: ltr;
+}
+
+.feature-card {
+  background: var(--bg-white);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-xl);
+  padding: 40px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.03);
+  transition: all 0.3s var(--ease-google);
+}
+
+.feature-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--google-blue);
+  box-shadow: 0 16px 40px rgba(49, 134, 255, 0.1);
+}
+
+.feature-icon-box {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: rgba(49, 134, 255, 0.1);
+  color: var(--google-blue);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.feature-card h3 {
+  font-family: var(--font-title);
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.feature-card p {
+  font-size: 15px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.feature-preview-box {
+  background: var(--bg-dark);
+  border-radius: var(--radius-xl);
+  height: 340px;
+  padding: 24px;
+  color: #FFFFFF;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border: 1px solid var(--border-dark);
+  position: relative;
+  overflow: hidden;
+}
+
+.code-snippet {
+  font-family: var(--font-code);
+  font-size: 13px;
+  line-height: 1.7;
+  color: #E2E8F0;
+}
+.code-keyword { color: #F472B6; }
+.code-fn { color: #60A5FA; }
+.code-str { color: #34D399; }
+
+/* ============================================================================
+   🎠 4. INTERACTIVE COMPONENT CAROUSEL
+   ============================================================================ */
+
+.carousel-wrapper {
+  position: relative;
+  overflow: hidden;
+  padding-bottom: 40px;
+}
+
+.carousel-track {
+  display: flex;
+  gap: 24px;
+  transition: transform 0.4s var(--ease-google);
+}
+
+.carousel-slide {
+  min-width: 360px;
+  background: var(--bg-white);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-xl);
+  padding: 28px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+}
+
+.carousel-controls {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.control-btn {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--bg-white);
+  border: 1px solid var(--border-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.control-btn:hover {
+  background: var(--text-primary);
+  color: #FFFFFF;
+  border-color: var(--text-primary);
+}
+
+/* ============================================================================
+   🖤 5. DARK CTA BANNER
+   ============================================================================ */
+
+.cta-banner {
+  background: var(--bg-dark);
+  border-radius: var(--radius-xxl);
+  padding: 80px 40px;
+  text-align: center;
+  color: #FFFFFF;
+  position: relative;
+  overflow: hidden;
+  margin: 100px auto;
+  max-width: 1280px;
+}
+
+.cta-banner h2 {
+  font-family: var(--font-title);
+  font-size: 42px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin-bottom: 16px;
+}
+
+.cta-banner p {
+  color: var(--text-light-dim);
+  font-size: 17px;
+  max-width: 600px;
+  margin: 0 auto 36px;
+}
+
+.btn-glowing-accent {
+  background: var(--google-blue);
+  color: #FFFFFF;
+  border-radius: var(--radius-pill);
+  padding: 16px 36px;
+  font-size: 16px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 0 30px rgba(49, 134, 255, 0.5);
+  transition: all 0.25s var(--ease-google);
+}
+
+.btn-glowing-accent:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 45px rgba(49, 134, 255, 0.75);
+}
+
+/* ============================================================================
+   🏁 6. FOOTER
+   ============================================================================ */
+
+.footer-section {
+  background: var(--bg-dark);
+  color: var(--text-light-dim);
+  padding: 60px 24px 40px;
+  border-top: 1px solid var(--border-dark);
+  position: relative;
+  z-index: 10;
+}
+
+.footer-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 40px;
+}
+
+.footer-brand h4 {
+  font-family: var(--font-title);
+  color: #FFFFFF;
+  font-size: 20px;
+  margin-bottom: 12px;
+}
+
+.footer-links h5 {
+  color: #FFFFFF;
+  font-size: 14px;
+  margin-bottom: 16px;
+}
+
+.footer-links ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.footer-links a {
+  color: var(--text-light-dim);
+  text-decoration: none;
+  font-size: 13.5px;
+  transition: color 0.2s ease;
+}
+
+.footer-links a:hover {
+  color: #FFFFFF;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .hero-headline { font-size: 38px; }
+  .feature-row { grid-template-columns: 1fr; }
+  .footer-container { grid-template-columns: 1fr 1fr; }
+}
