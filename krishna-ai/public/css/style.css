@@ -4,12 +4,27 @@
   --card: rgba(255, 255, 255, 0.02);
   --card-border: rgba(255, 255, 255, 0.08);
   --card-edge: rgba(255, 255, 255, 0.15);
-  --blue: #4C8BFF;
-  --purple: #A855F7;
-  --cyan: #2FE6E6;
-  --red: #F87171;
-  --orange: #FBBF24;
-  --green: #34D399;
+
+  /* ============================================================================
+     🎨 STRICT SEMANTIC COLOR DESIGN SYSTEM TOKENS
+     ============================================================================ */
+  --color-data: #38bdf8;        /* CYAN: Data points, AI-generated insights, metrics/numbers */
+  --color-primary: #a855f7;     /* PURPLE: Primary actions, branding elements, CTAs */
+  --color-success: #34d399;     /* GREEN: Positive/success states, completed tasks, good win probability */
+  --color-warning: #fbbf24;     /* ORANGE/YELLOW: Medium risk, warnings, SLIPPING TASK tags */
+  --color-danger: #f87171;      /* RED: Critical risk, blockers, weaknesses */
+
+  --color-risk-high: var(--color-danger);
+  --color-risk-medium: var(--color-warning);
+
+  /* Theme Reference Aliases */
+  --cyan: var(--color-data);
+  --purple: var(--color-primary);
+  --green: var(--color-success);
+  --orange: var(--color-warning);
+  --red: var(--color-danger);
+  --blue: var(--color-data);
+
   --text: #E7EAF3;
   --text-dim: #8B92AC;
   --text-dimmer: #5C6280;

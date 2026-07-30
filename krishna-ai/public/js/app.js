@@ -566,51 +566,51 @@ async function renderFiveJudgesSection(idea, stack) {
       <!-- Judge 1: Technical (30%) -->
       <div class="critique-item" style="border-radius:16px; padding:20px;">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-          <h5 style="color:var(--blue); margin:0; font-family:'Space Grotesk', sans-serif; font-size:13px;"><span class="panel-title-icon">💻</span> Technical Judge (30%)</h5>
-          <span style="font-family:'JetBrains Mono', monospace; font-weight:700; color:var(--text); font-size:13px;">${t.score}/100</span>
+          <h5 style="color:var(--color-data); margin:0; font-family:'Space Grotesk', sans-serif; font-size:13px;"><span class="panel-title-icon">💻</span> Technical Judge (30%)</h5>
+          <span style="font-family:'JetBrains Mono', monospace; font-weight:700; color:var(--color-data); font-size:13px;">${t.score}/100</span>
         </div>
         <p style="font-size:11.5px; margin-bottom:6px; font-family:'Inter', sans-serif;"><strong>Strengths:</strong> ${(t.strengths || []).join(', ')}</p>
-        <p style="font-size:11.5px; color:var(--red); font-family:'Inter', sans-serif;"><strong>Weakness:</strong> ${(t.weaknesses || []).join(', ')}</p>
+        <p style="font-size:11.5px; color:var(--color-danger); font-family:'Inter', sans-serif;"><strong>Weakness:</strong> ${(t.weaknesses || []).join(', ')}</p>
       </div>
 
       <!-- Judge 2: Innovation (20%) -->
       <div class="critique-item" style="border-radius:16px; padding:20px;">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-          <h5 style="color:var(--purple); margin:0; font-family:'Space Grotesk', sans-serif; font-size:13px;"><span class="panel-title-icon">💡</span> Innovation Judge (20%)</h5>
-          <span style="font-family:'JetBrains Mono', monospace; font-weight:700; color:var(--text); font-size:13px;">${i.score}/100</span>
+          <h5 style="color:var(--color-primary); margin:0; font-family:'Space Grotesk', sans-serif; font-size:13px;"><span class="panel-title-icon">💡</span> Innovation Judge (20%)</h5>
+          <span style="font-family:'JetBrains Mono', monospace; font-weight:700; color:var(--color-data); font-size:13px;">${i.score}/100</span>
         </div>
         <p style="font-size:11.5px; margin-bottom:6px; font-family:'Inter', sans-serif;"><strong>Strengths:</strong> ${(i.strengths || []).join(', ')}</p>
-        <p style="font-size:11.5px; color:var(--orange); font-family:'Inter', sans-serif;"><strong>Weakness:</strong> ${(i.weaknesses || []).join(', ')}</p>
+        <p style="font-size:11.5px; color:var(--color-warning); font-family:'Inter', sans-serif;"><strong>Weakness:</strong> ${(i.weaknesses || []).join(', ')}</p>
       </div>
 
       <!-- Judge 3: Business (20%) -->
       <div class="critique-item" style="border-radius:16px; padding:20px;">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-          <h5 style="color:var(--green); margin:0; font-family:'Space Grotesk', sans-serif; font-size:13px;"><span class="panel-title-icon">💼</span> Business Judge (20%)</h5>
-          <span style="font-family:'JetBrains Mono', monospace; font-weight:700; color:var(--text); font-size:13px;">${b.score}/100</span>
+          <h5 style="color:var(--color-success); margin:0; font-family:'Space Grotesk', sans-serif; font-size:13px;"><span class="panel-title-icon">💼</span> Business Judge (20%)</h5>
+          <span style="font-family:'JetBrains Mono', monospace; font-weight:700; color:var(--color-data); font-size:13px;">${b.score}/100</span>
         </div>
         <p style="font-size:11.5px; margin-bottom:6px; font-family:'Inter', sans-serif;"><strong>Strengths:</strong> ${(b.strengths || []).join(', ')}</p>
-        <p style="font-size:11.5px; color:var(--orange); font-family:'Inter', sans-serif;"><strong>Weakness:</strong> ${(b.weaknesses || []).join(', ')}</p>
+        <p style="font-size:11.5px; color:var(--color-warning); font-family:'Inter', sans-serif;"><strong>Weakness:</strong> ${(b.weaknesses || []).join(', ')}</p>
       </div>
 
       <!-- Judge 4: UI/UX (10%) -->
       <div class="critique-item" style="border-radius:16px; padding:20px;">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-          <h5 style="color:var(--cyan); margin:0; font-family:'Space Grotesk', sans-serif; font-size:13px;"><span class="panel-title-icon">🎨</span> UI/UX Judge (10%)</h5>
-          <span style="font-family:'JetBrains Mono', monospace; font-weight:700; color:var(--text); font-size:13px;">${u.score}/100</span>
+          <h5 style="color:var(--color-data); margin:0; font-family:'Space Grotesk', sans-serif; font-size:13px;"><span class="panel-title-icon">🎨</span> UI/UX Judge (10%)</h5>
+          <span style="font-family:'JetBrains Mono', monospace; font-weight:700; color:var(--color-data); font-size:13px;">${u.score}/100</span>
         </div>
         <p style="font-size:11.5px; margin-bottom:6px; font-family:'Inter', sans-serif;"><strong>Strengths:</strong> ${(u.strengths || []).join(', ')}</p>
-        <p style="font-size:11.5px; color:var(--orange); font-family:'Inter', sans-serif;"><strong>Weakness:</strong> ${(u.weaknesses || []).join(', ')}</p>
+        <p style="font-size:11.5px; color:var(--color-warning); font-family:'Inter', sans-serif;"><strong>Weakness:</strong> ${(u.weaknesses || []).join(', ')}</p>
       </div>
 
       <!-- Judge 5: Presentation (20%) -->
       <div class="critique-item" style="border-radius:16px; padding:20px;">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-          <h5 style="color:var(--orange); margin:0; font-family:'Space Grotesk', sans-serif; font-size:13px;"><span class="panel-title-icon">🎤</span> Presentation Judge (20%)</h5>
-          <span style="font-family:'JetBrains Mono', monospace; font-weight:700; color:var(--text); font-size:13px;">${p.score}/100</span>
+          <h5 style="color:var(--color-warning); margin:0; font-family:'Space Grotesk', sans-serif; font-size:13px;"><span class="panel-title-icon">🎤</span> Presentation Judge (20%)</h5>
+          <span style="font-family:'JetBrains Mono', monospace; font-weight:700; color:var(--color-data); font-size:13px;">${p.score}/100</span>
         </div>
         <p style="font-size:11.5px; margin-bottom:6px; font-family:'Inter', sans-serif;"><strong>Strengths:</strong> ${(p.strengths || []).join(', ')}</p>
-        <p style="font-size:11.5px; color:var(--red); font-family:'Inter', sans-serif;"><strong>Weakness:</strong> ${(p.weaknesses || []).join(', ')}</p>
+        <p style="font-size:11.5px; color:var(--color-danger); font-family:'Inter', sans-serif;"><strong>Weakness:</strong> ${(p.weaknesses || []).join(', ')}</p>
       </div>
 
     </div>
