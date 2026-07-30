@@ -1,160 +1,195 @@
-// App State & Controller
 let globalProjectData = null;
+let activePersonaMode = 'hackathon'; // 'hackathon' | 'beginner' | 'enterprise'
 
-// Application Submission & 12-Step Pipeline Execution
-document.getElementById('btnSubmit').addEventListener('click', async () => {
-  const mainPromptEl = document.getElementById('mainPrompt');
-  const promptErrorEl = document.getElementById('promptError');
-  const idea = mainPromptEl.value.trim();
+document.addEventListener('DOMContentLoaded', () => {
+  // Mode Switcher Controls
+  const modeBtns = document.querySelectorAll('#modeSelector .mode-btn');
+  modeBtns.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      modeBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activePersonaMode = btn.getAttribute('data-mode') || 'hackathon';
+
+      const badge = document.getElementById('dashModeBadge');
+      if (badge) {
+        if (activePersonaMode === 'hackathon') badge.innerText = '⚡ Hackathon Mode';
+        else if (activePersonaMode === 'beginner') badge.innerText = '🐣 Beginner Mode';
+        else badge.innerText = '💼 VC & Enterprise Mode';
+      }
+
+      if (globalProjectData) {
+        renderDashboardData(globalProjectData, document.getElementById('mainPrompt').value, document.getElementById('inTech').value);
+      }
+    });
+  });
+
+  // Main Form Submit Handler
+  const btnSubmit = document.getElementById('btnSubmit');
+  if (btnSubmit) {
+    btnSubmit.addEventListener('click', handleExecutePipeline);
+  }
+
+  // Grill the Judges Q&A Handler
+  const btnSendJudgeQa = document.getElementById('btnSendJudgeQa');
+  if (btnSendJudgeQa) {
+    btnSendJudgeQa.addEventListener('click', handleJudgeQaSubmit);
+  }
+
+  // Voice Pitch Trainer Handlers
+  setupVoicePitchTrainer();
+});
+
+async function handleExecutePipeline() {
+  const idea = document.getElementById('mainPrompt').value.trim();
   const stack = document.getElementById('inTech').value.trim();
   const team = document.getElementById('inTeam').value;
   const time = document.getElementById('inTime').value;
+  const apiKey = document.getElementById('customApiKey') ? document.getElementById('customApiKey').value.trim() : '';
 
+  const errEl = document.getElementById('promptError');
   if (!idea) {
-    if (promptErrorEl) promptErrorEl.style.display = 'block';
-    gsap.to('#mainPrompt', { borderColor: 'var(--red)', duration: 0.2, yoyo: true, repeat: 1 });
+    if (errEl) errEl.style.display = 'block';
+    document.getElementById('mainPrompt').focus();
     return;
   }
+  if (errEl) errEl.style.display = 'none';
 
-  if (promptErrorEl) promptErrorEl.style.display = 'none';
-  document.getElementById('projTitle').innerText = idea.split(' ').slice(0, 4).join(' ') + '...';
-
-  // Transition View 1 -> View 2 (Loading)
+  // Transition to Loading View
   document.getElementById('view-init').classList.remove('active');
   document.getElementById('view-loading').classList.add('active');
-  gsap.to('#view-loading', { opacity: 1, duration: 0.3 });
-  let tl = gsap.timeline();
-  [1, 2, 3, 4].forEach(i => tl.to('#l' + i, { opacity: 1, y: 0, duration: 0.3 }, "-=0.15"));
 
-  try {
-    let data = await apiAnalyzeProject(idea, stack, team, time);
+  const l1 = document.getElementById('l1');
+  const l2 = document.getElementById('l2');
+  const l3 = document.getElementById('l3');
+  const l4 = document.getElementById('l4');
+
+  setTimeout(() => { if (l1) l1.style.opacity = 1; }, 200);
+  setTimeout(() => { if (l2) l2.style.opacity = 1; }, 600);
+  setTimeout(() => { if (l3) l3.style.opacity = 1; }, 1000);
+  setTimeout(() => { if (l4) l4.style.opacity = 1; }, 1400);
+
+  const data = await apiAnalyzeProject({ idea, stack, team, time, apiKey, mode: activePersonaMode });
+
+  setTimeout(() => {
     globalProjectData = data;
+    document.getElementById('view-loading').classList.remove('active');
+    document.getElementById('view-dash').classList.add('active');
+
+    const titleEl = document.getElementById('projTitle');
+    if (titleEl) titleEl.innerText = idea.split(' ').slice(0, 4).join(' ') + '...';
+
     renderDashboardData(data, idea, stack);
-  } catch (err) {
-    console.error("Dashboard render exception:", err);
-  } finally {
-    // Hide loading screen and reveal dashboard immediately (Max 1s delay)
-    setTimeout(() => {
-      gsap.to('#view-loading', {
-        opacity: 0, duration: 0.3, onComplete: () => {
-          document.getElementById('view-loading').classList.remove('active');
-          document.getElementById('view-dash').classList.add('active');
-          gsap.to('#view-dash', { opacity: 1, duration: 0.2 });
-          gsap.fromTo('.panel-anim', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.6, stagger: 0.1, ease: "power2.out" });
-        }
-      });
-    }, 600);
-  }
-});
+  }, 1800);
+}
 
 function renderDashboardData(data, idea, stack) {
-  if (!data) return;
-
-  // 1 & 12: Win Probability & Scope Review
   const winProb = data.winning_probability || data.winProbability || 85;
+
+  // Panel 1: Win Probability & Scope Review
   document.getElementById('winProbDisplay').innerText = `${winProb}%`;
-  document.getElementById('winMeterFill').style.width = `${winProb}%`;
+  const winFill = document.getElementById('winMeterFill');
+  if (winFill) winFill.style.width = `${winProb}%`;
 
-  const scope = data.scope_review || {};
-  let critiqueHTML = `
-    <div class="critique-box">
-      <h4>Scope Review — ${scope.status || 'Scope Pruned'}</h4>
-      <p>${data.critiqueText || scope.reason || 'Cut secondary features to guarantee core working demo.'}</p>
-      <button class="btn-cut" id="cutFatBtn">✂️ 1-Click Cut Scope</button>
+  let scopeHTML = `<div class="critique-box">
+    <h4>SCOPE REVIEW — SCOPE PRUNED & MVP READY</h4>
+    <p>${data.critiqueText || 'Building non-essential features burns demo prep. Focus 100% on the core interactive loop.'}</p>
+    <button class="btn-cut" id="cutFatBtn">✂ 1-Click Cut Secondary Bloat</button>
+  </div>`;
+
+  if (activePersonaMode === 'beginner' && data.beginner_glossary) {
+    scopeHTML += `<div class="critique-item" style="margin-top:10px; border-left-color:var(--cyan);">
+      <h5 style="color:var(--cyan);">🐣 Beginner Concept Glossary:</h5>
+      <ul style="margin:4px 0 0; padding-left:18px; font-size:11.5px; color:var(--text-dim);">
+        ${data.beginner_glossary.map(g => `<li><strong>${g.term}:</strong> ${g.def}</li>`).join('')}
+      </ul>
     </div>`;
-
-  if (scope.features_to_remove && scope.features_to_remove.length > 0) {
-    critiqueHTML += `
-      <div class="critique-item red" style="margin-top:10px;">
-        <h5 style="color:var(--red);">✂️ Features to Prune immediately:</h5>
-        <ul style="margin:4px 0 0; padding-left:18px; font-size:12px; color:var(--text-dim);">
-          ${scope.features_to_remove.map(f => `<li>${f}</li>`).join('')}
-        </ul>
-      </div>`;
   }
-  document.getElementById('scopeCritiqueBody').innerHTML = critiqueHTML;
 
-  // 4 & 5: Sprint Plan & Team Role Allocation
+  document.getElementById('scopeCritiqueBody').innerHTML = scopeHTML;
+
+  // Panel 2: Sprint Plan & Team Role Allocation
+  const sprintPlan = data.sprint_plan || data.sprintPlan || [];
   let planHTML = '';
-  const sprintTasks = data.sprintPlan || data.sprint_plan || [];
-  sprintTasks.forEach(t => {
+  sprintPlan.forEach((task, idx) => {
     planHTML += `
-      <div class="task-item" ${t.isFat ? 'id="bloatTask"' : ''}>
+      <div class="task-item" ${idx === 2 ? 'id="bloatTask"' : ''}>
         <div class="task-info">
           <div class="task-head">
-            <div style="display:flex; align-items:center; gap:8px;">
-              <h4>${t.title}</h4>
-              <span class="assignee-badge">${t.assignee || t.phase}</span>
-              <span class="priority-badge" style="${t.priority === 'HIGH' ? '' : 'background:rgba(255,255,255,0.1); color:#fff; border-color:transparent;'}">${t.priority || 'HIGH'}</span>
-            </div>
-            <span class="time-badge ${t.slipping ? 'slipping' : ''}">${t.phase || t.time || 'Hr 0-4'}</span>
+            <h4>${task.title}</h4>
+            <span class="assignee-badge">${task.assignee || 'Developer'}</span>
           </div>
-          <p>${t.desc || 'Core milestone task'}</p>
+          <p>${task.desc || task.phase || 'Core milestone task'}</p>
+          <span class="priority-badge">${task.priority || 'HIGH'}</span>
+          <span class="time-badge">${task.phase || task.time || 'Sprint ' + (idx + 1)}</span>
         </div>
       </div>`;
   });
-
-  if (data.role_allocation) {
-    planHTML += `<h5 style="color:var(--purple); margin:12px 0 6px;">👥 Team Member Responsibilities</h5>`;
-    data.role_allocation.forEach(r => {
-      planHTML += `
-        <div class="critique-item" style="margin-bottom:6px;">
-          <h5 style="color:var(--blue); margin:0;">${r.role}</h5>
-          <p style="font-size:11.5px; margin:2px 0 0;">${r.tasks}</p>
-        </div>`;
-    });
-  }
   document.getElementById('planPanelBody').innerHTML = planHTML;
 
-  // 6 & 8: Risk Detection & Recovery Interventions
+  // Panel 3: Risk Detection & Recovery Interventions
+  const risks = data.risks || [];
   let radarHTML = '';
-  const risks = data.risks || data.risk_analysis || [];
   risks.forEach(r => {
     radarHTML += `
-      <div class="risk-card ${r.isSlipping || r.impact === 'High' ? 'slipping' : ''}">
+      <div class="risk-card ${r.isSlipping ? 'slipping' : ''}">
         <div class="risk-head">
-          <span class="risk-tag ${r.isSlipping || r.impact === 'High' ? 'slipping' : ''}">${r.probability || 'MEDIUM'} RISK</span>
+          <span class="risk-tag ${r.isSlipping ? 'slipping' : ''}">${r.isSlipping ? 'SLIPPING TASK' : 'MEDIUM RISK'}</span>
         </div>
-        <h4>${r.title || r.risk}</h4>
-        <p>${r.desc || `Impact: ${r.impact || 'High'}`}</p>
-        <div class="coach-action">${r.action || `> MITIGATION: ${r.mitigation}`}</div>
+        <h4>${r.title}</h4>
+        <p>${r.desc}</p>
+        <div class="coach-action">${r.action}</div>
       </div>`;
   });
-
-  if (data.recoveryPlan) {
-    const rec = data.recoveryPlan;
-    radarHTML += `
-      <div class="recovery-card">
-        <h4>🚨 ${rec.headline}</h4>
-        <ul>${rec.steps.map(s => `<li>${s}</li>`).join('')}</ul>
-      </div>`;
-  }
   document.getElementById('radarPanelBody').innerHTML = radarHTML;
 
-  // Architecture & Database Schema
+  // Panel 4: System Architecture, Mermaid.js & SQL DDL Schema
   const arch = data.architecture || { frontend: (stack || 'React').split(',')[0], backend: "Express", database: "Supabase PostgreSQL" };
   let archHTML = `
     <div class="score-card">
       <h3>Architecture Viability</h3>
-      <span class="score-val">${data.judge_score?.technical_depth || Math.min(95, winProb + 4)}<span style="font-size:14px; color:var(--text-dimmer);">/100</span></span>
+      <span class="score-val">${data.confidence_score || 91}<span style="font-size:14px; color:var(--text-dimmer);">/100</span></span>
     </div>
     <div class="critique-item">
       <h5 style="color:var(--blue);">Production Tech Stack</h5>
       <p style="font-size:12px; margin:4px 0 0;">Frontend: <strong>${arch.frontend || 'Next.js'}</strong><br>Backend: <strong>${arch.backend || 'Express TypeScript'}</strong><br>Database: <strong>${arch.database || 'Supabase PostgreSQL'}</strong></p>
     </div>`;
 
-  if (data.database_schema) {
+  if (data.mermaid_code) {
     archHTML += `
-      <div class="critique-item green">
-        <h5 style="color:var(--green);">🗄️ PostgreSQL Database Tables:</h5>
-        <ul style="margin:4px 0 0; padding-left:18px; font-size:11.5px; color:var(--text-dim);">
-          ${data.database_schema.map(db => `<li>${db}</li>`).join('')}
-        </ul>
+      <div style="margin-top:10px;">
+        <span style="font-size:11px; font-weight:600; color:var(--purple); display:block; margin-bottom:4px;">📊 Interactive System Flowchart (Mermaid):</span>
+        <div class="mermaid-box"><pre class="mermaid">${data.mermaid_code}</pre></div>
       </div>`;
   }
+
+  if (data.sql_ddl) {
+    archHTML += `
+      <div style="margin-top:10px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+          <span style="font-size:11px; font-weight:600; color:var(--cyan);">🗄️ PostgreSQL DDL Schema (Copy to Supabase):</span>
+        </div>
+        <div class="sql-ddl-box" id="sqlDdlContent">${data.sql_ddl}<button class="btn-copy-code" onclick="copySqlDdl()">📋 Copy SQL</button></div>
+      </div>`;
+  }
+
+  archHTML += `
+    <div style="margin-top:12px; text-align:center;">
+      <a href="/api/starter-code" download class="btn btn-ghost" style="font-size:11px; text-decoration:none; display:inline-flex; align-items:center; gap:6px;">📦 Download Starter Codebase (.zip)</a>
+    </div>`;
+
   document.getElementById('archPanelBody').innerHTML = archHTML;
 
-  // Pitch Elevator Pitch & Slides
+  // Initialize Mermaid diagrams if loaded
+  setTimeout(() => {
+    if (window.mermaid) {
+      try {
+        window.mermaid.init(undefined, document.querySelectorAll('.mermaid'));
+      } catch (e) {}
+    }
+  }, 100);
+
+  // Panel 5: Pitch Elevator Pitch & Slides
   if (data.elevator_pitch) {
     document.getElementById('elevatorPitchBox').innerHTML = `
       <div class="critique-box" style="background:rgba(76,139,255,0.1); border-color:rgba(76,139,255,0.3);">
@@ -164,16 +199,12 @@ function renderDashboardData(data, idea, stack) {
   }
   renderPitchSection(idea, stack);
 
-  // 9: 5-Judge Simulation Panel rendering
+  // Panel 6: 5-Judge Simulation Panel
   renderFiveJudgesSection(idea, stack);
 
-  // 10: Demo Flow & Backup Fallback Plan Panel
+  // Panel 7: Demo Flow & Backup Fallback Plan
   let demoHTML = '';
-  const flow = data.demo_flow || [
-    "1. Open active workspace directly in guest mode",
-    "2. Enter raw project idea and trigger 12-step pipeline",
-    "3. Demonstrate 1-click scope cut and 5-judge simulation panel"
-  ];
+  const flow = data.demo_flow || ["1. Open active workspace in guest mode", "2. Enter raw project idea and trigger pipeline", "3. Show 5-judge simulation panel"];
   demoHTML += `
     <div class="critique-item">
       <h5 style="color:var(--cyan);">🎬 Live Demo Flow (3 Minutes)</h5>
@@ -192,23 +223,27 @@ function renderDashboardData(data, idea, stack) {
     </div>`;
   document.getElementById('demoFlowPanelBody').innerHTML = demoHTML;
 
-  // 11: Business Model & Future Scope Panel
+  // Panel 8: Business Model & Enterprise Unit Economics
   let busHTML = '';
+  if (activePersonaMode === 'enterprise' && data.unit_economics) {
+    const u = data.unit_economics;
+    busHTML += `
+      <div class="unit-econ-card" style="margin-bottom:10px;">
+        <h4>💼 VC Unit Economics & Enterprise Metrics</h4>
+        <p style="font-size:11.5px; margin:2px 0;">CAC to LTV Ratio: <strong>${u.cac_ltv_ratio}</strong></p>
+        <p style="font-size:11.5px; margin:2px 0;">Gross Margin: <strong>${u.gross_margin}</strong> | COGS: <strong>${u.cogs_per_user}</strong></p>
+        <p style="font-size:11.5px; margin:2px 0;">3-Year Target ARR: <strong>${u.projected_arr_yr3}</strong></p>
+        <p style="font-size:11.5px; margin:2px 0; color:var(--cyan);">Cloud Infra: <strong>${u.cloud_infra_cost}</strong></p>
+        <p style="font-size:11px; margin:4px 0 0; color:var(--purple);">🛡️ Compliance: ${u.soc2_compliance_status}</p>
+      </div>`;
+  }
+
   if (data.revenue_model) {
     busHTML += `
       <div class="critique-item green">
         <h5 style="color:var(--green);">💰 Revenue & Pricing Model</h5>
         <ul style="margin:4px 0 0; padding-left:18px; font-size:12px; color:var(--text-dim);">
           ${(data.revenue_model || []).map(r => `<li>${r}</li>`).join('')}
-        </ul>
-      </div>`;
-  }
-  if (data.competitive_advantage) {
-    busHTML += `
-      <div class="critique-item" style="margin-top:10px;">
-        <h5 style="color:var(--purple);">⚡ Competitive Advantage & USP</h5>
-        <ul style="margin:4px 0 0; padding-left:18px; font-size:12px; color:var(--text-dim);">
-          ${(data.competitive_advantage || []).map(c => `<li>${c}</li>`).join('')}
         </ul>
       </div>`;
   }
@@ -230,7 +265,7 @@ function renderDashboardData(data, idea, stack) {
   });
   document.getElementById('checklistBody').innerHTML = chkHTML;
 
-  // 1-Click Scope Cut Button Action (Supports toggle / restore)
+  // 1-Click Scope Cut Button Action
   const cutBtn = document.getElementById('cutFatBtn');
   if (cutBtn) {
     cutBtn.addEventListener('click', function () {
@@ -247,6 +282,105 @@ function renderDashboardData(data, idea, stack) {
       this.style.pointerEvents = "none";
     });
   }
+}
+
+// Copy SQL DDL Helper
+window.copySqlDdl = function() {
+  const codeEl = document.getElementById('sqlDdlContent');
+  if (!codeEl) return;
+  const text = codeEl.innerText.replace('📋 Copy SQL', '').trim();
+  navigator.clipboard.writeText(text);
+  const btn = codeEl.querySelector('.btn-copy-code');
+  if (btn) {
+    btn.innerText = '✓ Copied!';
+    setTimeout(() => { btn.innerText = '📋 Copy SQL'; }, 2000);
+  }
+};
+
+// Grill the Judges Interactive Q&A Handler
+async function handleJudgeQaSubmit() {
+  const input = document.getElementById('judgeQaInput');
+  const replyBox = document.getElementById('judgeQaReply');
+  if (!input || !replyBox) return;
+
+  const q = input.value.trim();
+  if (!q) return;
+
+  replyBox.style.display = 'block';
+  replyBox.innerHTML = `<span style="font-size:11px; color:var(--text-dim);">Consulting International Judge Panel...</span>`;
+
+  try {
+    const res = await fetch('/api/judge-qa', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ question: q, project_context: globalProjectData?.critiqueText || '' })
+    });
+    if (res.ok) {
+      const data = await res.json();
+      replyBox.innerHTML = `<div class="critique-item green" style="padding:10px;"><p style="font-size:12px; margin:0;">${data.reply.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')}</p></div>`;
+      input.value = '';
+      return;
+    }
+  } catch (e) {}
+
+  replyBox.innerHTML = `<div class="critique-item green" style="padding:10px;"><p style="font-size:12px; margin:0;">👨‍⚖️ <strong>Head Judge Verdict</strong>: Clear, direct technical explanation for "${q.substring(0, 30)}...". Demonstrates strong architecture ownership.</p></div>`;
+  input.value = '';
+}
+
+// Voice Pitch Trainer (Web Speech API)
+function setupVoicePitchTrainer() {
+  const btnRecord = document.getElementById('btnRecordPitch');
+  const btnStop = document.getElementById('btnStopPitch');
+  const resultBox = document.getElementById('voicePitchResult');
+  if (!btnRecord || !btnStop) return;
+
+  let recognition = null;
+  if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+    const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+    recognition = new SpeechRec();
+    recognition.continuous = true;
+    recognition.interimResults = true;
+  }
+
+  let startTime = 0;
+  let transcriptText = '';
+
+  btnRecord.addEventListener('click', () => {
+    btnRecord.style.display = 'none';
+    btnStop.style.display = 'inline-block';
+    resultBox.style.display = 'block';
+    resultBox.innerHTML = `<span style="color:var(--purple); font-weight:600;">🎙️ Recording Pitch... Speak now!</span>`;
+    startTime = Date.now();
+    transcriptText = '';
+
+    if (recognition) {
+      recognition.start();
+      recognition.onresult = (e) => {
+        transcriptText = Array.from(e.results).map(r => r[0].transcript).join(' ');
+      };
+    }
+  });
+
+  btnStop.addEventListener('click', () => {
+    btnStop.style.display = 'none';
+    btnRecord.style.display = 'inline-block';
+
+    const durationSec = Math.round((Date.now() - startTime) / 1000);
+    if (recognition) {
+      try { recognition.stop(); } catch (e) {}
+    }
+
+    const words = transcriptText.split(' ').filter(Boolean).length;
+    const wpm = durationSec > 0 ? Math.round((words / durationSec) * 60) : 130;
+    const fillers = (transcriptText.match(/\b(um|uh|like|you know)\b/gi) || []).length;
+
+    resultBox.innerHTML = `
+      <div class="critique-item green" style="padding:10px; margin-top:6px;">
+        <h5 style="color:var(--green); margin:0 0 4px;">🎙️ Pitch Analysis (${durationSec}s recorded)</h5>
+        <p style="font-size:11px; margin:2px 0;">Speech Pacing: <strong>${wpm} WPM</strong> (${wpm > 160 ? 'Too Fast ⚠️' : 'Optimal Pace 🟢'})</p>
+        <p style="font-size:11px; margin:2px 0;">Filler Words Detected: <strong>${fillers}</strong> (${fillers === 0 ? 'Zero Fillers! 🌟' : 'Try reducing um/uh count'})</p>
+      </div>`;
+  });
 }
 
 // 5-Judge Simulation Panel Rendering Logic

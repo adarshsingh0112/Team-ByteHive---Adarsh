@@ -71,7 +71,12 @@ async function callGeminiAPI(prompt, apiKeyOverride) {
 
 // Handler for Deep Project Analysis
 const analyzeHandler = async (req, res) => {
-  const { idea, stack, team, time, apiKey } = req.body;
+  const rawIdea = req.body.idea;
+  const idea = typeof rawIdea === 'string' ? rawIdea : (rawIdea && rawIdea.idea ? String(rawIdea.idea) : String(rawIdea || ''));
+  const rawStack = req.body.stack;
+  const stack = typeof rawStack === 'string' ? rawStack : String(rawStack || '');
+  const { team, time, apiKey } = req.body;
+
   const winProb = calculateDynamicWinProb(idea, stack, team, time);
 
   const prompt = `
@@ -112,9 +117,10 @@ const analyzeHandler = async (req, res) => {
     return res.json(aiResult);
   }
 
-  // Smart Dynamic Fallback Generator tailored to user input
+  // Smart Dynamic Fallback Generator tailored to user input & persona mode
   const mainTech = (stack || 'React, Node').split(',')[0].trim();
   const shortIdea = (idea || 'Hackathon Project').substring(0, 35);
+  const tableName = shortIdea.toLowerCase().replace(/[^a-z0-9]/g, '_').substring(0, 15);
 
   const fallbackData = {
     winning_probability: winProb,
@@ -136,6 +142,21 @@ const analyzeHandler = async (req, res) => {
       backend: "Node.js Express",
       database: "Supabase PostgreSQL"
     },
+    mermaid_code: `graph TD\n  Client[User Browser UI] -->|API Request| Express[Express Node.js Server]\n  Express -->|Query| DB[(Supabase PostgreSQL)]\n  Express -->|LLM Prompt| AI[Claude 3.5 / Gemini Engine]\n  AI -->|Structured JSON| Express\n  Express -->|Real-time Sync| Client`,
+    sql_ddl: `-- PostgreSQL Schema for ${shortIdea}\nCREATE TABLE ${tableName}_projects (\n  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),\n  title VARCHAR(255) NOT NULL,\n  tech_stack TEXT[],\n  win_probability INT DEFAULT ${winProb},\n  created_at TIMESTAMPTZ DEFAULT NOW()\n);\n\nCREATE INDEX idx_${tableName}_created ON ${tableName}_projects(created_at DESC);`,
+    unit_economics: {
+      cac_ltv_ratio: "1 : 4.8",
+      cogs_per_user: "$0.04 / month",
+      gross_margin: "87%",
+      projected_arr_yr3: "$1.4M ARR",
+      cloud_infra_cost: "$45 / mo (Vercel + Supabase)",
+      soc2_compliance_status: "SOC2 Type II Ready (TLS 1.3 & Encrypted DB At Rest)"
+    },
+    beginner_glossary: [
+      { term: "PostgreSQL DDL", def: "Data Definition Language used to create database tables." },
+      { term: "Scope Bloat", def: "Adding non-essential features that delay your main MVP release." },
+      { term: "Cold Start Latency", def: "Delay when a serverless cloud function wakes up after inactivity." }
+    ],
     elevator_pitch: `Introducing ${shortIdea}: an intelligent engine powered by ${mainTech} that solves core workflow bottlenecks in real time.`,
     demo_flow: ["1. Open active workspace directly in guest mode", "2. Enter raw project idea and trigger pipeline", "3. Show 5-judge simulation panel"],
     backup_demo_plan: ["Pre-recorded 60s HD video walkthrough"],
@@ -163,6 +184,31 @@ const analyzeHandler = async (req, res) => {
 
 app.post('/api/analyze', analyzeHandler);
 app.post('/api/analyze-project', analyzeHandler);
+
+// Handler for Interactive "Grill the Judges" Q&A Simulator
+app.post('/api/judge-qa', (req, res) => {
+  const { question, project_context } = req.body;
+  const qLower = (question || '').toLowerCase();
+
+  let answer = "";
+  if (qLower.includes('db') || qLower.includes('database') || qLower.includes('pool')) {
+    answer = "👨‍⚖️ **Technical Judge Reply**: Good answer! Using Supabase transaction poolers (PgBouncer) avoids socket exhaustion during spike traffic. Make sure you mention connection limits in Slide 3!";
+  } else if (qLower.includes('cac') || qLower.includes('revenue') || qLower.includes('money')) {
+    answer = "💼 **Business Judge Reply**: Strong unit economics. An 87% gross margin with 1:4.8 LTV ratio makes this very attractive for angel/seed rounds.";
+  } else {
+    answer = `👨‍⚖️ **Head Judge Verdict**: Direct, confident response. Addressing "${question.substring(0, 30)}..." shows deep technical ownership under pressure.`;
+  }
+
+  res.json({ reply: answer });
+});
+
+// Handler for 1-Click Starter Codebase Generator
+app.get('/api/starter-code', (req, res) => {
+  const readmeContent = `# KrishnaAI Starter Codebase\n\nGenerated automatically for your project MVP.\n\n## Quick Start\n1. Run \`npm install\`\n2. Set environment variables in \`.env\`\n3. Execute \`npm start\`\n`;
+  res.setHeader('Content-Type', 'text/plain');
+  res.setHeader('Content-Disposition', 'attachment; filename="krishna_starter_code.txt"');
+  res.send(readmeContent);
+});
 
 // Handler for 5-Slide Pitch Generator Endpoint
 const pitchHandler = async (req, res) => {

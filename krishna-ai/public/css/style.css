@@ -1027,3 +1027,110 @@ header {
   }
 }
 
+/* 3-Tier Persona Mode Switcher Styles */
+.mode-pill-wrap {
+  display: flex;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 2px;
+  gap: 2px;
+}
+
+.mode-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-dim);
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 5px 11px;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.25s var(--ease-ios);
+}
+
+.mode-btn.active {
+  background: linear-gradient(135deg, var(--purple), var(--blue));
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(168, 85, 247, 0.3);
+}
+
+.mode-btn:hover:not(.active) {
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.mode-badge-pill {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  background: rgba(168, 85, 247, 0.15);
+  border: 1px solid rgba(168, 85, 247, 0.3);
+  color: var(--purple);
+  margin-left: 6px;
+}
+
+/* Mermaid & SQL DDL Containers */
+.mermaid-box {
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 14px;
+  overflow-x: auto;
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+.sql-ddl-box {
+  background: #090d16;
+  border: 1px solid rgba(6, 182, 212, 0.3);
+  border-radius: 10px;
+  padding: 12px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: #38bdf8;
+  overflow-x: auto;
+  position: relative;
+  white-space: pre-wrap;
+}
+
+.btn-copy-code {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
+  font-size: 10px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-copy-code:hover {
+  background: var(--purple);
+  border-color: var(--purple);
+}
+
+/* Voice Pitch Trainer & Enterprise Cards */
+.voice-pitch-card button:hover {
+  transform: translateY(-1px);
+}
+
+.unit-econ-card {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.08), rgba(6, 182, 212, 0.08));
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  border-radius: 12px;
+  padding: 14px;
+}
+
+.unit-econ-card h4 {
+  margin: 0 0 6px;
+  color: #10b981;
+  font-size: 13px;
+  font-family: 'Space Grotesk';
+}
+

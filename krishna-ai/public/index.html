@@ -3,12 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>KrishnaAI — Hackathon Project Coach OS</title>
+<title>KrishnaAI — Hackathon & Enterprise Execution OS</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -26,17 +27,24 @@
       Krishna<span style="color:var(--text-dimmer);font-weight:400;">AI</span>
     </div>
     <div class="nav-actions">
-      <button class="btn btn-ghost" id="btnToggleHistory" style="font-size:12px; padding:6px 12px;">📁 Project Saved</button>
+      <!-- 3-Tier Persona Mode Switcher -->
+      <div class="mode-pill-wrap" id="modeSelector">
+        <button class="mode-btn active" data-mode="hackathon" title="Speed-focused 12-step MVP pipeline">⚡ Hackathon</button>
+        <button class="mode-btn" data-mode="beginner" title="Guided explanations & step-by-step tooltips">🐣 Beginner</button>
+        <button class="mode-btn" data-mode="enterprise" title="VC metrics, unit economics & SOC2 compliance">💼 VC / Enterprise</button>
+      </div>
+
+      <button class="btn btn-ghost" id="btnToggleHistory" style="font-size:12px; padding:6px 12px;">📁 Saved Projects</button>
       <div class="status-pill"><span class="status-dot"></span> 🟢 AI Connected</div>
-      <button class="btn btn-ghost" id="btnToggleCoach" style="font-size:12px; padding:6px 12px;">💬 Live Coaching Active</button>
+      <button class="btn btn-ghost" id="btnToggleCoach" style="font-size:12px; padding:6px 12px;">💬 Live Coach</button>
     </div>
   </header>
 
   <!-- VIEW 1: INIT LANDING -->
   <div class="view active" id="view-init">
     <div class="init-content">
-      <h1 class="hero-title">Hackathon Execution OS</h1>
-      <p class="hero-sub">Enter your concept and team details. I will execute the 12-step production pipeline: critiquing scope, generating sprint plans, assigning roles, detecting risks, building recovery plans, producing pitch PPTs, running the 5-judge simulation, and predicting win probability.</p>
+      <h1 class="hero-title">Execution & Intelligence OS</h1>
+      <p class="hero-sub" id="modeHeroSub">Enter your concept and team details. I will execute the 12-step production pipeline: critiquing scope, generating sprint plans, assigning roles, detecting risks, building recovery plans, producing pitch PPTs, running the 5-judge simulation, and predicting win probability.</p>
       
       <div class="prompt-box">
         <div id="promptError" style="display:none; color:var(--red); font-weight:600; font-size:12px; margin-bottom:8px;">⚠️ Please enter your project idea before executing the 12-step pipeline.</div>
@@ -78,7 +86,7 @@
           <div class="api-key-wrap">
             <div style="display:flex; align-items:center; gap: 10px; flex-wrap:wrap;">
               <span class="api-status live" id="apiStatusBadge">🟢 AI Connected (Claude & Gemini API)</span>
-              <input type="password" id="customApiKey" placeholder="Paste Claude / Gemini API Key (optional)" style="background:rgba(0,0,0,0.4); border:1px solid rgba(255,255,255,0.12); border-radius:6px; padding:6px 12px; color:#fff; font-size:11px; width:250px;">
+              <input type="password" id="customApiKey" placeholder="Paste Claude / Gemini API Key (optional)" style="background:rgba(0,0,0,0.4); border:1px solid rgba(255,255,255,0.12); border-radius:6px; padding:6px 12px; color:#fff; font-size:11px; width:240px;">
             </div>
           </div>
           <button class="btn btn-primary" id="btnSubmit" style="font-size: 15px;">Execute 12-Step Pipeline ↗</button>
@@ -119,7 +127,7 @@
 
     <div class="dash-header">
       <div class="dash-title">
-        <p>● Autonomous Coach Pipeline Active</p>
+        <p>● Autonomous Coach Pipeline Active <span id="dashModeBadge" class="mode-badge-pill">⚡ Hackathon Mode</span></p>
         <h2 id="projTitle">Project Workspace</h2>
       </div>
       <div class="dash-actions">
@@ -129,12 +137,24 @@
       </div>
     </div>
 
-    <!-- FEATURED HERO BANNER: International 5-Judge Simulation Verdict -->
+    <!-- FEATURED HERO BANNER: International 5-Judge Simulation Verdict & Grill-the-Judges Q&A -->
     <div class="hero-judge-banner panel-anim">
       <div class="panel-header" style="background:transparent; border:none; padding: 0 0 12px;">
-        <div class="panel-title" style="font-size:16px; color:var(--purple);">👨‍⚖️ International 5-Judge Simulation Panel & Head Verdict</div>
+        <div class="panel-title" style="font-size:16px; color:var(--purple);">👨‍⚖️ International 5-Judge Simulation Panel & Live Q&A Simulator</div>
       </div>
       <div id="fiveJudgesPanelBody"></div>
+
+      <!-- Interactive "Grill the Judges" Q&A Bar -->
+      <div class="judge-qa-box" style="margin-top:16px; padding-top:14px; border-top:1px solid rgba(255,255,255,0.08);">
+        <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
+          <span style="font-size:12px; font-weight:600; color:var(--cyan);">🎤 Practice Judge Q&A / Answer Criticisms:</span>
+        </div>
+        <div style="display:flex; gap:8px;">
+          <input type="text" id="judgeQaInput" placeholder="Type your answer to a judge critique (e.g. 'We handle DB connection pooling via Supabase bouncers')..." style="flex:1; background:rgba(0,0,0,0.4); border:1px solid var(--card-border); border-radius:8px; padding:8px 12px; color:#fff; font-size:12px;">
+          <button class="btn btn-primary" id="btnSendJudgeQa" style="padding:6px 14px; font-size:12px;">Ask Judges</button>
+        </div>
+        <div id="judgeQaReply" style="margin-top:8px; display:none;"></div>
+      </div>
     </div>
 
     <!-- BALANCED 3-COLUMN DASHBOARD GRID (Symmetrical 2x3 Layout) -->
@@ -165,17 +185,31 @@
         <div class="panel-body" id="radarPanelBody"></div>
       </div>
       
-      <!-- Panel 4: System Architecture & Database Schema -->
+      <!-- Panel 4: Interactive System Architecture, Mermaid & PostgreSQL DB Schema -->
       <div class="glass-panel panel-anim">
-        <div class="panel-header"><div class="panel-title">🏗️ Architecture & PostgreSQL DB Schema</div></div>
+        <div class="panel-header">
+          <div class="panel-title">🏗️ Architecture, Mermaid Diagram & DB Schema</div>
+        </div>
         <div class="panel-body" id="archPanelBody"></div>
       </div>
 
-      <!-- Panel 5: PPT Outline, Elevator Pitch & Deck Audit -->
+      <!-- Panel 5: PPT Outline, Elevator Pitch, Deck Audit & Voice Pitch Trainer -->
       <div class="glass-panel panel-anim">
-        <div class="panel-header"><div class="panel-title">🎤 PPT Slide Script & Pitch Elevator</div></div>
+        <div class="panel-header"><div class="panel-title">🎤 PPT Slide Script & Voice Pitch Trainer</div></div>
         <div class="panel-body" id="pitchPanelBody" style="justify-content: flex-start; gap: 14px;">
           <div id="elevatorPitchBox"></div>
+
+          <!-- Live Voice Pitch Trainer -->
+          <div class="voice-pitch-card" style="background:rgba(168,85,247,0.08); border:1px solid rgba(168,85,247,0.3); border-radius:12px; padding:12px; text-align:center;">
+            <div style="font-size:12px; font-weight:600; color:var(--purple); margin-bottom:6px;">🎙️ AI Voice Pitch Trainer</div>
+            <p style="font-size:11px; color:var(--text-dim); margin:0 0 10px;">Record your 60-second pitch via mic to analyze speech pacing & filler words.</p>
+            <div style="display:flex; justify-content:center; gap:8px;">
+              <button class="btn btn-ghost" id="btnRecordPitch" style="font-size:11px; padding:4px 10px;">🔴 Record Pitch (Mic)</button>
+              <button class="btn btn-ghost" id="btnStopPitch" style="font-size:11px; padding:4px 10px; display:none;">⏹️ Stop & Analyze</button>
+            </div>
+            <div id="voicePitchResult" style="font-size:11px; margin-top:8px; display:none;"></div>
+          </div>
+
           <div id="uploadZone" class="upload-zone">
             <input type="file" id="deckFileInput" accept=".pdf,.txt,.ppt,.pptx,.md" style="display:none;">
             <div class="upload-icon" style="font-size:22px; margin-bottom:4px;">📄</div>
@@ -191,7 +225,7 @@
 
       <!-- Panel 6: Demo Flow, Offline Backup & Business Model -->
       <div class="glass-panel panel-anim">
-        <div class="panel-header"><div class="panel-title">💼 Business Model & Live Demo Flow</div></div>
+        <div class="panel-header"><div class="panel-title">💼 Business Model, Unit Economics & Demo Flow</div></div>
         <div class="panel-body" id="demoAndBusinessBody">
           <div id="demoFlowPanelBody"></div>
           <hr style="border:none; border-top:1px solid rgba(255,255,255,0.05); margin: 6px 0;">
