@@ -40,19 +40,35 @@
     </div>
   </header>
 
-  <!-- VIEW 1: INIT LANDING -->
+  <!-- VIEW 1: INIT LANDING ($100M SaaS TEAMWORK GRAPH HERO) -->
   <div class="view active" id="view-init">
-    <div class="init-content">
-      <h1 class="hero-title">Execution & Intelligence OS</h1>
-      <p class="hero-sub" id="modeHeroSub">Enter your concept and team details. I will execute the 12-step production pipeline: critiquing scope, generating sprint plans, assigning roles, detecting risks, building recovery plans, producing pitch PPTs, running the 5-judge simulation, and predicting win probability.</p>
+    <div class="init-content" style="max-width:1100px; margin:0 auto; padding-top:40px;">
       
-      <div class="prompt-box">
+      <!-- Announcement Pill -->
+      <div style="display:inline-flex; align-items:center; gap:8px; background:rgba(79,140,255,0.08); border:1px solid rgba(79,140,255,0.2); padding:6px 16px; border-radius:20px; font-size:12px; color:var(--color-data); margin-bottom:20px;">
+        <span style="width:6px; height:6px; border-radius:50%; background:var(--color-data); box-shadow:0 0 8px var(--color-data);"></span>
+        <span>Teamwork Graph 2.0 Execution Engine</span>
+        <span style="color:var(--text-dimmer);">|</span>
+        <span style="color:var(--text-dim);">12-Step Autonomous Coaching</span>
+      </div>
+
+      <!-- Large $100M SaaS Animated Headline -->
+      <h1 class="hero-title" style="font-size:52px; font-weight:800; letter-spacing:-0.03em; line-height:1.15; margin-bottom:12px;">
+        Where Teams & AI <br>
+        <span class="gradient-text-blue">Work Together.</span>
+      </h1>
+      <p class="hero-sub" id="modeHeroSub" style="max-width:680px; margin:0 auto 32px; font-size:15px; color:var(--text-dim); line-height:1.6;">
+        The next-generation project execution platform. Enter your concept to run our 12-stage production pipeline: scope optimization, 5-judge simulation, risk mitigation, and live stage demo preparation.
+      </p>
+      
+      <!-- Glassmorphic Prompt Box with Glowing Border -->
+      <div class="prompt-box gradient-border-glow" style="background:rgba(17,17,17,0.85); backdrop-filter:blur(20px); border:1px solid rgba(255,255,255,0.1); border-radius:20px; padding:24px; box-shadow:0 30px 60px rgba(0,0,0,0.5);">
         <div id="promptError" style="display:none; color:var(--red); font-weight:600; font-size:12px; margin-bottom:8px;">⚠️ Please enter your project idea before executing the 12-step pipeline.</div>
-        <textarea class="prompt-input" id="mainPrompt" placeholder="What are you building? (e.g., An AI-powered crowdfunding app with automated milestone verification...)"></textarea>
+        <textarea class="prompt-input" id="mainPrompt" placeholder="What are you building? (e.g., An AI-powered crowdfunding app with automated milestone verification...)" style="font-size:14px; background:rgba(0,0,0,0.4); border-radius:12px; padding:14px; border:1px solid rgba(255,255,255,0.08);"></textarea>
         
         <!-- Sample Suggestion Chips -->
-        <div class="sample-chips">
-          <span class="chip-label">Try Example:</span>
+        <div class="sample-chips" style="margin:14px 0;">
+          <span class="chip-label" style="font-size:11px; color:var(--text-dim);">Try Example:</span>
           <button class="chip-btn" onclick="useSamplePrompt('AI Crowdfunding App with automated milestone verification and smart contract escrow', 'Next.js, Supabase, Node, Solidity', '3 Developers', '24 Hours')">⚡ AI Crowdfunding</button>
           <button class="chip-btn" onclick="useSamplePrompt('Web3 Multiplayer Gaming Arcade with real-time zero-knowledge verification', 'Solana, Rust, React, WebSockets', '4+ Developers', '48 Hours')">🎮 Web3 Gaming</button>
           <button class="chip-btn" onclick="useSamplePrompt('HealthTech AI Diagnostics Assistant with offline patient record sync', 'React Native, Python, PyTorch, FastAPI', '2 Developers', '36 Hours')">🏥 HealthTech AI</button>
@@ -60,11 +76,11 @@
 
         <div class="meta-inputs">
           <div class="meta-group">
-            <label>Tech Stack</label>
+            <label style="font-size:11px; text-transform:uppercase; letter-spacing:0.05em; color:var(--text-dim);">Tech Stack</label>
             <input type="text" id="inTech" value="Next.js, Supabase, Node, Vercel" placeholder="e.g. React, Python, FastAPI">
           </div>
           <div class="meta-group">
-            <label>Team Size</label>
+            <label style="font-size:11px; text-transform:uppercase; letter-spacing:0.05em; color:var(--text-dim);">Team Size</label>
             <select id="inTeam">
               <option value="Solo Developer">Solo Developer</option>
               <option value="2 Developers">2 Developers</option>
@@ -73,7 +89,7 @@
             </select>
           </div>
           <div class="meta-group">
-            <label>Hackathon Duration</label>
+            <label style="font-size:11px; text-transform:uppercase; letter-spacing:0.05em; color:var(--text-dim);">Hackathon Duration</label>
             <select id="inTime">
               <option value="24 Hours" selected>24 Hours</option>
               <option value="36 Hours">36 Hours</option>
@@ -82,16 +98,25 @@
           </div>
         </div>
 
-        <div class="prompt-footer">
+        <div class="prompt-footer" style="margin-top:16px;">
           <div class="api-key-wrap">
             <div style="display:flex; align-items:center; gap: 10px; flex-wrap:wrap;">
-              <span class="api-status live" id="apiStatusBadge">🟢 AI Connected (Claude & Gemini API)</span>
+              <span class="api-status live" id="apiStatusBadge">System Operational</span>
               <input type="password" id="customApiKey" placeholder="Paste Claude / Gemini API Key (optional)" style="background:rgba(0,0,0,0.4); border:1px solid rgba(255,255,255,0.12); border-radius:6px; padding:6px 12px; color:#fff; font-size:11px; width:240px;">
             </div>
           </div>
-          <button class="btn btn-primary" id="btnSubmit" style="font-size: 15px;">Execute 12-Step Pipeline ↗</button>
+          <button class="btn btn-primary-glow" id="btnSubmit" style="font-size: 14px; padding:12px 24px;">Execute 12-Step Pipeline ↗</button>
         </div>
       </div>
+
+      <!-- Trust Marquee Banner -->
+      <div style="margin-top:40px; overflow:hidden; width:100%; opacity:0.6; padding-top:20px; border-top:1px solid rgba(255,255,255,0.06);">
+        <p style="font-size:10px; font-family:'JetBrains Mono', monospace; text-transform:uppercase; letter-spacing:0.15em; color:var(--text-dim); margin-bottom:12px;">Trusted by engineering teams worldwide</p>
+        <div class="animate-marquee" style="gap:40px; font-size:12px; font-family:'Space Grotesk', sans-serif; font-weight:700; color:var(--text-dim); text-transform:uppercase;">
+          <span>FIGMA</span> • <span>GITHUB</span> • <span>LINEAR</span> • <span>VERCEL</span> • <span>STRIPE</span> • <span>SLACK</span> • <span>AWS</span> • <span>SUPABASE</span> • <span>FIGMA</span> • <span>GITHUB</span> • <span>LINEAR</span> • <span>VERCEL</span>
+        </div>
+      </div>
+
     </div>
   </div>
 
