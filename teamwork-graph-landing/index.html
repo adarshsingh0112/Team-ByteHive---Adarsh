@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Teamwork Graph — Where Teams & AI Work Together</title>
+  <meta name="description" content="Build your AI-powered workspace. The next-generation team execution platform combining autonomous AI agents, real-time telemetry, and workflow orchestration.">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brandDark: '#090909',
+            brandCard: '#111111',
+            brandBlue: '#4F8CFF',
+            brandPurple: '#7C3AED',
+            brandGlow: '#5EA0FF',
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- FontAwesome Icons & GSAP -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+
+  <!-- Custom Design System CSS -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="dark-grid-bg relative text-white">
+
+  <!-- Mouse Cursor Spotlight Effect -->
+  <div id="cursor-spotlight"></div>
+
+  <!-- Ambient Glow Overlay & Orbs -->
+  <div class="radial-glow-overlay"></div>
+  <div class="floating-orb orb-1"></div>
+  <div class="floating-orb orb-2"></div>
+
+  <!-- ============================================================================
+     🧭 STICKY GLASS NAVIGATION BAR
+     ============================================================================ -->
+  <header class="glass-header fixed top-0 left-0 w-full z-50 py-4 px-6 md:px-12 flex justify-between items-center">
+    <div class="flex items-center gap-3">
+      <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-brandBlue to-brandPurple flex items-center justify-center font-bold text-lg shadow-lg shadow-brandBlue/30">
+        <i class="fa-solid fa-diagram-project text-white text-sm"></i>
+      </div>
+      <span class="font-bold text-lg tracking-tight text-white font-['Space_Grotesk']">Teamwork <span class="text-brandBlue">Graph</span></span>
+    </div>
+
+    <!-- Navigation Links -->
+    <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-gray-400">
+      <a href="#features" class="hover:text-white transition-colors">Features</a>
+      <a href="#preview" class="hover:text-white transition-colors">Product</a>
+      <a href="#workflow" class="hover:text-white transition-colors">Workflow</a>
+      <a href="#pricing" class="hover:text-white transition-colors">Pricing</a>
+      <a href="#faq" class="hover:text-white transition-colors">FAQ</a>
+    </nav>
+
+    <div class="flex items-center gap-4">
+      <a href="#pricing" class="hidden sm:inline-block text-sm text-gray-400 hover:text-white font-medium transition-colors">Sign In</a>
+      <a href="#pricing" class="btn-primary-glow text-sm py-2.5 px-5">Start Free <i class="fa-solid fa-arrow-right text-xs"></i></a>
+    </div>
+  </header>
+
+  <!-- ============================================================================
+     🚀 HERO SECTION (CENTER ALIGNED WITH 3D ORBIT CANVAS)
+     ============================================================================ -->
+  <section class="relative min-h-screen pt-36 pb-20 px-6 flex flex-col justify-center items-center text-center overflow-hidden">
+    
+    <!-- Hero Canvas Background Ecosystem -->
+    <div class="absolute inset-0 w-full h-full pointer-events-auto z-0">
+      <canvas id="hero-orbit-canvas"></canvas>
+    </div>
+
+    <div class="relative z-10 max-w-4xl mx-auto flex flex-col items-center">
+      
+      <!-- Announcement Pill -->
+      <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-card border border-white/10 text-xs font-medium text-brandBlue mb-8 shadow-inner">
+        <span class="w-2 h-2 rounded-full bg-brandBlue animate-ping"></span>
+        <span>Introducing Teamwork Graph 2.0</span>
+        <span class="text-gray-500">|</span>
+        <span class="text-gray-300">Explore AI Agents <i class="fa-solid fa-chevron-right text-[10px] ml-1"></i></span>
+      </div>
+
+      <!-- Large Animated Headline -->
+      <h1 class="text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight leading-tight mb-6 font-['Space_Grotesk']">
+        Where Teams & AI <br>
+        <span class="gradient-text-blue">Work Together.</span>
+      </h1>
+
+      <!-- Subtitle -->
+      <p class="text-lg md:text-xl text-gray-400 max-w-2xl font-normal leading-relaxed mb-10">
+        The next-generation intelligence platform. Orchestrate autonomous AI agents, real-time code execution, and team workflows in one unified graph.
+      </p>
+
+      <!-- CTA Buttons -->
+      <div class="flex flex-wrap justify-center items-center gap-4">
+        <a href="#pricing" class="btn-primary-glow text-base">
+          Start Free <i class="fa-solid fa-arrow-right"></i>
+        </a>
+        <a href="#preview" class="btn-secondary-glass text-base">
+          <i class="fa-solid fa-circle-play text-brandPurple"></i> Watch Demo (2 min)
+        </a>
+      </div>
+
+      <!-- Key Metrics Badge -->
+      <div class="mt-14 flex items-center gap-6 text-xs text-gray-500 font-mono">
+        <span class="flex items-center gap-1.5"><i class="fa-solid fa-check text-brandBlue"></i> No Credit Card Required</span>
+        <span class="flex items-center gap-1.5"><i class="fa-solid fa-check text-brandBlue"></i> SOC2 Type II Certified</span>
+        <span class="flex items-center gap-1.5"><i class="fa-solid fa-check text-brandBlue"></i> 14-Day Free Trial</span>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============================================================================
+     🤝 TRUST SECTION (INFINITE LOGO MARQUEE)
+     ============================================================================ -->
+  <section class="py-16 border-y border-white/5 bg-black/40 backdrop-blur-md relative z-10 overflow-hidden">
+    <p class="text-center text-xs font-mono uppercase tracking-widest text-gray-500 mb-8">Trusted by forward-thinking teams at top engineering orgs</p>
+    
+    <div class="overflow-hidden w-full relative">
+      <div class="animate-marquee items-center gap-16 text-gray-500 font-bold text-xl tracking-wider uppercase opacity-70">
+        <span class="hover:text-white transition-colors cursor-pointer"><i class="fa-brands fa-figma text-2xl mr-2"></i> FIGMA</span>
+        <span class="hover:text-white transition-colors cursor-pointer"><i class="fa-brands fa-github text-2xl mr-2"></i> GITHUB</span>
+        <span class="hover:text-white transition-colors cursor-pointer"><i class="fa-brands fa-[#0052CC] text-2xl mr-2"></i> LINEAR</span>
+        <span class="hover:text-white transition-colors cursor-pointer"><i class="fa-brands fa-[#000000] text-2xl mr-2"></i> VERCEL</span>
+        <span class="hover:text-white transition-colors cursor-pointer"><i class="fa-brands fa-stripe text-2xl mr-2"></i> STRIPE</span>
+        <span class="hover:text-white transition-colors cursor-pointer"><i class="fa-brands fa-slack text-2xl mr-2"></i> SLACK</span>
+        <span class="hover:text-white transition-colors cursor-pointer"><i class="fa-brands fa-aws text-2xl mr-2"></i> AWS</span>
+        <!-- Duplicate for marquee loop -->
+        <span class="hover:text-white transition-colors cursor-pointer"><i class="fa-brands fa-figma text-2xl mr-2"></i> FIGMA</span>
+        <span class="hover:text-white transition-colors cursor-pointer"><i class="fa-brands fa-github text-2xl mr-2"></i> GITHUB</span>
+        <span class="hover:text-white transition-colors cursor-pointer"><i class="fa-brands fa-[#0052CC] text-2xl mr-2"></i> LINEAR</span>
+        <span class="hover:text-white transition-colors cursor-pointer"><i class="fa-brands fa-[#000000] text-2xl mr-2"></i> VERCEL</span>
+        <span class="hover:text-white transition-colors cursor-pointer"><i class="fa-brands fa-stripe text-2xl mr-2"></i> STRIPE</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================================
+     🕸️ INTERACTIVE FEATURE GRAPH SECTION
+     ============================================================================ -->
+  <section id="feature-graph" class="py-28 px-6 max-w-7xl mx-auto relative z-10">
+    <div class="text-center max-w-3xl mx-auto mb-16">
+      <span class="text-xs font-mono uppercase tracking-widest text-brandBlue bg-brandBlue/10 border border-brandBlue/20 px-3 py-1 rounded-full">Interactive Ecosystem</span>
+      <h2 class="text-3xl md:text-5xl font-extrabold tracking-tight mt-4 font-['Space_Grotesk']">
+        Connected Graph Architecture
+      </h2>
+      <p class="text-gray-400 mt-4 text-base">
+        Hover over feature nodes to inspect how our AI orchestration engine connects your entire toolchain.
+      </p>
+    </div>
+
+    <!-- Feature Graph Grid & Connection Canvas -->
+    <div class="relative min-h-[500px] grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
+      
+      <!-- Left Column Nodes -->
+      <div class="flex flex-col gap-6">
+        <div class="glass-card p-6 feature-graph-card cursor-pointer" data-connection="node-1">
+          <div class="w-10 h-10 rounded-lg bg-brandBlue/10 text-brandBlue flex items-center justify-center text-lg mb-3">
+            <i class="fa-solid fa-robot"></i>
+          </div>
+          <h3 class="font-bold text-lg text-white">Autonomous Agents</h3>
+          <p class="text-xs text-gray-400 mt-1">AI subagents execute code, run tests, and manage deployments asynchronously.</p>
+        </div>
+
+        <div class="glass-card p-6 feature-graph-card cursor-pointer" data-connection="node-2">
+          <div class="w-10 h-10 rounded-lg bg-brandPurple/10 text-brandPurple flex items-center justify-center text-lg mb-3">
+            <i class="fa-solid fa-brain"></i>
+          </div>
+          <h3 class="font-bold text-lg text-white">RAG Vector Search</h3>
+          <p class="text-xs text-gray-400 mt-1">Cosine similarity matching over pre-indexed company knowledge bases.</p>
+        </div>
+      </div>
+
+      <!-- Center Hub Card -->
+      <div class="glass-card p-8 text-center gradient-border-glow bg-brandCard/90 relative z-20 shadow-2xl">
+        <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-brandBlue to-brandPurple mx-auto flex items-center justify-center text-2xl shadow-xl shadow-brandBlue/40 mb-4 animate-pulse">
+          <i class="fa-solid fa-microchip text-white"></i>
+        </div>
+        <h3 class="font-extrabold text-2xl text-white font-['Space_Grotesk']">Teamwork AI Engine</h3>
+        <p class="text-xs font-mono text-brandBlue mt-1">LATENCY: 12ms | ACTIVE THREADS: 1,024</p>
+        <div class="mt-6 pt-6 border-t border-white/10 flex justify-center gap-4 text-xs font-mono text-gray-400">
+          <span><i class="fa-solid fa-bolt text-brandBlue"></i> 60 FPS</span>
+          <span><i class="fa-solid fa-shield-halved text-brandPurple"></i> E2E Encrypted</span>
+        </div>
+      </div>
+
+      <!-- Right Column Nodes -->
+      <div class="flex flex-col gap-6">
+        <div class="glass-card p-6 feature-graph-card cursor-pointer" data-connection="node-3">
+          <div class="w-10 h-10 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-lg mb-3">
+            <i class="fa-solid fa-code"></i>
+          </div>
+          <h3 class="font-bold text-lg text-white">Code Synthesis</h3>
+          <p class="text-xs text-gray-400 mt-1">Generates production-grade React, Node, and SQL DDL code automatically.</p>
+        </div>
+
+        <div class="glass-card p-6 feature-graph-card cursor-pointer" data-connection="node-4">
+          <div class="w-10 h-10 rounded-lg bg-amber-500/10 text-amber-400 flex items-center justify-center text-lg mb-3">
+            <i class="fa-solid fa-chart-line"></i>
+          </div>
+          <h3 class="font-bold text-lg text-white">Predictive Analytics</h3>
+          <p class="text-xs text-gray-400 mt-1">Real-time team velocity metrics, COGS optimization, and ARR projections.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============================================================================
+     📊 STATS SECTION (COUNT-UP CARDS)
+     ============================================================================ -->
+  <section class="py-20 px-6 max-w-7xl mx-auto border-t border-white/5 relative z-10">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+      
+      <div class="glass-card p-8 text-center">
+        <h3 class="text-4xl md:text-5xl font-extrabold font-['JetBrains_Mono'] gradient-text-blue stat-number" data-target="50" data-suffix="M+">0</h3>
+        <p class="text-xs font-mono text-gray-400 mt-2 uppercase tracking-wider">Tasks Completed</p>
+      </div>
+
+      <div class="glass-card p-8 text-center">
+        <h3 class="text-4xl md:text-5xl font-extrabold font-['JetBrains_Mono'] gradient-text-purple stat-number" data-target="120" data-suffix="+">0</h3>
+        <p class="text-xs font-mono text-gray-400 mt-2 uppercase tracking-wider">Countries Served</p>
+      </div>
+
+      <div class="glass-card p-8 text-center">
+        <h3 class="text-4xl md:text-5xl font-extrabold font-['JetBrains_Mono'] gradient-text-blue stat-number" data-target="99.99" data-suffix="%">0</h3>
+        <p class="text-xs font-mono text-gray-400 mt-2 uppercase tracking-wider">Guaranteed Uptime</p>
+      </div>
+
+      <div class="glass-card p-8 text-center">
+        <h3 class="text-4xl md:text-5xl font-extrabold font-['JetBrains_Mono'] gradient-text-purple stat-number" data-target="24" data-suffix="/7">0</h3>
+        <p class="text-xs font-mono text-gray-400 mt-2 uppercase tracking-wider">AI Automation</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============================================================================
+     🎨 FEATURES SECTION (ALTERNATING BENTO LAYOUT)
+     ============================================================================ -->
+  <section id="features" class="py-28 px-6 max-w-7xl mx-auto space-y-24 relative z-10">
+    
+    <!-- Feature 1: Code Editor & AI Automation -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      <div class="glass-card p-8 lg:p-10 relative overflow-hidden">
+        <div class="flex items-center gap-2 mb-4">
+          <div class="w-3 h-3 rounded-full bg-red-500/80"></div>
+          <div class="w-3 h-3 rounded-full bg-yellow-500/80"></div>
+          <div class="w-3 h-3 rounded-full bg-green-500/80"></div>
+          <span class="text-xs font-mono text-gray-500 ml-2">agent_execution.ts</span>
+        </div>
+        <pre class="font-mono text-xs text-brandBlue bg-black/60 p-6 rounded-xl border border-white/10 overflow-x-auto leading-relaxed"><code><span class="text-purple-400">import</span> { VectorSearch, AIClient } <span class="text-purple-400">from</span> <span class="text-emerald-400">'@teamwork/graph'</span>;
+
+<span class="text-gray-500">// Initialize Autonomous Subagent</span>
+<span class="text-purple-400">const</span> agent = <span class="text-purple-400">new</span> AIClient({ model: <span class="text-emerald-400">'claude-3-5-sonnet'</span> });
+
+<span class="text-purple-400">async function</span> executeTask(query: <span class="text-yellow-400">string</span>) {
+  <span class="text-purple-400">const</span> context = <span class="text-purple-400">await</span> VectorSearch.query(query, <span class="text-amber-300">0.94</span>);
+  <span class="text-purple-400">return await</span> agent.synthesize({ context, query });
+}</code></pre>
+      </div>
+
+      <div class="space-y-6">
+        <span class="text-xs font-mono text-brandBlue uppercase tracking-widest bg-brandBlue/10 border border-brandBlue/20 px-3 py-1 rounded-full">01. Autonomous Execution</span>
+        <h2 class="text-3xl lg:text-4xl font-extrabold font-['Space_Grotesk'] leading-tight">
+          Write Code & Automate Tasks in Real Time.
+        </h2>
+        <p class="text-gray-400 leading-relaxed">
+          Say goodbye to manual context switching. Our AI agents read your codebase, write production TypeScript & SQL DDL code, and run automated unit test suites natively inside your graph workspace.
+        </p>
+        <ul class="space-y-3 text-sm text-gray-300 font-medium">
+          <li class="flex items-center gap-3"><i class="fa-solid fa-circle-check text-brandBlue"></i> Zero-latency API execution with circuit breaker protection</li>
+          <li class="flex items-center gap-3"><i class="fa-solid fa-circle-check text-brandBlue"></i> PostgreSQL DDL auto-generation & Supabase integration</li>
+          <li class="flex items-center gap-3"><i class="fa-solid fa-circle-check text-brandBlue"></i> 1-Click scope optimization for rapid hackathon MVPs</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Feature 2: Analytics & Real-Time Telemetry (Reversed Layout) -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      <div class="space-y-6 lg:order-1 order-2">
+        <span class="text-xs font-mono text-brandPurple uppercase tracking-widest bg-brandPurple/10 border border-brandPurple/20 px-3 py-1 rounded-full">02. Live Telemetry</span>
+        <h2 class="text-3xl lg:text-4xl font-extrabold font-['Space_Grotesk'] leading-tight">
+          Real-Time Team Velocity & Financial Metrics.
+        </h2>
+        <p class="text-gray-400 leading-relaxed">
+          Monitor your startup's unit economics, cloud infrastructure costs, CAC-to-LTV ratios, and projected 3-year ARR targets in one unified, real-time telemetry dashboard.
+        </p>
+        <div class="grid grid-cols-2 gap-4 pt-2">
+          <div class="glass-card p-4">
+            <span class="text-xs text-gray-500 font-mono">Gross Margin</span>
+            <h4 class="text-2xl font-bold text-emerald-400 font-mono mt-1">87.4%</h4>
+          </div>
+          <div class="glass-card p-4">
+            <span class="text-xs text-gray-500 font-mono">CAC : LTV Ratio</span>
+            <h4 class="text-2xl font-bold text-brandBlue font-mono mt-1">1 : 4.2</h4>
+          </div>
+        </div>
+      </div>
+
+      <div class="glass-card p-8 lg:p-10 lg:order-2 order-1">
+        <div class="flex justify-between items-center mb-6">
+          <div>
+            <h3 class="font-bold text-lg text-white">System Health & Telemetry</h3>
+            <p class="text-xs text-gray-500 font-mono">Live socket stream updates</p>
+          </div>
+          <span class="px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-400 text-xs font-mono font-semibold">● 100% Operational</span>
+        </div>
+
+        <div class="space-y-4">
+          <div>
+            <div class="flex justify-between text-xs font-mono mb-1 text-gray-400">
+              <span>Agent Memory Usage</span>
+              <span class="text-brandBlue">42.8 GB / 128 GB</span>
+            </div>
+            <div class="w-full h-2 bg-black/60 rounded-full overflow-hidden">
+              <div class="h-full bg-brandBlue w-[35%]"></div>
+            </div>
+          </div>
+
+          <div>
+            <div class="flex justify-between text-xs font-mono mb-1 text-gray-400">
+              <span>Vector Search Latency</span>
+              <span class="text-brandPurple">12ms (99.9th percentile)</span>
+            </div>
+            <div class="w-full h-2 bg-black/60 rounded-full overflow-hidden">
+              <div class="h-full bg-brandPurple w-[22%]"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ============================================================================
+     💻 LIVE PREVIEW SECTION (INTERACTIVE 3D BROWSER TILT)
+     ============================================================================ -->
+  <section id="preview" class="py-28 px-6 max-w-7xl mx-auto text-center relative z-10">
+    <div class="max-w-3xl mx-auto mb-16">
+      <span class="text-xs font-mono uppercase tracking-widest text-brandBlue bg-brandBlue/10 border border-brandBlue/20 px-3 py-1 rounded-full">Product Preview</span>
+      <h2 class="text-3xl md:text-5xl font-extrabold tracking-tight mt-4 font-['Space_Grotesk']">
+        Experience the Next-Gen Workspace
+      </h2>
+      <p class="text-gray-400 mt-4 text-base">Move your mouse over the window to interact with our 3D perspective engine.</p>
+    </div>
+
+    <!-- 3D Interactive Browser Window -->
+    <div id="interactive-browser" class="glass-card p-4 max-w-5xl mx-auto shadow-2xl border border-white/10 transition-transform ease-out duration-200 cursor-pointer">
+      <div class="flex items-center justify-between px-4 py-3 bg-black/60 rounded-xl border border-white/5 mb-4">
+        <div class="flex items-center gap-2">
+          <div class="w-3 h-3 rounded-full bg-red-500"></div>
+          <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+          <div class="w-3 h-3 rounded-full bg-green-500"></div>
+        </div>
+        <div class="px-6 py-1 bg-white/5 rounded-lg text-xs font-mono text-gray-400 border border-white/5">
+          https://app.teamworkgraph.com/workspace/main
+        </div>
+        <div class="text-xs text-gray-500"><i class="fa-solid fa-lock text-brandBlue mr-1"></i> SSL 256-bit</div>
+      </div>
+
+      <!-- Inner Workspace Mockup -->
+      <div class="bg-[#0b0f17] p-8 rounded-xl border border-white/5 text-left grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="glass-card p-5">
+          <h4 class="font-bold text-sm text-gray-300">5-Axis Multidimensional Radar</h4>
+          <div class="h-32 mt-4 bg-brandBlue/5 rounded-lg border border-brandBlue/20 flex items-center justify-center text-brandBlue text-xs font-mono">
+            [ Radar Chart Rendered ]
+          </div>
+        </div>
+        <div class="glass-card p-5">
+          <h4 class="font-bold text-sm text-gray-300">12-Step Coaching Pipeline</h4>
+          <div class="h-32 mt-4 bg-brandPurple/5 rounded-lg border border-brandPurple/20 flex items-center justify-center text-brandPurple text-xs font-mono">
+            [ 12-Stage Active Stream ]
+          </div>
+        </div>
+        <div class="glass-card p-5">
+          <h4 class="font-bold text-sm text-gray-300">RAG Knowledge Engine</h4>
+          <div class="h-32 mt-4 bg-emerald-500/5 rounded-lg border border-emerald-500/20 flex items-center justify-center text-emerald-400 text-xs font-mono">
+            [ 0.94 Cosine Match ]
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================================
+     ⚙️ WORKFLOW GRAPH SECTION
+     ============================================================================ -->
+  <section id="workflow" class="py-28 px-6 max-w-7xl mx-auto relative z-10">
+    <div class="text-center max-w-3xl mx-auto mb-16">
+      <span class="text-xs font-mono uppercase tracking-widest text-brandPurple bg-brandPurple/10 border border-brandPurple/20 px-3 py-1 rounded-full">Automated Workflow</span>
+      <h2 class="text-3xl md:text-5xl font-extrabold tracking-tight mt-4 font-['Space_Grotesk']">
+        End-to-End Execution Graph
+      </h2>
+    </div>
+
+    <!-- Workflow Steps Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div class="glass-card p-6 text-center">
+        <div class="w-12 h-12 rounded-xl bg-brandBlue/10 text-brandBlue flex items-center justify-center text-xl mx-auto mb-4">
+          <i class="fa-solid fa-lightbulb"></i>
+        </div>
+        <h4 class="font-bold text-lg">1. Idea Submission</h4>
+        <p class="text-xs text-gray-400 mt-2">Enter project concepts and tech stack parameters.</p>
+      </div>
+
+      <div class="glass-card p-6 text-center">
+        <div class="w-12 h-12 rounded-xl bg-brandPurple/10 text-brandPurple flex items-center justify-center text-xl mx-auto mb-4">
+          <i class="fa-solid fa-scissors"></i>
+        </div>
+        <h4 class="font-bold text-lg">2. 1-Click Scope Cut</h4>
+        <p class="text-xs text-gray-400 mt-2">Prune secondary bloat tasks to isolate 1-feature MVP happy paths.</p>
+      </div>
+
+      <div class="glass-card p-6 text-center">
+        <div class="w-12 h-12 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-xl mx-auto mb-4">
+          <i class="fa-solid fa-gavel"></i>
+        </div>
+        <h4 class="font-bold text-lg">3. 5-Judge Simulation</h4>
+        <p class="text-xs text-gray-400 mt-2">Evaluate projects against technical & innovation rubrics.</p>
+      </div>
+
+      <div class="glass-card p-6 text-center">
+        <div class="w-12 h-12 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center text-xl mx-auto mb-4">
+          <i class="fa-solid fa-rocket"></i>
+        </div>
+        <h4 class="font-bold text-lg">4. Pre-Flight Stage Demo</h4>
+        <p class="text-xs text-gray-400 mt-2">Execute 3-minute pitch scripts with offline fallback readiness.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================================
+     💬 TESTIMONIALS SECTION (GLASS SLIDER)
+     ============================================================================ -->
+  <section class="py-28 px-6 max-w-5xl mx-auto relative z-10">
+    <div class="text-center mb-16">
+      <span class="text-xs font-mono uppercase tracking-widest text-brandBlue bg-brandBlue/10 border border-brandBlue/20 px-3 py-1 rounded-full">Testimonials</span>
+      <h2 class="text-3xl md:text-5xl font-extrabold tracking-tight mt-4 font-['Space_Grotesk']">
+        Loved by Builders Worldwide
+      </h2>
+    </div>
+
+    <!-- Carousel Container -->
+    <div class="overflow-hidden glass-card p-8 md:p-12 relative">
+      <div id="testimonials-track" class="flex transition-transform duration-500 ease-in-out">
+        
+        <div class="w-full flex-shrink-0 space-y-6">
+          <div class="flex text-amber-400 text-sm gap-1">
+            <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+          </div>
+          <p class="text-lg md:text-xl text-gray-200 font-medium leading-relaxed italic">
+            "Teamwork Graph transformed how our engineering team ships products. The 1-click scope optimization saved us over 40 hours during our last major release."
+          </p>
+          <div class="flex items-center gap-4 pt-4 border-t border-white/10">
+            <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-brandBlue to-brandPurple flex items-center justify-center font-bold text-sm">AS</div>
+            <div>
+              <h4 class="font-bold text-sm text-white">Adarsh Singh</h4>
+              <p class="text-xs text-gray-400">Lead Architect at ByteHive</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="w-full flex-shrink-0 space-y-6">
+          <div class="flex text-amber-400 text-sm gap-1">
+            <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+          </div>
+          <p class="text-lg md:text-xl text-gray-200 font-medium leading-relaxed italic">
+            "The 5-judge simulation panel gave us honest, evidence-backed feedback before presenting to VCs. We raised our seed round 2 weeks faster."
+          </p>
+          <div class="flex items-center gap-4 pt-4 border-t border-white/10">
+            <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-emerald-400 to-brandBlue flex items-center justify-center font-bold text-sm">EK</div>
+            <div>
+              <h4 class="font-bold text-sm text-white">Elena Rostova</h4>
+              <p class="text-xs text-gray-400">Founder at Nexus AI</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================================
+     💲 PRICING SECTION
+     ============================================================================ -->
+  <section id="pricing" class="py-28 px-6 max-w-7xl mx-auto relative z-10">
+    <div class="text-center max-w-3xl mx-auto mb-16">
+      <span class="text-xs font-mono uppercase tracking-widest text-brandBlue bg-brandBlue/10 border border-brandBlue/20 px-3 py-1 rounded-full">Transparent Pricing</span>
+      <h2 class="text-3xl md:text-5xl font-extrabold tracking-tight mt-4 font-['Space_Grotesk']">
+        Simple Plans for Every Team
+      </h2>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
+      
+      <!-- Starter Plan -->
+      <div class="glass-card p-8 space-y-6">
+        <h3 class="font-bold text-xl text-white">Starter</h3>
+        <p class="text-xs text-gray-400">For solo developers and hackathon participants.</p>
+        <div class="text-4xl font-extrabold font-mono text-white">$0 <span class="text-xs text-gray-500 font-sans font-normal">/ forever</span></div>
+        <ul class="space-y-3 text-xs text-gray-300">
+          <li class="flex items-center gap-2"><i class="fa-solid fa-check text-brandBlue"></i> 12-Step Coaching Pipeline</li>
+          <li class="flex items-center gap-2"><i class="fa-solid fa-check text-brandBlue"></i> Basic 5-Judge Simulation</li>
+          <li class="flex items-center gap-2"><i class="fa-solid fa-check text-brandBlue"></i> Community Support</li>
+        </ul>
+        <button class="btn-secondary-glass w-full justify-center">Get Started</button>
+      </div>
+
+      <!-- Pro Plan (Highlighted with Animated Gradient Border) -->
+      <div class="glass-card p-8 space-y-6 gradient-border-glow bg-brandCard/90 relative z-20 shadow-2xl">
+        <div class="inline-block px-3 py-1 rounded-full bg-brandBlue/20 text-brandBlue text-xs font-mono font-semibold">MOST POPULAR</div>
+        <h3 class="font-bold text-2xl text-white font-['Space_Grotesk']">Pro Team</h3>
+        <p class="text-xs text-gray-400">For fast-moving startups and product teams.</p>
+        <div class="text-5xl font-extrabold font-mono text-white">$29 <span class="text-xs text-gray-500 font-sans font-normal">/ member / mo</span></div>
+        <ul class="space-y-3 text-xs text-gray-300">
+          <li class="flex items-center gap-2"><i class="fa-solid fa-check text-brandBlue"></i> Everything in Starter</li>
+          <li class="flex items-center gap-2"><i class="fa-solid fa-check text-brandBlue"></i> Unlimited RAG Vector Search</li>
+          <li class="flex items-center gap-2"><i class="fa-solid fa-check text-brandBlue"></i> Real-Time Telemetry & Metrics</li>
+          <li class="flex items-center gap-2"><i class="fa-solid fa-check text-brandBlue"></i> Priority API Keys & Claude 3.5</li>
+        </ul>
+        <button class="btn-primary-glow w-full justify-center">Start 14-Day Free Trial</button>
+      </div>
+
+      <!-- Enterprise Plan -->
+      <div class="glass-card p-8 space-y-6">
+        <h3 class="font-bold text-xl text-white">Enterprise</h3>
+        <p class="text-xs text-gray-400">For enterprise orgs requiring SOC2 & dedicated infrastructure.</p>
+        <div class="text-4xl font-extrabold font-mono text-white">Custom</div>
+        <ul class="space-y-3 text-xs text-gray-300">
+          <li class="flex items-center gap-2"><i class="fa-solid fa-check text-brandPurple"></i> Custom Vector Embeddings</li>
+          <li class="flex items-center gap-2"><i class="fa-solid fa-check text-brandPurple"></i> Dedicated PgBouncer Sockets</li>
+          <li class="flex items-center gap-2"><i class="fa-solid fa-check text-brandPurple"></i> 24/7 SLA Support</li>
+        </ul>
+        <button class="btn-secondary-glass w-full justify-center">Contact Sales</button>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============================================================================
+     ❓ FAQ SECTION (ANIMATED ACCORDION)
+     ============================================================================ -->
+  <section id="faq" class="py-28 px-6 max-w-4xl mx-auto relative z-10">
+    <div class="text-center mb-16">
+      <span class="text-xs font-mono uppercase tracking-widest text-brandPurple bg-brandPurple/10 border border-brandPurple/20 px-3 py-1 rounded-full">Frequently Asked Questions</span>
+      <h2 class="text-3xl md:text-5xl font-extrabold tracking-tight mt-4 font-['Space_Grotesk']">
+        Got Questions? We Have Answers.
+      </h2>
+    </div>
+
+    <div class="space-y-4">
+      
+      <div class="glass-card faq-item overflow-hidden">
+        <button class="faq-btn w-full p-6 text-left flex justify-between items-center font-bold text-base text-white">
+          <span>What is Teamwork Graph?</span>
+          <i class="fa-solid fa-plus faq-icon text-brandBlue transition-transform duration-300"></i>
+        </button>
+        <div class="faq-content max-h-0 overflow-hidden transition-all duration-300 ease-out px-6">
+          <p class="pb-6 text-sm text-gray-400 leading-relaxed">
+            Teamwork Graph is an all-in-one AI execution platform that orchestrates autonomous agents, real-time code generation, and team telemetry in a unified workspace.
+          </p>
+        </div>
+      </div>
+
+      <div class="glass-card faq-item overflow-hidden">
+        <button class="faq-btn w-full p-6 text-left flex justify-between items-center font-bold text-base text-white">
+          <span>How does the 1-Click Scope Cut feature work?</span>
+          <i class="fa-solid fa-plus faq-icon text-brandBlue transition-transform duration-300"></i>
+        </button>
+        <div class="faq-content max-h-0 overflow-hidden transition-all duration-300 ease-out px-6">
+          <p class="pb-6 text-sm text-gray-400 leading-relaxed">
+            Our AI scope engine evaluates secondary features against your timeline and automatically prunes low-impact bloat tasks, leaving a 100% working core MVP.
+          </p>
+        </div>
+      </div>
+
+      <div class="glass-card faq-item overflow-hidden">
+        <button class="faq-btn w-full p-6 text-left flex justify-between items-center font-bold text-base text-white">
+          <span>Is my code and project data private?</span>
+          <i class="fa-solid fa-plus faq-icon text-brandBlue transition-transform duration-300"></i>
+        </button>
+        <div class="faq-content max-h-0 overflow-hidden transition-all duration-300 ease-out px-6">
+          <p class="pb-6 text-sm text-gray-400 leading-relaxed">
+            Yes. All vector data embeddings and code snippets are encrypted end-to-end and stored in SOC2 Type II certified environments. We never use client code for model training.
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============================================================================
+     🏁 FOOTER
+     ============================================================================ -->
+  <footer class="border-t border-white/10 bg-black/80 py-16 px-6 max-w-7xl mx-auto relative z-10">
+    <div class="grid grid-cols-1 md:grid-cols-5 gap-10 mb-12">
+      
+      <div class="md:col-span-2 space-y-4">
+        <div class="flex items-center gap-3">
+          <div class="w-7 h-7 rounded-lg bg-gradient-to-tr from-brandBlue to-brandPurple flex items-center justify-center text-xs font-bold">
+            <i class="fa-solid fa-diagram-project text-white"></i>
+          </div>
+          <span class="font-bold text-lg tracking-tight text-white font-['Space_Grotesk']">Teamwork <span class="text-brandBlue">Graph</span></span>
+        </div>
+        <p class="text-xs text-gray-400 max-w-sm leading-relaxed">
+          The next-generation intelligence platform for engineering teams.
+        </p>
+        <div class="flex items-center gap-4 text-gray-400 text-sm">
+          <a href="#" class="hover:text-brandBlue transition-colors"><i class="fa-brands fa-x-twitter"></i></a>
+          <a href="#" class="hover:text-brandBlue transition-colors"><i class="fa-brands fa-github"></i></a>
+          <a href="#" class="hover:text-brandBlue transition-colors"><i class="fa-brands fa-discord"></i></a>
+        </div>
+      </div>
+
+      <div>
+        <h4 class="font-bold text-sm text-white mb-3">Product</h4>
+        <ul class="space-y-2 text-xs text-gray-400">
+          <li><a href="#features" class="hover:text-white transition-colors">Features</a></li>
+          <li><a href="#preview" class="hover:text-white transition-colors">3D Preview</a></li>
+          <li><a href="#workflow" class="hover:text-white transition-colors">Workflows</a></li>
+          <li><a href="#pricing" class="hover:text-white transition-colors">Pricing</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="font-bold text-sm text-white mb-3">Resources</h4>
+        <ul class="space-y-2 text-xs text-gray-400">
+          <li><a href="#" class="hover:text-white transition-colors">Documentation</a></li>
+          <li><a href="#" class="hover:text-white transition-colors">API Reference</a></li>
+          <li><a href="#" class="hover:text-white transition-colors">System Status</a></li>
+          <li><a href="#" class="hover:text-white transition-colors">Changelog</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="font-bold text-sm text-white mb-3">Subscribe</h4>
+        <p class="text-xs text-gray-400 mb-3">Get product updates & release notes.</p>
+        <div class="flex gap-2">
+          <input type="email" placeholder="Enter email..." class="bg-white/5 border border-white/10 rounded-lg px-3 py-1.5 text-xs text-white placeholder-gray-500 w-full focus:outline-none focus:border-brandBlue">
+          <button class="bg-brandBlue text-white px-3 py-1.5 rounded-lg text-xs font-semibold hover:bg-brandBlue/90 transition-colors">Join</button>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="pt-8 border-t border-white/5 flex flex-col sm:flex-row justify-between items-center text-xs text-gray-500 font-mono">
+      <p>© 2026 Teamwork Graph Inc. All rights reserved.</p>
+      <div class="flex gap-6 mt-4 sm:mt-0">
+        <a href="#" class="hover:text-gray-400 transition-colors">Privacy Policy</a>
+        <a href="#" class="hover:text-gray-400 transition-colors">Terms of Service</a>
+        <a href="#" class="hover:text-gray-400 transition-colors">Security</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- App Script -->
+  <script src="js/app.js"></script>
+</body>
+</html>
