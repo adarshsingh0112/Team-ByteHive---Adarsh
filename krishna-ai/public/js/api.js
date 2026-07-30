@@ -2,19 +2,119 @@
 
 const API_BASE = ''; 
 
+function calculateLocalWinProb(idea, stack, team, time) {
+  let score = 78;
+  const ideaLen = (idea || '').length;
+  if (ideaLen > 20) score += 4;
+  if (ideaLen > 120) score += 3;
+
+  const techCount = (stack || '').split(',').filter(Boolean).length;
+  if (techCount >= 3) score += 3;
+  if (techCount > 6) score -= 6;
+
+  if ((team || '').includes('Solo')) score -= 4;
+  if ((team || '').includes('4+')) score += 3;
+
+  if ((time || '').includes('48')) score += 4;
+  if ((time || '').includes('24')) score -= 3;
+
+  let hash = 0;
+  for (let i = 0; i < ideaLen; i++) {
+    hash = (hash << 5) - hash + (idea || '').charCodeAt(i);
+    hash |= 0;
+  }
+  score += Math.abs(hash % 11) - 5;
+
+  return Math.min(97, Math.max(58, score));
+}
+
+function saveProjectToLocalStorage(project) {
+  try {
+    const list = JSON.parse(localStorage.getItem('krishna_saved_projects') || '[]');
+    // Filter out duplicates with same ID or idea
+    const filtered = list.filter(p => p.id !== project.id && p.idea !== project.idea);
+    filtered.unshift(project);
+    localStorage.setItem('krishna_saved_projects', JSON.stringify(filtered.slice(0, 25)));
+  } catch (e) {
+    console.warn("LocalStorage save error:", e);
+  }
+}
+
+function getProjectsFromLocalStorage() {
+  try {
+    return JSON.parse(localStorage.getItem('krishna_saved_projects') || '[]');
+  } catch (e) {
+    return [];
+  }
+}
+
 async function apiAnalyzeProject(idea, stack, team, time) {
+  const winProb = calculateLocalWinProb(idea, stack, team, time);
   try {
     const res = await fetch(`${API_BASE}/api/analyze`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ idea, stack, team, time })
     });
-    if (!res.ok) throw new Error("Backend API error");
-    return await res.json();
+    if (res.ok) {
+      const data = await res.json();
+      if (!data.winning_probability) data.winning_probability = winProb;
+      const projRecord = { id: `proj_${Date.now()}`, idea, stack, winProbability: winProb, data };
+      saveProjectToLocalStorage(projRecord);
+      return data;
+    }
   } catch (err) {
-    console.warn("Using backend response handling:", err.message);
-    return null;
+    console.warn("API offline, utilizing local response engine:", err.message);
   }
+
+  // Dynamic Fallback Data Generator
+  const mainTech = (stack || 'React, Node').split(',')[0].trim();
+  const shortIdea = (idea || 'Hackathon Project').substring(0, 35);
+
+  const fallbackData = {
+    winning_probability: winProb,
+    confidence_score: 91,
+    critiqueText: `Building custom auth & analytics for <b>${shortIdea}</b> with <b>${stack || 'your stack'}</b> in <b>${time || '24h'}</b> will burn critical demo prep time. <b>Cut secondary bloat features immediately!</b> Focus 100% on the core interactive user loop.`,
+    scope_review: { status: "Scope Pruned & MVP Ready", reason: `Pruned non-essential tabs to guarantee working ${mainTech} core demo.` },
+    sprint_plan: [
+      { phase: "Sprint 1 (Hr 0-4)", title: "Core DB Schema & Server Setup", assignee: "Backend Lead", priority: "HIGH" },
+      { phase: "Sprint 2 (Hr 4-12)", title: `Interactive UI for ${shortIdea}`, assignee: "Frontend Lead", priority: "HIGH" },
+      { phase: "Sprint 3 (Hr 12-18)", title: `${mainTech} Integration & Pipeline`, assignee: "AI Lead", priority: "HIGH" },
+      { phase: "Sprint 4 (Hr 18-24)", title: "Demo Script & Pre-Flight Verification", assignee: "Pitch Lead", priority: "HIGH" }
+    ],
+    risks: [
+      { title: "API Latency & Integration Blocker", desc: "Frontend waiting on real backend endpoints.", action: "> COACH: Implement mock JSON fallback engine in frontend client.", isSlipping: true },
+      { title: "Deployment Configuration Failure", desc: "Host environment variables unverified.", action: "> COACH: Deploy early to Vercel/Render at Hour 4 to test CORS.", isSlipping: false }
+    ],
+    architecture: {
+      frontend: mainTech,
+      backend: "Node.js Express",
+      database: "Supabase PostgreSQL"
+    },
+    elevator_pitch: `Introducing ${shortIdea}: an intelligent engine powered by ${mainTech} that automates complex decisions in real time.`,
+    demo_flow: ["1. Open active workspace directly in guest mode", "2. Enter raw project idea and trigger execution pipeline", "3. Show 5-judge simulation panel & win score"],
+    backup_demo_plan: ["Pre-recorded 60s HD video walkthrough saved locally"],
+    revenue_model: ["Freemium individual access tier", "Enterprise event tier ($499/event)"],
+    head_judge: {
+      overall_score: (winProb * 0.97).toFixed(1),
+      winning_probability: winProb,
+      one_line_verdict: `High impact concept with ${winProb}% predicted win chance if live demo stays focused.`,
+      project_status: "Top Contender",
+      mission_status: "PROCEED TO PITCH"
+    }
+  };
+
+  const projRecord = { id: `proj_${Date.now()}`, idea, stack, winProbability: winProb, data: fallbackData };
+  saveProjectToLocalStorage(projRecord);
+
+  // Sync with backend memory if possible
+  fetch(`${API_BASE}/api/projects`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(projRecord)
+  }).catch(() => {});
+
+  return fallbackData;
 }
 
 async function apiSimulate5Judges(projectPayload) {
@@ -24,11 +124,24 @@ async function apiSimulate5Judges(projectPayload) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(projectPayload)
     });
-    if (!res.ok) throw new Error("5-Judge API error");
-    return await res.json();
-  } catch (err) {
-    return null;
-  }
+    if (res.ok) return await res.json();
+  } catch (err) {}
+
+  const win = calculateLocalWinProb(projectPayload.problem_statement || projectPayload.project_name, projectPayload.tech_stack, "3", "24");
+  return {
+    technical_judge: { score: Math.min(98, win + 2), strengths: ["Low latency architecture", "Clean code structure"], weaknesses: ["Needs DB connection pooling"] },
+    innovation_judge: { score: Math.min(96, win + 4), strengths: ["Novel AI agent orchestration"], weaknesses: ["Niche target market"] },
+    business_judge: { score: Math.max(60, win - 3), strengths: ["Clear Freemium tier model"], weaknesses: ["High user acquisition cost"] },
+    uiux_judge: { score: Math.min(99, win + 5), strengths: ["Glassmorphism visual hierarchy"], weaknesses: ["Mobile navbar spacing"] },
+    presentation_judge: { score: win, strengths: ["Strong elevator pitch hook"], weaknesses: ["Pacing during live demo"] },
+    head_judge: {
+      overall_score: (win * 0.98).toFixed(1),
+      winning_probability: win,
+      one_line_verdict: `Strong execution potential with ${win}% predicted win chance.`,
+      project_status: "Top Contender",
+      mission_status: "PROCEED TO PITCH"
+    }
+  };
 }
 
 async function apiGeneratePitch(idea, stack) {
@@ -38,19 +151,18 @@ async function apiGeneratePitch(idea, stack) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ idea, stack })
     });
-    if (!res.ok) throw new Error("Pitch API error");
-    return await res.json();
-  } catch (err) {
-    return {
-      slides: [
-        { num: 1, title: "Slide 1: Hook & Pain Point", script: `Every team building ${idea.substring(0,30)} faces massive friction.` },
-        { num: 2, title: "Slide 2: Solution & Value Prop", script: `Our app automates complex decisions in real time using ${stack}.` },
-        { num: 3, title: "Slide 3: Technical Architecture", script: `Powered by ${stack} with optimized low-latency data pipelines.` },
-        { num: 4, title: "Slide 4: Live Demo Focus", script: "Jump directly into the workspace to demonstrate 1-click execution." },
-        { num: 5, title: "Slide 5: Immediate Impact", script: "Ready to deploy from hackathon MVP to enterprise scale." }
-      ]
-    };
-  }
+    if (res.ok) return await res.json();
+  } catch (err) {}
+
+  return {
+    slides: [
+      { num: 1, title: "Slide 1: Hook & Pain Point", script: `Every team building ${(idea || 'project').substring(0,30)} faces massive friction. We waste hours on manual overhead instead of executing.` },
+      { num: 2, title: "Slide 2: Solution & Value Prop", script: `Introducing our platform: an intelligent engine that automates complex decisions in real time using ${stack || 'modern tech'}.` },
+      { num: 3, title: "Slide 3: System Architecture", script: `Powered by ${stack || 'our stack'}. Designed for low-latency API execution with resilient fallback engines.` },
+      { num: 4, title: "Slide 4: Live Demo Flow", script: "Start directly in the active execution workspace. Show 1-click action, instant analysis, and dynamic output." },
+      { num: 5, title: "Slide 5: Future Horizon & Wrap", script: "From hackathon MVP to production scale — our modular design allows seamless expansion to enterprise workflows." }
+    ]
+  };
 }
 
 async function apiAuditPitchDeck(deckText) {
@@ -60,40 +172,60 @@ async function apiAuditPitchDeck(deckText) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ deckText })
     });
-    if (!res.ok) throw new Error("Audit API error");
-    return await res.json();
-  } catch (err) {
-    return {
-      storyScore: "8.5",
-      critiques: [
-        { type: "red", title: "🔴 Too Much Text", desc: "Slide 2 has over 150 words. Convert to visual bullet points." },
-        { type: "orange", title: "⚠️ Missing Architecture Diagram", desc: "Include an explicit architecture flowchart." },
-        { type: "green", title: "🟢 Strong Opening Hook", desc: "Clear problem statement in the first 15 seconds." }
-      ]
-    };
-  }
+    if (res.ok) return await res.json();
+  } catch (err) {}
+
+  return {
+    storyScore: "8.2",
+    critiques: [
+      { type: "red", title: "🔴 Paragraph Overload", desc: "Slide 2 contains too much prose. Convert long sentences into 3 punchy bullet points." },
+      { type: "orange", title: "⚠️ Missing Tech Stack Callout", desc: "Be explicit about why your backend architecture solves latency or scaling challenges." },
+      { type: "green", title: "🟢 Strong Demo Hook", desc: "Your planned demo flow focuses straight on the core value proposition without setup fluff." }
+    ]
+  };
 }
 
 async function apiCoachChat(message, context) {
+  if (!message || message.trim() === '') {
+    return { reply: "👋 Ask me anything about scope cuts, tech stack shortcuts, or live pitch tips!", aiSource: "Krishna AI Engine" };
+  }
+
   try {
     const res = await fetch(`${API_BASE}/api/chat`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ message, context })
     });
-    if (!res.ok) throw new Error("Coach Chat API error");
-    return await res.json();
-  } catch (err) {
-    return { reply: "🚀 **Coach Advice**: Focus on building a clean 1-feature MVP that never crashes during live demo!", aiSource: "Krishna AI Engine" };
+    if (res.ok) return await res.json();
+  } catch (err) {}
+
+  const lower = (message || '').toLowerCase();
+  let reply = "";
+  if (lower.includes('auth') || lower.includes('login')) {
+    reply = "💡 **Coach Advice**: Skip full OAuth/JWT for now! Hardcode a `guest-demo` button in the UI that loads pre-seeded state. Spending 3 hours fixing CORS/Auth tokens during a hackathon is a classic trap.";
+  } else if (lower.includes('pitch') || lower.includes('deck') || lower.includes('hook') || lower.includes('present')) {
+    reply = "🎤 **Coach Advice**: Start your presentation with a 15-second story hook. Do NOT explain your database setup first. Show the working product in the first 45 seconds!";
+  } else if (lower.includes('database') || lower.includes('db') || lower.includes('sql') || lower.includes('game')) {
+    reply = "🗄️ **Coach Advice**: For fast hackathon builds, use Supabase or Firebase for instant real-time sync. Avoid writing raw socket servers from scratch unless necessary!";
+  } else if (lower.includes('api') || lower.includes('backend') || lower.includes('slow')) {
+    reply = "⚡ **Coach Advice**: If your backend is slow or hitting rate limits, create a local `mock-data.json` fallback in your frontend API client. Never let a live demo fail due to network hiccups.";
+  } else {
+    reply = `🚀 **Coach Advice**: Regarding "${message.substring(0, 30)}..." — Focus on completing one single 'happy path' loop from end to end. A working 1-feature MVP beats a broken 5-feature system 100% of the time!`;
   }
+
+  return { reply, aiSource: "Krishna AI Engine" };
 }
 
 async function apiFetchSavedProjects() {
   try {
     const res = await fetch(`${API_BASE}/api/projects`);
-    if (!res.ok) return [];
-    return await res.json();
-  } catch (err) {
-    return [];
-  }
+    if (res.ok) {
+      const serverList = await res.json();
+      if (serverList && Array.isArray(serverList) && serverList.length > 0) {
+        return serverList;
+      }
+    }
+  } catch (err) {}
+
+  return getProjectsFromLocalStorage();
 }

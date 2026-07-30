@@ -39,6 +39,7 @@
       <p class="hero-sub">Enter your concept and team details. I will execute the 12-step production pipeline: critiquing scope, generating sprint plans, assigning roles, detecting risks, building recovery plans, producing pitch PPTs, running the 5-judge simulation, and predicting win probability.</p>
       
       <div class="prompt-box">
+        <div id="promptError" style="display:none; color:var(--red); font-weight:600; font-size:12px; margin-bottom:8px;">⚠️ Please enter your project idea before executing the 12-step pipeline.</div>
         <textarea class="prompt-input" id="mainPrompt" placeholder="What are you building? (e.g., An AI-powered crowdfunding app with automated milestone verification...)"></textarea>
         
         <div class="meta-inputs">
@@ -207,7 +208,7 @@
 
     <div class="final-score-box">
       <p class="mono" style="color:var(--purple); font-size:11px; margin: 0 0 6px;">Predicted Viability Score</p>
-      <h1 style="margin:0; font-size:36px;" id="demoScoreDisplay">--/10</h1>
+      <h1 style="margin:0; font-size:36px;" id="demoScoreDisplay">Pending Run</h1>
       <p style="color:var(--text-dim); font-size:12px; margin: 8px 0 0;">Based on scope realism & architecture resilience.</p>
     </div>
   </div>

@@ -1,0 +1,31 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "krishna-ai/server.js",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "krishna-ai/public/**",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "krishna-ai/server.js"
+    },
+    {
+      "src": "/css/(.*)",
+      "dest": "krishna-ai/public/css/$1"
+    },
+    {
+      "src": "/js/(.*)",
+      "dest": "krishna-ai/public/js/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "krishna-ai/public/$1"
+    }
+  ]
+}

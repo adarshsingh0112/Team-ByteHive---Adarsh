@@ -3,16 +3,20 @@ let globalProjectData = null;
 
 // Application Submission & 12-Step Pipeline Execution
 document.getElementById('btnSubmit').addEventListener('click', async () => {
-  const idea = document.getElementById('mainPrompt').value.trim();
+  const mainPromptEl = document.getElementById('mainPrompt');
+  const promptErrorEl = document.getElementById('promptError');
+  const idea = mainPromptEl.value.trim();
   const stack = document.getElementById('inTech').value.trim();
   const team = document.getElementById('inTeam').value;
   const time = document.getElementById('inTime').value;
 
   if (!idea) {
+    if (promptErrorEl) promptErrorEl.style.display = 'block';
     gsap.to('#mainPrompt', { borderColor: 'var(--red)', duration: 0.2, yoyo: true, repeat: 1 });
     return;
   }
 
+  if (promptErrorEl) promptErrorEl.style.display = 'none';
   document.getElementById('projTitle').innerText = idea.split(' ').slice(0, 4).join(' ') + '...';
 
   // Transition View 1 -> View 2 (Loading)
@@ -24,25 +28,6 @@ document.getElementById('btnSubmit').addEventListener('click', async () => {
 
   try {
     let data = await apiAnalyzeProject(idea, stack, team, time);
-    if (!data) {
-      data = {
-        winning_probability: 88,
-        confidence_score: 92,
-        scope_review: { status: "Scope Pruned & MVP Ready", reason: "Cut secondary features to guarantee a flawless 3-minute live demo happy path." },
-        sprint_plan: [
-          { phase: "Sprint 1 (Hr 0-4)", title: "Core DB Schema & Server Express Setup", assignee: "Backend Lead", priority: "HIGH" },
-          { phase: "Sprint 2 (Hr 4-12)", title: "Interactive Glassmorphism Frontend Dashboard", assignee: "Frontend Lead", priority: "HIGH" },
-          { phase: "Sprint 3 (Hr 12-18)", title: "Gemini AI Pipeline Orchestration", assignee: "AI Engineer", priority: "HIGH" },
-          { phase: "Sprint 4 (Hr 18-24)", title: "Demo Script & Pre-Flight Verification", assignee: "Pitch Lead", priority: "HIGH" }
-        ],
-        risks: [{ title: "Network Latency & Auth Blocker", desc: "Probability: Medium | Impact: High", action: "> COACH INTERVENTION: Hardcode 1-click Guest Demo mode." }],
-        architecture: { frontend: "Next.js 14, React, Tailwind CSS", backend: "Node.js, Express, TypeScript", database: "Supabase PostgreSQL" },
-        elevator_pitch: `KrishnaAI Coach strategy for ${idea.substring(0, 40)}.`,
-        demo_flow: ["1. Open active workspace directly in guest mode", "2. Enter raw project idea and trigger pipeline", "3. Show 5-judge simulation panel"],
-        backup_demo_plan: ["Pre-recorded 60s HD video walkthrough"],
-        revenue_model: ["Freemium individual participant access", "Enterprise event tier ($499/event)"]
-      };
-    }
     globalProjectData = data;
     renderDashboardData(data, idea, stack);
   } catch (err) {
@@ -66,7 +51,7 @@ function renderDashboardData(data, idea, stack) {
   if (!data) return;
 
   // 1 & 12: Win Probability & Scope Review
-  const winProb = data.winning_probability || data.winProbability || 88;
+  const winProb = data.winning_probability || data.winProbability || 85;
   document.getElementById('winProbDisplay').innerText = `${winProb}%`;
   document.getElementById('winMeterFill').style.width = `${winProb}%`;
 
@@ -147,11 +132,11 @@ function renderDashboardData(data, idea, stack) {
   document.getElementById('radarPanelBody').innerHTML = radarHTML;
 
   // Architecture & Database Schema
-  const arch = data.architecture || { frontend: "Next.js", backend: "Express", database: "Supabase PostgreSQL" };
+  const arch = data.architecture || { frontend: (stack || 'React').split(',')[0], backend: "Express", database: "Supabase PostgreSQL" };
   let archHTML = `
     <div class="score-card">
       <h3>Architecture Viability</h3>
-      <span class="score-val">${data.judge_score?.technical_depth || 85}<span style="font-size:14px; color:var(--text-dimmer);">/100</span></span>
+      <span class="score-val">${data.judge_score?.technical_depth || Math.min(95, winProb + 4)}<span style="font-size:14px; color:var(--text-dimmer);">/100</span></span>
     </div>
     <div class="critique-item">
       <h5 style="color:var(--blue);">Production Tech Stack</h5>
@@ -231,8 +216,8 @@ function renderDashboardData(data, idea, stack) {
 
   // Demo Readiness Checklist Modal
   const demoReadiness = data.demoReadiness || {};
-  const demoScoreVal = demoReadiness.score || data.demoScore || "8.5";
-  document.getElementById('demoScoreDisplay').innerText = String(demoScoreVal).includes('/10') ? demoScoreVal : `${demoScoreVal}/10`;
+  const demoScoreVal = demoReadiness.score || data.demoScore || (winProb / 10).toFixed(1);
+  document.getElementById('demoScoreDisplay').innerText = `${demoScoreVal}/10`;
 
   let chkHTML = '';
   const chkList = demoReadiness.checklist || data.checklist || [
@@ -245,7 +230,7 @@ function renderDashboardData(data, idea, stack) {
   });
   document.getElementById('checklistBody').innerHTML = chkHTML;
 
-  // 1-Click Scope Cut Button Action
+  // 1-Click Scope Cut Button Action (Supports toggle / restore)
   const cutBtn = document.getElementById('cutFatBtn');
   if (cutBtn) {
     cutBtn.addEventListener('click', function () {
@@ -269,7 +254,7 @@ async function renderFiveJudgesSection(idea, stack) {
   const panel = document.getElementById('fiveJudgesPanelBody');
   if (!panel) return;
 
-  panel.innerHTML = `<div class="loader-ring" style="width:30px;height:30px;margin:20px auto;"></div><p style="text-align:center;font-size:12px;color:var(--purple);">Evaluating project with 5 Independent International Judges (Technical, Innovation, Business, UI/UX, Presentation)...</p>`;
+  panel.innerHTML = `<div class="loader-ring" style="width:30px;height:30px;margin:20px auto;"></div><p style="text-align:center;font-size:12px;color:var(--purple);">Evaluating project with 5 Independent International Judges...</p>`;
 
   const data = await apiSimulate5Judges({
     project_name: idea.substring(0, 30),
@@ -359,7 +344,7 @@ async function renderFiveJudgesSection(idea, stack) {
   panel.innerHTML = html;
 }
 
-// File Upload Deck Inspector
+// File Upload Deck Inspector with Format & Extension Validation
 const uploadZone = document.getElementById('uploadZone');
 const deckFileInput = document.getElementById('deckFileInput');
 
@@ -368,6 +353,19 @@ if (uploadZone && deckFileInput) {
   deckFileInput.addEventListener('change', async (e) => {
     const file = e.target.files[0];
     if (!file) return;
+
+    const ext = file.name.split('.').pop().toLowerCase();
+    const validExtensions = ['pdf', 'txt', 'ppt', 'pptx', 'md'];
+
+    if (!validExtensions.includes(ext)) {
+      uploadZone.innerHTML = `
+        <div style="color:var(--red); font-size:22px; margin-bottom:4px;">⚠️</div>
+        <h4 style="color:var(--red);">Unsupported File Format</h4>
+        <p style="font-size:11px; color:var(--text-dim); margin-top:4px;">"${file.name}" is not supported. Please upload a PDF, PPT, or TXT presentation file.</p>
+        <button class="btn btn-ghost" onclick="location.reload()" style="margin-top:8px; font-size:11px;">Try Again</button>
+      `;
+      return;
+    }
 
     uploadZone.innerHTML = `<div class="loader-ring" style="width:30px;height:30px;margin-bottom:8px;"></div><p style="font-size:12px;">Auditing ${file.name}...</p>`;
     uploadZone.style.pointerEvents = 'none';
@@ -415,7 +413,7 @@ async function loadHistoryList() {
     html += `
       <div class="critique-item" style="cursor:pointer; margin-bottom:8px;" onclick="loadSavedProject('${p.id}')">
         <h5 style="color:var(--cyan);">${(p.idea || 'Project').substring(0, 32)}...</h5>
-        <p style="font-size:11px;">Stack: ${p.stack} | Win: <strong>${p.winProbability}%</strong></p>
+        <p style="font-size:11px;">Stack: ${p.stack || 'General'} | Win: <strong>${p.winProbability || 85}%</strong></p>
       </div>`;
   });
   historyList.innerHTML = html;
@@ -440,7 +438,7 @@ window.loadSavedProject = async function(id) {
   const found = projects.find(p => p.id === id);
   if (found && found.data) {
     globalProjectData = found.data;
-    document.getElementById('projTitle').innerText = found.idea.split(' ').slice(0, 4).join(' ') + '...';
+    document.getElementById('projTitle').innerText = (found.idea || 'Saved Project').split(' ').slice(0, 4).join(' ') + '...';
     document.getElementById('view-init').classList.remove('active');
     document.getElementById('view-dash').classList.add('active');
     renderDashboardData(found.data, found.idea, found.stack);
@@ -463,59 +461,60 @@ document.getElementById('btnCloseModal').addEventListener('click', () => {
   document.getElementById('modalPreflight').classList.remove('active');
 });
 
-// Export PDF Report logic
+// Export PDF/HTML Report Logic (Direct Download without popup blocks)
 document.getElementById('btnExport').addEventListener('click', () => {
   if (!globalProjectData) return;
 
-  const printHtml = `
-    <!DOCTYPE html>
-    <html>
-    <head>
-      <title>KrishnaAI Hackathon Report</title>
-      <style>
-        body { font-family: sans-serif; color: #111; line-height: 1.6; padding: 40px; max-width: 800px; margin: 0 auto; }
-        h1, h2, h3 { color: #333; border-bottom: 2px solid #eee; padding-bottom: 8px;}
-        .card { border: 1px solid #ccc; padding: 16px; margin-bottom: 16px; border-radius: 8px; page-break-inside: avoid; }
-        .tag { display: inline-block; padding: 4px 8px; background: #eee; border-radius: 4px; font-size: 12px; font-weight: bold;}
-        .high-priority { background: #fee2e2; color: #991b1b; }
-        .risk { border-left: 4px solid #ef4444; }
-      </style>
-    </head>
-    <body>
-      <h1>KrishnaAI — Production Hackathon Execution Report</h1>
-      <p><strong>Winning Probability:</strong> ${globalProjectData.winning_probability || globalProjectData.winProbability || 88}%</p>
-      <p><strong>Elevator Pitch:</strong> "${globalProjectData.elevator_pitch || ''}"</p>
-      
-      <h2>1. Scope & Execution Strategy</h2>
-      <div class="card"><p>${(globalProjectData.critiqueText || globalProjectData.scope_review?.reason || '').replace(/<[^>]*>?/gm, '')}</p></div>
+  const htmlReport = `<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>KrishnaAI Hackathon Report</title>
+  <style>
+    body { font-family: sans-serif; color: #111; line-height: 1.6; padding: 40px; max-width: 800px; margin: 0 auto; background: #fafafa; }
+    h1, h2, h3 { color: #1e293b; border-bottom: 2px solid #cbd5e1; padding-bottom: 8px;}
+    .card { background: #fff; border: 1px solid #e2e8f0; padding: 16px; margin-bottom: 16px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+    .tag { display: inline-block; padding: 4px 8px; background: #e2e8f0; border-radius: 4px; font-size: 12px; font-weight: bold;}
+    .high-priority { background: #fee2e2; color: #991b1b; }
+  </style>
+</head>
+<body>
+  <h1>KrishnaAI — Hackathon Execution Report</h1>
+  <p><strong>Winning Probability:</strong> ${globalProjectData.winning_probability || globalProjectData.winProbability || 85}%</p>
+  <p><strong>Elevator Pitch:</strong> "${globalProjectData.elevator_pitch || ''}"</p>
+  
+  <h2>1. Scope & Execution Strategy</h2>
+  <div class="card"><p>${(globalProjectData.critiqueText || globalProjectData.scope_review?.reason || '').replace(/<[^>]*>?/gm, '')}</p></div>
 
-      <h2>2. Sprint Plan & Role Allocation</h2>
-      ${(globalProjectData.sprintPlan || globalProjectData.sprint_plan || []).map(t => `
-        <div class="card">
-          <h4 style="margin:0 0 8px;">${t.title} <span class="tag">${t.assignee}</span></h4>
-          <p style="margin:0;">${t.desc || ''} <em>(${t.phase || t.time})</em></p>
-        </div>
-      `).join('')}
+  <h2>2. Sprint Plan & Role Allocation</h2>
+  ${(globalProjectData.sprintPlan || globalProjectData.sprint_plan || []).map(t => `
+    <div class="card">
+      <h4 style="margin:0 0 8px;">${t.title} <span class="tag">${t.assignee || 'Team Member'}</span></h4>
+      <p style="margin:0;">${t.desc || ''} <em>(${t.phase || t.time || 'Milestone'})</em></p>
+    </div>
+  `).join('')}
 
-      <h2>3. 5-Judge Simulation Verdict</h2>
-      <div class="card">
-        <p><strong>Head Judge Verdict:</strong> ${globalProjectData.head_judge?.one_line_verdict || 'A high-impact hackathon tool.'}</p>
-        <p><strong>Overall Score:</strong> ${globalProjectData.head_judge?.overall_score || 85.7}/100</p>
-      </div>
-    </body>
-    </html>
-  `;
+  <h2>3. 5-Judge Simulation Verdict</h2>
+  <div class="card">
+    <p><strong>Head Judge Verdict:</strong> ${globalProjectData.head_judge?.one_line_verdict || 'A high-impact hackathon tool.'}</p>
+    <p><strong>Overall Score:</strong> ${globalProjectData.head_judge?.overall_score || 85.7}/100</p>
+  </div>
+</body>
+</html>`;
 
-  const printWin = window.open('', '_blank');
-  printWin.document.write(printHtml);
-  printWin.document.close();
-  printWin.focus();
-  setTimeout(() => { printWin.print(); }, 300);
+  const blob = new Blob([htmlReport], { type: 'text/html' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `KrishnaAI_Execution_Report_${Date.now()}.html`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
 });
 
 // ============================================================================
 // 🤖 KRISHNA AI COACH CHAT DRAWER UX CONTROLLER
-// Features: Smooth animations, click-outside auto-close, Escape key listener
 // ============================================================================
 
 const coachToggleBtn = document.getElementById('coachToggleBtn');
@@ -578,7 +577,7 @@ function toggleCoachChat(e) {
   }
 }
 
-// 1. Click Outside Listener (Auto-Close Drawer)
+// 1. Click Outside Listener
 document.addEventListener('click', (e) => {
   if (!coachChatWindow || !coachChatWindow.classList.contains('active')) return;
 
@@ -607,7 +606,6 @@ if (btnCloseChat) {
   });
 }
 
-// Prevent click events inside chat window from closing the drawer
 if (coachChatWindow) {
   coachChatWindow.addEventListener('click', (e) => {
     e.stopPropagation();
@@ -634,7 +632,7 @@ async function handleSendMessage() {
   const context = globalProjectData ? globalProjectData.critiqueText : '';
   const res = await apiCoachChat(text, context);
 
-  let replyText = res.reply.replace(/\*\*(.*?)\*\*(.*?)/g, '<strong>$1</strong>');
+  let replyText = (res.reply || '').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
   if (res.aiSource) {
     replyText += `<br><span style="font-size:10px; color:var(--text-dimmer); display:block; margin-top:4px;">🤖 Powered by ${res.aiSource}</span>`;
   }

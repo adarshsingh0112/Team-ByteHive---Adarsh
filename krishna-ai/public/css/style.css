@@ -940,3 +940,36 @@ header {
 }
 
 .chat-input-area input:focus { border-color: var(--purple); }
+
+/* Mobile Responsiveness Improvements */
+@media (max-width: 600px) {
+  header {
+    padding: 10px 14px;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .nav-actions {
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .status-pill {
+    font-size: 10px;
+    padding: 4px 8px;
+  }
+  .meta-inputs {
+    grid-template-columns: 1fr;
+  }
+  .pipeline-container {
+    padding: 8px 10px;
+    gap: 4px;
+  }
+  .pipeline-step {
+    font-size: 9.5px;
+    padding: 2px 6px;
+  }
+  .coach-chat-window {
+    width: calc(100vw - 32px);
+    right: 16px;
+  }
+}
+
