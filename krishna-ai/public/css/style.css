@@ -1,84 +1,66 @@
 :root {
-  --bg: #020308;
-  --bg-alt: #060814;
+  --bg: #0a0a0f;
+  --bg-alt: #12121a;
   --card: rgba(255, 255, 255, 0.02);
   --card-border: rgba(255, 255, 255, 0.08);
-  --card-edge: rgba(255, 255, 255, 0.15);
+  --card-edge: rgba(255, 255, 255, 0.12);
 
   /* ============================================================================
-     🎨 STRICT SEMANTIC COLOR DESIGN SYSTEM TOKENS
+     🎨 SINGLE ACCENT COLOR SAAS DESIGN SYSTEM TOKENS (INDIGO #6366f1)
      ============================================================================ */
-  --color-data: #38bdf8;        /* CYAN: Data points, AI-generated insights, metrics/numbers */
-  --color-primary: #a855f7;     /* PURPLE: Primary actions, branding elements, CTAs */
-  --color-success: #34d399;     /* GREEN: Positive/success states, completed tasks, good win probability */
-  --color-warning: #fbbf24;     /* ORANGE/YELLOW: Medium risk, warnings, SLIPPING TASK tags */
-  --color-danger: #f87171;      /* RED: Critical risk, blockers, weaknesses */
+  --accent: #6366f1;           /* INDIGO: Primary action, scores, links */
+  --accent-hover: #4f46e5;     /* INDIGO HOVER */
+  --accent-soft: rgba(99, 102, 241, 0.12);
+  --color-success: #10b981;     /* EMERALD: Positive/success states */
+  --color-warning: #f59e0b;     /* AMBER: Medium risk, warnings */
+  --color-danger: #ef4444;      /* RED: Critical risk, blockers */
 
-  --color-risk-high: var(--color-danger);
-  --color-risk-medium: var(--color-warning);
-
-  /* Theme Reference Aliases */
-  --cyan: var(--color-data);
-  --purple: var(--color-primary);
+  /* Semantic Theme Aliases */
+  --cyan: var(--accent);
+  --purple: var(--accent);
   --green: var(--color-success);
   --orange: var(--color-warning);
   --red: var(--color-danger);
-  --blue: var(--color-data);
+  --blue: var(--accent);
 
-  --text: #E7EAF3;
-  --text-dim: #8B92AC;
-  --text-dimmer: #5C6280;
-  --ease-ios: cubic-bezier(0.25, 1, 0.5, 1);
+  --text: #f8fafc;
+  --text-dim: #94a3b8;
+  --text-dimmer: #64748b;
+  --ease-ios: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* $100M SaaS Design System Utilities */
+/* Single Accent SaaS Utilities */
 .dark-grid-bg {
   background-image: 
-    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
   background-size: 60px 60px;
 }
 
 .gradient-text-blue {
-  background: linear-gradient(135deg, #FFFFFF 0%, #94B8FF 50%, #4F8CFF 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: #f8fafc;
 }
 
 .gradient-border-glow {
   position: relative;
 }
 
-.gradient-border-glow::before {
-  content: '';
-  position: absolute;
-  inset: -1px;
-  border-radius: 18px;
-  padding: 1px;
-  background: linear-gradient(135deg, rgba(79, 140, 255, 0.8), rgba(168, 85, 247, 0.8));
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  pointer-events: none;
-  opacity: 0.8;
-  transition: opacity 0.3s;
-}
-
 .btn-primary-glow {
-  background: linear-gradient(135deg, #4F8CFF 0%, #a855f7 100%);
+  background: var(--accent);
   color: #FFFFFF;
   font-weight: 600;
-  padding: 14px 28px;
-  border-radius: 12px;
+  padding: 12px 24px;
+  border-radius: 10px;
   border: none;
   cursor: pointer;
-  box-shadow: 0 0 25px rgba(79, 140, 255, 0.4);
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 14px rgba(99, 102, 241, 0.3);
+  transition: all 0.2s var(--ease-ios);
 }
 
 .btn-primary-glow:hover {
-  transform: translateY(-2px) scale(1.02);
-  box-shadow: 0 0 40px rgba(168, 85, 247, 0.65);
+  background: var(--accent-hover);
+  box-shadow: 0 6px 20px rgba(99, 102, 241, 0.45);
+  transform: translateY(-1px);
 }
 
 @keyframes marquee {
@@ -94,7 +76,7 @@
 
 /* Dark Theme Mermaid Diagram Overrides */
 .mermaid-box {
-  background: #060814;
+  background: #0f0f17;
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 12px;
   padding: 16px;
@@ -103,40 +85,40 @@
 }
 
 .mermaid .node rect, .mermaid .node circle, .mermaid .node polygon, .mermaid rect {
-  fill: #0F172A !important;
-  stroke: rgba(79, 140, 255, 0.4) !important;
+  fill: #181824 !important;
+  stroke: rgba(99, 102, 241, 0.4) !important;
   stroke-width: 1.5px !important;
   rx: 8px !important;
   ry: 8px !important;
 }
 
 .mermaid .node .label, .mermaid span, .mermaid text {
-  fill: #FFFFFF !important;
-  color: #FFFFFF !important;
+  fill: #f8fafc !important;
+  color: #f8fafc !important;
   font-family: 'Inter', sans-serif !important;
   font-size: 12px !important;
   font-weight: 500 !important;
 }
 
 .mermaid .edgePath .path, .mermaid path {
-  stroke: #4F8CFF !important;
+  stroke: #6366f1 !important;
   stroke-width: 1.5px !important;
 }
 
 .mermaid .marker {
-  fill: #4F8CFF !important;
-  stroke: #4F8CFF !important;
+  fill: #6366f1 !important;
+  stroke: #6366f1 !important;
 }
 
 .btn-optimize-purple-pink {
   width: 100%;
-  background: rgba(79, 140, 255, 0.1);
-  border: 1px solid rgba(79, 140, 255, 0.3);
-  color: #4F8CFF;
+  background: rgba(99, 102, 241, 0.1);
+  border: 1px solid rgba(99, 102, 241, 0.3);
+  color: #6366f1;
   padding: 12px 18px;
   border-radius: 10px;
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: 12.5px;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
   font-weight: 600;
   cursor: pointer;
   display: flex;
@@ -146,8 +128,10 @@
 }
 
 .btn-optimize-purple-pink:hover {
-  background: rgba(79, 140, 255, 0.2);
-  border-color: rgba(79, 140, 255, 0.6);
+  background: rgba(99, 102, 241, 0.2);
+  border-color: rgba(99, 102, 241, 0.6);
+  transform: translateY(-1px);
+}
   transform: translateY(-1px);
 }
 

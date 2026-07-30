@@ -130,71 +130,61 @@ function renderDashboardData(data, idea, stack) {
         <!-- Main Grid: Left Panel (Score Display) & Right Panel (Scope Review) -->
         <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:16px; align-items:stretch;">
           
-          <!-- Left Panel: Score Display with Radial Progress SVG & Particle Glow -->
-          <div style="text-align:center; padding:18px 14px; background:rgba(0,0,0,0.35); border-radius:14px; border:1px solid rgba(56,189,248,0.2); position:relative; display:flex; flex-direction:column; justify-content:center; align-items:center;">
+          <!-- Left Panel: Score Display with Radial Progress SVG -->
+          <div style="text-align:center; padding:18px 14px; background:rgba(255,255,255,0.02); border-radius:12px; border:1px solid rgba(255,255,255,0.08); position:relative; display:flex; flex-direction:column; justify-content:center; align-items:center;">
             
             <!-- Radial Progress Circle SVG -->
             <div style="position:relative; width:135px; height:135px; margin:0 auto 10px;">
               <svg viewBox="0 0 100 100" style="width:100%; height:100%; transform:rotate(-90deg); overflow:visible;">
-                <defs>
-                  <linearGradient id="radialCyanGreenGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stop-color="#38bdf8" />
-                    <stop offset="100%" stop-color="#10B981" />
-                  </linearGradient>
-                  <filter id="glowCircleFilter" x="-20%" y="-20%" width="140%" height="140%">
-                    <feGaussianBlur stdDeviation="3" result="blur" />
-                    <feComposite in="SourceGraphic" in2="blur" operator="over" />
-                  </filter>
-                </defs>
                 <circle cx="50" cy="50" r="42" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="8" />
-                <circle cx="50" cy="50" r="42" fill="none" stroke="url(#radialCyanGreenGrad)" stroke-width="8" stroke-dasharray="264" stroke-dashoffset="${strokeOffset}" stroke-linecap="round" filter="url(#glowCircleFilter)" style="transition: stroke-dashoffset 1s ease;" />
+                <circle cx="50" cy="50" r="42" fill="none" stroke="#6366f1" stroke-width="8" stroke-dasharray="264" stroke-dashoffset="${strokeOffset}" stroke-linecap="round" style="transition: stroke-dashoffset 1s ease;" />
               </svg>
               <div style="position:absolute; inset:0; display:flex; flex-direction:column; justify-content:center; align-items:center;">
-                <span id="winProbDisplay" style="font-family:'JetBrains Mono', monospace; font-size:34px; font-weight:800; color:#38bdf8; line-height:1;">${winProb}%</span>
-                <span style="font-size:9px; font-family:'JetBrains Mono', monospace; color:var(--text-dim); text-transform:uppercase; letter-spacing:0.06em; margin-top:4px;">WIN PROBABILITY</span>
+                <span id="winProbDisplay" style="font-family:'JetBrains Mono', monospace; font-size:34px; font-weight:800; color:#6366f1; line-height:1;">${winProb}%</span>
+                <span style="font-size:9px; font-family:'JetBrains Mono', monospace; color:var(--text-dimmer); text-transform:uppercase; letter-spacing:0.06em; margin-top:4px;">WIN PROBABILITY</span>
               </div>
             </div>
 
-            <div style="display:inline-block; background:rgba(16,185,129,0.15); border:1px solid rgba(16,185,129,0.3); border-radius:12px; padding:3px 10px; font-size:10.5px; color:#10B981; font-weight:600; margin-bottom:6px;">
+            <div style="display:inline-block; background:rgba(16,185,129,0.12); border:1px solid rgba(16,185,129,0.25); border-radius:12px; padding:3px 10px; font-size:10.5px; color:#10b981; font-weight:600; margin-bottom:6px;">
               High Probability of Success
             </div>
-            <div style="font-size:11.5px; font-weight:600; color:#e2e8f0; display:flex; align-items:center; justify-content:center; gap:4px;">
+            <div style="font-size:11.5px; font-weight:600; color:var(--text); display:flex; align-items:center; justify-content:center; gap:4px;">
               Strong Market Demand Detected
             </div>
           </div>
 
           <!-- Right Panel: Scope Review & Features Impact Analysis -->
-          <div style="display:flex; flex-direction:column; justify-content:space-between; background:rgba(0,0,0,0.25); border:1px solid rgba(255,255,255,0.06); border-radius:14px; padding:14px;">
+          <div style="display:flex; flex-direction:column; justify-content:space-between; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:14px;">
             <div>
               <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-                <h4 style="font-family:'Space Grotesk', sans-serif; font-size:12px; font-weight:700; color:var(--cyan); margin:0; text-transform:uppercase; letter-spacing:0.04em;">
+                <h4 style="font-family:'Inter', sans-serif; font-size:12px; font-weight:600; color:var(--text-dimmer); margin:0; text-transform:uppercase; letter-spacing:0.04em;">
                   SCOPE REVIEW & FEATURES IMPACT
                 </h4>
               </div>
 
               <!-- Green Checkmark High Impact Features -->
               <div style="display:flex; flex-direction:column; gap:6px; margin-bottom:10px;">
-                <div style="display:flex; align-items:center; gap:6px; font-size:11.5px; color:#34d399; font-family:'Inter', sans-serif;">
+                <div style="display:flex; align-items:center; gap:6px; font-size:11.5px; color:#10b981; font-family:'Inter', sans-serif;">
                   <span style="font-weight:700;">✓</span> <span>Core Application Workflows</span>
                 </div>
-                <div style="display:flex; align-items:center; gap:6px; font-size:11.5px; color:#34d399; font-family:'Inter', sans-serif;">
+                <div style="display:flex; align-items:center; gap:6px; font-size:11.5px; color:#10b981; font-family:'Inter', sans-serif;">
                   <span style="font-weight:700;">✓</span> <span>Knowledge Base Vector Indexing</span>
                 </div>
               </div>
 
-              <!-- Purple Strikethrough Low Impact Features -->
+              <!-- Muted Strikethrough Low Impact Features -->
               <div style="display:flex; flex-direction:column; gap:6px; margin-bottom:10px;">
-                <div style="display:flex; align-items:center; gap:6px; font-size:11.5px; color:#a855f7; text-decoration:line-through; font-family:'Inter', sans-serif;">
+                <div style="display:flex; align-items:center; gap:6px; font-size:11.5px; color:var(--text-dimmer); text-decoration:line-through; font-family:'Inter', sans-serif;">
                   <span style="font-weight:700;">✕</span> <span>Custom Authentication Pipeline</span>
                 </div>
-                <div style="display:flex; align-items:center; gap:6px; font-size:11.5px; color:#a855f7; text-decoration:line-through; font-family:'Inter', sans-serif;">
+                <div style="display:flex; align-items:center; gap:6px; font-size:11.5px; color:var(--text-dimmer); text-decoration:line-through; font-family:'Inter', sans-serif;">
                   <span style="font-weight:700;">✕</span> <span>Advanced Analytics Dashboard</span>
                 </div>
               </div>
             </div>
 
             <!-- Tip Card -->
-            <div style="background:rgba(56,189,248,0.08); border:1px solid rgba(56,189,248,0.2); border-radius:8px; padding:8px 10px; font-size:11px; color:var(--text-dim);">
+            <div style="background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.08); border-radius:8px; padding:8px 10px; font-size:11px; color:var(--text-dim);">
               <span><strong>Engineering Note:</strong> Pruning low-impact features eliminates 14 hours of integration risk before live demo judging.</span>
             </div>
           </div>
@@ -205,16 +195,16 @@ function renderDashboardData(data, idea, stack) {
         <div style="border-top:1px solid rgba(255,255,255,0.08); padding-top:12px;">
           
           <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:8px; margin-bottom:12px; text-align:center;">
-            <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.06); padding:8px 4px; border-radius:8px;">
-              <span style="font-family:'JetBrains Mono', monospace; font-size:14px; font-weight:800; color:#10B981; display:block;">3.2x</span>
+            <div style="background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.06); padding:8px 4px; border-radius:8px;">
+              <span style="font-family:'JetBrains Mono', monospace; font-size:14px; font-weight:700; color:#10b981; display:block;">3.2x</span>
               <span style="font-size:9.5px; color:var(--text-dim);">Higher Success</span>
             </div>
-            <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.06); padding:8px 4px; border-radius:8px;">
-              <span style="font-family:'JetBrains Mono', monospace; font-size:14px; font-weight:800; color:#38bdf8; display:block;">-68%</span>
+            <div style="background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.06); padding:8px 4px; border-radius:8px;">
+              <span style="font-family:'JetBrains Mono', monospace; font-size:14px; font-weight:700; color:#6366f1; display:block;">-68%</span>
               <span style="font-size:9.5px; color:var(--text-dim);">Time to Market</span>
             </div>
-            <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.06); padding:8px 4px; border-radius:8px;">
-              <span style="font-family:'JetBrains Mono', monospace; font-size:14px; font-weight:800; color:#a855f7; display:block;">-54%</span>
+            <div style="background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.06); padding:8px 4px; border-radius:8px;">
+              <span style="font-family:'JetBrains Mono', monospace; font-size:14px; font-weight:700; color:#6366f1; display:block;">-54%</span>
               <span style="font-size:9.5px; color:var(--text-dim);">Dev Cost Savings</span>
             </div>
           </div>
@@ -593,7 +583,7 @@ function generateRadarChartSVG(scores) {
     const xOuter = cx + r * Math.cos(angle);
     const yOuter = cy + r * Math.sin(angle);
 
-    axisHTML += `<line x1="${cx}" y1="${cy}" x2="${xOuter.toFixed(1)}" y2="${yOuter.toFixed(1)}" stroke="rgba(255,255,255,0.12)" stroke-width="1" />`;
+    axisHTML += `<line x1="${cx}" y1="${cy}" x2="${xOuter.toFixed(1)}" y2="${yOuter.toFixed(1)}" stroke="rgba(255,255,255,0.08)" stroke-width="1" />`;
 
     const ratio = Math.min(100, Math.max(0, item.score)) / 100;
     const xScore = cx + r * ratio * Math.cos(angle);
@@ -605,41 +595,30 @@ function generateRadarChartSVG(scores) {
     const anchor = Math.abs(Math.cos(angle)) < 0.1 ? 'middle' : (Math.cos(angle) > 0 ? 'start' : 'end');
 
     labelHTML += `
-      <text x="${xLabel.toFixed(1)}" y="${yLabel.toFixed(1)}" text-anchor="${anchor}" fill="#cbd5e1" font-size="11" font-family="'Space Grotesk', sans-serif" font-weight="600">
-        ${item.icon} ${item.name} <tspan fill="#38bdf8" font-family="'JetBrains Mono', monospace" font-weight="700">(${item.score}/100)</tspan>
+      <text x="${xLabel.toFixed(1)}" y="${yLabel.toFixed(1)}" text-anchor="${anchor}" fill="#cbd5e1" font-size="11" font-family="'Inter', sans-serif" font-weight="500">
+        ${item.name} <tspan fill="#6366f1" font-family="'JetBrains Mono', monospace" font-weight="600">(${item.score}/100)</tspan>
       </text>
-      <circle cx="${xScore.toFixed(1)}" cy="${yScore.toFixed(1)}" r="4.5" fill="#38bdf8" stroke="#060814" stroke-width="2" />
+      <circle cx="${xScore.toFixed(1)}" cy="${yScore.toFixed(1)}" r="4" fill="#6366f1" stroke="#0a0a0f" stroke-width="2" />
     `;
   });
 
   const polyStr = scorePoints.join(' ');
 
   return `
-    <div style="grid-column: 1 / -1; background: rgba(0,0,0,0.3); border: 1px solid rgba(56,189,248,0.25); border-radius: 16px; padding: 20px; margin-bottom: 4px;">
+    <div style="grid-column: 1 / -1; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 20px; margin-bottom: 4px;">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; flex-wrap:wrap; gap:8px;">
-        <span style="font-family:'Space Grotesk', sans-serif; font-size:13px; font-weight:600; color:var(--cyan); display:flex; align-items:center; gap:6px;">
-          📊 5-Axis Multidimensional Judging Radar (0-100 Scale)
+        <span style="font-family:'Inter', sans-serif; font-size:13px; font-weight:600; color:var(--text); display:flex; align-items:center; gap:6px;">
+          5-Axis Evaluation Radar (0-100 Scale)
         </span>
-        <span style="font-family:'JetBrains Mono', monospace; font-size:10.5px; color:var(--text-dim);">Cyan-Purple Radar Pattern Visualizer</span>
+        <span style="font-family:'JetBrains Mono', monospace; font-size:10.5px; color:var(--text-dimmer);">Multidimensional Score Profile</span>
       </div>
       <div style="width:100%; max-width:440px; margin:0 auto;">
         <svg viewBox="0 0 360 270" style="width:100%; height:auto; overflow:visible; display:block;">
-          <defs>
-            <linearGradient id="radarGradCyanPurple" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.55" />
-              <stop offset="100%" stop-color="#a855f7" stop-opacity="0.4" />
-            </linearGradient>
-            <filter id="radarGlow" x="-20%" y="-20%" width="140%" height="140%">
-              <feGaussianBlur stdDeviation="3" result="blur" />
-              <feComposite in="SourceGraphic" in2="blur" operator="over" />
-            </filter>
-          </defs>
-
           ${gridHTML}
           ${axisHTML}
 
-          <!-- Radar Shape Fill & Outline -->
-          <polygon points="${polyStr}" fill="url(#radarGradCyanPurple)" stroke="#38bdf8" stroke-width="2.5" filter="url(#radarGlow)" style="transform-origin: 180px 135px;">
+          <!-- Radar Shape Soft Indigo Fill & Thin Outline -->
+          <polygon points="${polyStr}" fill="rgba(99, 102, 241, 0.15)" stroke="#6366f1" stroke-width="1.5" style="transform-origin: 180px 135px;">
             <animate attributeName="opacity" from="0" to="1" dur="0.6s" fill="freeze" />
           </polygon>
 
