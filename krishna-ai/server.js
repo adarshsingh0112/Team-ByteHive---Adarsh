@@ -323,12 +323,117 @@ app.post('/api/judge-qa', (req, res) => {
   });
 });
 
-// Handler for 1-Click Starter Codebase Generator
+// Helper for dynamic Zip file creation in pure JavaScript
+function buildZipArchive(files) {
+  const localHeaders = [];
+  const centralDirs = [];
+  let offset = 0;
+
+  files.forEach(file => {
+    const nameBuf = Buffer.from(file.name);
+    const contentBuf = Buffer.from(file.content);
+    
+    let crc = 0xFFFFFFFF;
+    for (let i = 0; i < contentBuf.length; i++) {
+      crc ^= contentBuf[i];
+      for (let j = 0; j < 8; j++) {
+        crc = (crc >>> 1) ^ (crc & 1 ? 0xEDB88320 : 0);
+      }
+    }
+    crc = (crc ^ 0xFFFFFFFF) >>> 0;
+
+    const localHeader = Buffer.alloc(30 + nameBuf.length);
+    localHeader.writeUInt32LE(0x04034b50, 0);
+    localHeader.writeUInt16LE(20, 4);
+    localHeader.writeUInt16LE(0, 6);
+    localHeader.writeUInt16LE(0, 8);
+    localHeader.writeUInt16LE(0, 10);
+    localHeader.writeUInt16LE(0, 12);
+    localHeader.writeUInt32LE(crc, 14);
+    localHeader.writeUInt32LE(contentBuf.length, 18);
+    localHeader.writeUInt32LE(contentBuf.length, 22);
+    localHeader.writeUInt16LE(nameBuf.length, 26);
+    localHeader.writeUInt16LE(0, 28);
+    nameBuf.copy(localHeader, 30);
+
+    const centralDir = Buffer.alloc(46 + nameBuf.length);
+    centralDir.writeUInt32LE(0x02014b50, 0);
+    centralDir.writeUInt16LE(20, 4);
+    centralDir.writeUInt16LE(20, 6);
+    centralDir.writeUInt16LE(0, 8);
+    centralDir.writeUInt16LE(0, 10);
+    centralDir.writeUInt16LE(0, 12);
+    centralDir.writeUInt32LE(crc, 16);
+    centralDir.writeUInt32LE(contentBuf.length, 20);
+    centralDir.writeUInt32LE(contentBuf.length, 24);
+    centralDir.writeUInt16LE(nameBuf.length, 28);
+    centralDir.writeUInt16LE(0, 30);
+    centralDir.writeUInt16LE(0, 32);
+    centralDir.writeUInt16LE(0, 34);
+    centralDir.writeUInt16LE(0, 36);
+    centralDir.writeUInt32LE(0, 38);
+    centralDir.writeUInt32LE(offset, 42);
+    nameBuf.copy(centralDir, 46);
+
+    localHeaders.push(localHeader, contentBuf);
+    centralDirs.push(centralDir);
+
+    offset += localHeader.length + contentBuf.length;
+  });
+
+  const centralDirOffset = offset;
+  let centralDirSize = 0;
+  centralDirs.forEach(cd => { centralDirSize += cd.length; });
+
+  const endRecord = Buffer.alloc(22);
+  endRecord.writeUInt32LE(0x06054b50, 0);
+  endRecord.writeUInt16LE(0, 4);
+  endRecord.writeUInt16LE(0, 6);
+  endRecord.writeUInt16LE(files.length, 8);
+  endRecord.writeUInt16LE(files.length, 10);
+  endRecord.writeUInt32LE(centralDirSize, 12);
+  endRecord.writeUInt32LE(centralDirOffset, 16);
+  endRecord.writeUInt16LE(0, 20);
+
+  return Buffer.concat([...localHeaders, ...centralDirs, endRecord]);
+}
+
+// Handler for 1-Click Starter Codebase Generator (.zip archive)
 app.get('/api/starter-code', (req, res) => {
-  const readmeContent = `# KrishnaAI Starter Codebase\n\nGenerated automatically for your project MVP.\n\n## Quick Start\n1. Run \`npm install\`\n2. Set environment variables in \`.env\`\n3. Execute \`npm start\`\n`;
-  res.setHeader('Content-Type', 'text/plain');
-  res.setHeader('Content-Disposition', 'attachment; filename="krishna_starter_code.txt"');
-  res.send(readmeContent);
+  const files = [
+    {
+      name: "README.md",
+      content: "# KrishnaAI Generated Starter Codebase\n\nGenerated automatically for your MVP.\n\n## Quick Start\n1. Run `npm install`\n2. Set `SUPABASE_URL` & `SUPABASE_ANON_KEY` in `.env`\n3. Execute `npm start`\n"
+    },
+    {
+      name: "package.json",
+      content: JSON.stringify({
+        name: "krishna-ai-starter-codebase",
+        version: "1.0.0",
+        main: "server.js",
+        scripts: { start: "node server.js", dev: "nodemon server.js" },
+        dependencies: { express: "^4.18.2", "@supabase/supabase-js": "^2.39.0", dotenv: "^16.3.1" }
+      }, null, 2)
+    },
+    {
+      name: ".env.example",
+      content: "PORT=3000\nSUPABASE_URL=https://your-project.supabase.co\nSUPABASE_ANON_KEY=your_supabase_anon_key_here\n"
+    },
+    {
+      name: "server.js",
+      content: `const express = require('express');\nconst { createClient } = require('@supabase/supabase-js');\nrequire('dotenv').config();\n\nconst app = express();\napp.use(express.json());\napp.use(express.static('public'));\n\nconst supabase = createClient(process.env.SUPABASE_URL || 'https://example.supabase.co', process.env.SUPABASE_ANON_KEY || 'key');\n\napp.get('/api/health', (req, res) => res.json({ status: 'ok', time: new Date() }));\n\nconst PORT = process.env.PORT || 3000;\napp.listen(PORT, () => console.log(\`🚀 Express server running on port \${PORT}\`));\n`
+    },
+    {
+      name: "public/index.html",
+      content: `<!DOCTYPE html>\n<html>\n<head>\n  <meta charset="UTF-8">\n  <title>KrishnaAI Starter App</title>\n  <style>body{font-family:sans-serif; background:#0b0f17; color:#fff; padding:40px; text-align:center;}</style>\n</head>\n<body>\n  <h1>⚡ Welcome to Your MVP Starter</h1>\n  <p>Connected to Supabase PostgreSQL & Express Backend.</p>\n</body>\n</html>\n`
+    }
+  ];
+
+  const zipBuffer = buildZipArchive(files);
+
+  res.setHeader('Content-Type', 'application/zip');
+  res.setHeader('Content-Disposition', 'attachment; filename="krishna_starter_codebase.zip"');
+  res.send(zipBuffer);
 });
 
 // Handler for 5-Slide Pitch Generator Endpoint

@@ -1401,3 +1401,133 @@ header {
   filter: brightness(1.1);
 }
 
+/* ============================================================================
+   📱 FULL MOBILE, TABLET & LAPTOP RESPONSIVE MEDIA QUERIES
+   ============================================================================ */
+
+/* 1. Laptops & Large Tablets (1025px - 1280px) */
+@media (max-width: 1280px) {
+  .panel-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* 2. Tablets & Small Laptops (769px - 1024px) */
+@media (max-width: 1024px) {
+  .panel-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+
+  .dash-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+  }
+
+  .dash-actions {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .dash-actions button {
+    flex: 1 1 auto;
+  }
+
+  .pipeline-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 8px;
+  }
+
+  .pipeline-step {
+    flex-shrink: 0;
+  }
+}
+
+/* 3. Portrait Tablets & Mobile Devices (<= 768px) */
+@media (max-width: 768px) {
+  body {
+    padding: 12px;
+  }
+
+  .app-container {
+    max-width: 100%;
+  }
+
+  .panel-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-judge-banner {
+    padding: 16px;
+  }
+
+  .judge-qa-box > div:nth-child(2) {
+    flex-direction: column;
+  }
+
+  .judge-qa-box input {
+    width: 100%;
+  }
+
+  .modal-box {
+    width: 94vw !important;
+    padding: 18px !important;
+  }
+
+  .agent-activity-ticker {
+    left: 12px;
+    bottom: 12px;
+    max-width: calc(100vw - 24px);
+    font-size: 10px;
+    padding: 4px 10px;
+  }
+
+  .coach-drawer {
+    right: 12px;
+    bottom: 12px;
+  }
+
+  .coach-chat-window {
+    width: calc(100vw - 24px) !important;
+    right: 12px !important;
+  }
+}
+
+/* 4. Small Mobile Smartphones (<= 480px) */
+@media (max-width: 480px) {
+  .init-card {
+    padding: 20px;
+  }
+
+  .init-card h1 {
+    font-size: 26px;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .dash-header h2 {
+    font-size: 20px;
+  }
+
+  .dash-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .dash-actions button {
+    width: 100%;
+    font-size: 11px;
+    padding: 6px 8px;
+  }
+
+  .btn-optimize-purple-pink {
+    font-size: 11px;
+    padding: 10px 12px;
+  }
+}
+

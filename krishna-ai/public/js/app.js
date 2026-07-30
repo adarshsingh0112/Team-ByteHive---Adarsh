@@ -267,8 +267,35 @@ function renderDashboardData(data, idea, stack) {
   });
   document.getElementById('radarPanelBody').innerHTML = radarHTML;
 
-  // Panel 4: System Architecture, Mermaid.js & SQL DDL Schema
+  // Panel 4: System Architecture, Dynamic Mermaid Flowchart & PostgreSQL DB Schema
   const arch = data.architecture || { frontend: (stack || 'React').split(',')[0], backend: "Express", database: "Supabase PostgreSQL" };
+  const rawIdeaStr = (idea || 'project').toLowerCase().replace(/[^a-z0-9]/g, '_').replace(/_+/g, '_').substring(0, 16);
+  const sanitizedIdea = rawIdeaStr.length > 2 ? rawIdeaStr : 'hackathon_mvp';
+
+  const dynamicSqlDdl = data.sql_ddl || `-- PostgreSQL Schema & Supabase PgBouncer Configuration for ${idea || 'Project'}
+CREATE TABLE ${sanitizedIdea}_users (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  email VARCHAR(255) UNIQUE NOT NULL,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE TABLE ${sanitizedIdea}_records (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID REFERENCES ${sanitizedIdea}_users(id) ON DELETE CASCADE,
+  payload JSONB NOT NULL,
+  status VARCHAR(50) DEFAULT 'active',
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX idx_${sanitizedIdea}_user ON ${sanitizedIdea}_records(user_id);
+-- PgBouncer Transaction Pooler Mode: Max 100 Sockets`;
+
+  const mermaidCode = data.mermaid_code || `graph TD
+  A[User Browser UI] -->|API Request| B[Express Node.js Server]
+  B -->|Query / Pooler| C[(Supabase PostgreSQL)]
+  B -->|LLM Pipeline| D[Claude 3.5 / Gemini Engine]
+  D -->|Structured JSON| B`;
+
   let archHTML = `
     <div class="score-card">
       <h3>Architecture Viability</h3>
@@ -277,29 +304,19 @@ function renderDashboardData(data, idea, stack) {
     <div class="critique-item">
       <h5 style="color:var(--blue);">Production Tech Stack</h5>
       <p style="font-size:12px; margin:4px 0 0;">Frontend: <strong>${arch.frontend || 'Next.js'}</strong><br>Backend: <strong>${arch.backend || 'Express TypeScript'}</strong><br>Database: <strong>${arch.database || 'Supabase PostgreSQL'}</strong></p>
-    </div>`;
-
-  if (data.mermaid_code) {
-    archHTML += `
-      <div style="margin-top:10px;">
-        <span style="font-size:11px; font-weight:600; color:var(--purple); display:block; margin-bottom:4px;">📊 Interactive System Flowchart (Mermaid):</span>
-        <div class="mermaid-box"><pre class="mermaid">${data.mermaid_code}</pre></div>
-      </div>`;
-  }
-
-  if (data.sql_ddl) {
-    archHTML += `
-      <div style="margin-top:10px;">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
-          <span style="font-size:11px; font-weight:600; color:var(--cyan);">🗄️ PostgreSQL DDL Schema (Copy to Supabase):</span>
-        </div>
-        <div class="sql-ddl-box" id="sqlDdlContent">${data.sql_ddl}<button class="btn-copy-code" onclick="copySqlDdl()">📋 Copy SQL</button></div>
-      </div>`;
-  }
-
-  archHTML += `
+    </div>
+    <div style="margin-top:10px;">
+      <span style="font-size:11px; font-weight:600; color:var(--purple); display:block; margin-bottom:4px;">📊 Interactive System Flowchart (Mermaid):</span>
+      <div class="mermaid-box"><pre class="mermaid">${mermaidCode}</pre></div>
+    </div>
+    <div style="margin-top:10px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+        <span style="font-size:11px; font-weight:600; color:var(--cyan);">🗄️ PostgreSQL DDL Schema (Copy to Supabase):</span>
+      </div>
+      <div class="sql-ddl-box" id="sqlDdlContent">${dynamicSqlDdl}<button class="btn-copy-code" onclick="copySqlDdl()">📋 Copy SQL</button></div>
+    </div>
     <div style="margin-top:12px; text-align:center;">
-      <a href="/api/starter-code" download class="btn btn-ghost" style="font-size:11px; text-decoration:none; display:inline-flex; align-items:center; gap:6px;">📦 Download Starter Codebase (.zip)</a>
+      <a href="/api/starter-code" download="krishna_starter_codebase.zip" class="btn btn-ghost" style="font-size:11px; text-decoration:none; display:inline-flex; align-items:center; gap:6px; border-color:var(--purple); color:var(--purple);">📦 Download Starter Codebase (.zip)</a>
     </div>`;
 
   document.getElementById('archPanelBody').innerHTML = archHTML;
