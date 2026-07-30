@@ -32,7 +32,7 @@
     </div>
   </header>
 
-  <!-- VIEW 1: INIT -->
+  <!-- VIEW 1: INIT LANDING -->
   <div class="view active" id="view-init">
     <div class="init-content">
       <h1 class="hero-title">Hackathon Execution OS</h1>
@@ -42,6 +42,14 @@
         <div id="promptError" style="display:none; color:var(--red); font-weight:600; font-size:12px; margin-bottom:8px;">⚠️ Please enter your project idea before executing the 12-step pipeline.</div>
         <textarea class="prompt-input" id="mainPrompt" placeholder="What are you building? (e.g., An AI-powered crowdfunding app with automated milestone verification...)"></textarea>
         
+        <!-- Sample Suggestion Chips -->
+        <div class="sample-chips">
+          <span class="chip-label">Try Example:</span>
+          <button class="chip-btn" onclick="useSamplePrompt('AI Crowdfunding App with automated milestone verification and smart contract escrow', 'Next.js, Supabase, Node, Solidity', '3 Developers', '24 Hours')">⚡ AI Crowdfunding</button>
+          <button class="chip-btn" onclick="useSamplePrompt('Web3 Multiplayer Gaming Arcade with real-time zero-knowledge verification', 'Solana, Rust, React, WebSockets', '4+ Developers', '48 Hours')">🎮 Web3 Gaming</button>
+          <button class="chip-btn" onclick="useSamplePrompt('HealthTech AI Diagnostics Assistant with offline patient record sync', 'React Native, Python, PyTorch, FastAPI', '2 Developers', '36 Hours')">🏥 HealthTech AI</button>
+        </div>
+
         <div class="meta-inputs">
           <div class="meta-group">
             <label>Tech Stack</label>
@@ -82,17 +90,17 @@
   <div class="view" id="view-loading">
     <div class="loader-ring"></div>
     <div class="term-loader">
-      <p id="l1">> 1. Idea Submitted & Analysis Running...</p>
+      <p id="l1">> 1. Idea Submitted & Scope Critique Running...</p>
       <p id="l2">> 2. Creating Sprint Plan & Assigning Team Roles...</p>
       <p id="l3">> 3. Detecting Risks & Generating Recovery Interventions...</p>
-      <p id="l4">> 4. Preparing Pitch PPT, Simulating 5 Independent Judges & Predicting Win Chance...</p>
+      <p id="l4">> 4. Preparing Pitch PPT & Simulating 5 Independent International Judges...</p>
     </div>
   </div>
 
-  <!-- VIEW 3: DASHBOARD -->
+  <!-- VIEW 3: DASHBOARD WORKSPACE -->
   <div class="view" id="view-dash">
     
-    <!-- 12-Step Pipeline Status Header -->
+    <!-- 12-Step Pipeline Progress Bar -->
     <div class="pipeline-container" id="pipelineBar">
       <div class="pipeline-step done"><span>1. Idea Submitted</span></div> <span class="pipeline-arrow">›</span>
       <div class="pipeline-step done"><span>2. AI Reviews</span></div> <span class="pipeline-arrow">›</span>
@@ -120,16 +128,25 @@
       </div>
     </div>
 
+    <!-- FEATURED HERO BANNER: International 5-Judge Simulation Verdict -->
+    <div class="hero-judge-banner panel-anim">
+      <div class="panel-header" style="background:transparent; border:none; padding: 0 0 12px;">
+        <div class="panel-title" style="font-size:16px; color:var(--purple);">👨‍⚖️ International 5-Judge Simulation Panel & Head Verdict</div>
+      </div>
+      <div id="fiveJudgesPanelBody"></div>
+    </div>
+
+    <!-- BALANCED 3-COLUMN DASHBOARD GRID (Symmetrical 2x3 Layout) -->
     <div class="panel-grid">
       
-      <!-- Panel 1: Win Probability & Scope Critique -->
+      <!-- Panel 1: Win Probability & Scope Review -->
       <div class="glass-panel panel-anim">
         <div class="panel-header"><div class="panel-title">🏆 Win Probability & Scope Review</div></div>
         <div class="panel-body" id="probPanelBody">
           <div class="win-prob-card">
             <p class="mono" style="font-size:11px; color:var(--text-dim); margin:0 0 4px;">Predicting Winning Probability</p>
-            <h1 style="font-size:38px; color:var(--cyan); margin:0;" id="winProbDisplay">88%</h1>
-            <div class="win-meter-bg"><div class="win-meter-fill" id="winMeterFill" style="width: 88%;"></div></div>
+            <h1 style="font-size:38px; color:var(--cyan); margin:0;" id="winProbDisplay">85%</h1>
+            <div class="win-meter-bg"><div class="win-meter-fill" id="winMeterFill" style="width: 85%;"></div></div>
           </div>
           <div id="scopeCritiqueBody"></div>
         </div>
@@ -159,7 +176,7 @@
         <div class="panel-body" id="pitchPanelBody" style="justify-content: flex-start; gap: 14px;">
           <div id="elevatorPitchBox"></div>
           <div id="uploadZone" class="upload-zone">
-            <input type="file" id="deckFileInput" accept=".pdf,.txt,.ppt,.pptx" style="display:none;">
+            <input type="file" id="deckFileInput" accept=".pdf,.txt,.ppt,.pptx,.md" style="display:none;">
             <div class="upload-icon" style="font-size:22px; margin-bottom:4px;">📄</div>
             <h4>Audit Pitch Deck Document</h4>
             <p style="font-size:11px; color:var(--text-dim); margin-top:4px;">Click or drag PDF/PPT text files to scan slides for storytelling gaps and wordiness.</p>
@@ -171,22 +188,14 @@
         </div>
       </div>
 
-      <!-- Panel 6: International 5-Judge Simulation Panel -->
-      <div class="glass-panel panel-anim" style="grid-column: 1 / -1;">
-        <div class="panel-header"><div class="panel-title">👨‍⚖️ International 5-Judge Simulation Panel</div></div>
-        <div class="panel-body" id="fiveJudgesPanelBody"></div>
-      </div>
-
-      <!-- Panel 7: Demo Flow & Backup Fallback Plan -->
+      <!-- Panel 6: Demo Flow, Offline Backup & Business Model -->
       <div class="glass-panel panel-anim">
-        <div class="panel-header"><div class="panel-title">🎬 Demo Flow & Offline Fallback Plan</div></div>
-        <div class="panel-body" id="demoFlowPanelBody"></div>
-      </div>
-
-      <!-- Panel 8: GTM Business Model & Future Horizon -->
-      <div class="glass-panel panel-anim">
-        <div class="panel-header"><div class="panel-title">💼 Business Model & Future Horizon</div></div>
-        <div class="panel-body" id="businessPanelBody"></div>
+        <div class="panel-header"><div class="panel-title">💼 Business Model & Live Demo Flow</div></div>
+        <div class="panel-body" id="demoAndBusinessBody">
+          <div id="demoFlowPanelBody"></div>
+          <hr style="border:none; border-top:1px solid rgba(255,255,255,0.05); margin: 6px 0;">
+          <div id="businessPanelBody"></div>
+        </div>
       </div>
 
     </div>
@@ -249,6 +258,16 @@
     <span>🤖</span> <span>Ask Krishna Coach</span>
   </button>
 </div>
+
+<script>
+function useSamplePrompt(idea, stack, team, time) {
+  document.getElementById('mainPrompt').value = idea;
+  if (stack) document.getElementById('inTech').value = stack;
+  if (team) document.getElementById('inTeam').value = team;
+  if (time) document.getElementById('inTime').value = time;
+  document.getElementById('mainPrompt').focus();
+}
+</script>
 
 <script src="js/three-bg.js"></script>
 <script src="js/api.js"></script>

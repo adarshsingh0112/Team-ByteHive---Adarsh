@@ -476,15 +476,69 @@ header {
   gap: 12px;
 }
 
+.hero-judge-banner {
+  width: 100%;
+  margin-bottom: 20px;
+  background: rgba(15, 23, 42, 0.65);
+  border: 1px solid var(--card-border);
+  border-top: 1px solid var(--card-edge);
+  border-radius: 20px;
+  padding: 20px;
+  backdrop-filter: blur(32px) saturate(180%);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.4);
+  transition: border-color 0.3s;
+}
+
+.hero-judge-banner:hover {
+  border-color: rgba(168, 85, 247, 0.3);
+}
+
+.sample-chips {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+
+.chip-label {
+  font-family: 'JetBrains Mono';
+  font-size: 11px;
+  color: var(--text-dimmer);
+}
+
+.chip-btn {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--text-dim);
+  font-size: 11px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.25s var(--ease-ios);
+  font-family: 'Inter';
+}
+
+.chip-btn:hover {
+  background: rgba(168, 85, 247, 0.15);
+  border-color: rgba(168, 85, 247, 0.4);
+  color: var(--text);
+  transform: translateY(-1px);
+}
+
 .panel-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: 20px;
   width: 100%;
   padding-bottom: 40px;
 }
 
-@media(max-width: 1024px) {
+@media(max-width: 1180px) {
+  .panel-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media(max-width: 768px) {
   .panel-grid { grid-template-columns: 1fr; }
 }
 
