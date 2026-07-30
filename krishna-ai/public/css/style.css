@@ -79,20 +79,27 @@
   background: #0f0f17;
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 12px;
-  padding: 16px;
+  padding: 20px 16px;
   overflow-x: auto;
   text-align: center;
 }
 
-.mermaid .node rect, .mermaid .node circle, .mermaid .node polygon, .mermaid rect {
+/* Specific Node Styling */
+.mermaid .node rect,
+.mermaid .node circle,
+.mermaid .node polygon,
+.mermaid .node path {
   fill: #181824 !important;
-  stroke: rgba(99, 102, 241, 0.4) !important;
+  stroke: rgba(99, 102, 241, 0.5) !important;
   stroke-width: 1.5px !important;
   rx: 8px !important;
   ry: 8px !important;
 }
 
-.mermaid .node .label, .mermaid span, .mermaid text {
+/* Node Text */
+.mermaid .node .label,
+.mermaid .node span,
+.mermaid .node text {
   fill: #f8fafc !important;
   color: #f8fafc !important;
   font-family: 'Inter', sans-serif !important;
@@ -100,14 +107,45 @@
   font-weight: 500 !important;
 }
 
-.mermaid .edgePath .path, .mermaid path {
+/* Connector Lines & Arrowheads */
+.mermaid .edgePath .path,
+.mermaid .edgePath path,
+.mermaid path.path {
   stroke: #6366f1 !important;
   stroke-width: 1.5px !important;
 }
 
-.mermaid .marker {
+.mermaid .marker,
+.mermaid marker path {
   fill: #6366f1 !important;
   stroke: #6366f1 !important;
+}
+
+/* Edge Labels (Text along lines) - Seamless Dark Background */
+.mermaid .edgeLabel rect,
+.mermaid .edgeLabel span,
+.mermaid .edgeLabel p,
+.mermaid .edgeLabel .label,
+.mermaid .labelBkg {
+  fill: #0f0f17 !important;
+  background-color: #0f0f17 !important;
+  color: #94a3b8 !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 11px !important;
+  font-weight: 500 !important;
+  rx: 4px !important;
+  ry: 4px !important;
+  stroke: rgba(255, 255, 255, 0.08) !important;
+  stroke-width: 1px !important;
+}
+
+.mermaid .edgeLabel text,
+.mermaid .edgeLabel tspan {
+  fill: #94a3b8 !important;
+  color: #94a3b8 !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 11px !important;
+  font-weight: 500 !important;
 }
 
 .btn-optimize-purple-pink {
