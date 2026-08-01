@@ -1582,7 +1582,7 @@ header {
 }
 
 /* ============================================================================
-   📱 FULL MOBILE, TABLET & LAPTOP RESPONSIVE MEDIA QUERIES
+   📱 FULL MOBILE, TABLET & SMARTPHONE RESPONSIVE MEDIA QUERIES (UI/UX BOOST)
    ============================================================================ */
 
 /* 1. Laptops & Large Tablets (1025px - 1280px) */
@@ -1625,22 +1625,106 @@ header {
   }
 }
 
-/* 3. Portrait Tablets & Mobile Devices (<= 768px) */
+/* 3. Portrait Tablets & Mobile Smartphones (<= 768px) */
 @media (max-width: 768px) {
   body {
-    padding: 12px;
+    padding: 10px;
   }
 
   .app-container {
     max-width: 100%;
   }
 
+  /* Header Optimization: Clean 2-Row Mobile Navbar */
+  header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    padding: 12px 14px;
+  }
+
+  .nav-actions {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .mode-pill-wrap {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    background: rgba(255, 255, 255, 0.03);
+    padding: 3px;
+    border-radius: 12px;
+  }
+
+  .mode-pill-wrap .mode-btn {
+    flex: 1;
+    text-align: center;
+    padding: 8px 6px;
+    font-size: 12px;
+    border-radius: 9px;
+  }
+
+  /* Hide redundant top assistant header button on mobile since floating Ask Assistant exists */
+  #btnToggleCoach {
+    display: none !important;
+  }
+
+  /* Hero Section Typography Scale for Mobile Screen Fit */
+  .hero-title {
+    font-size: 32px !important;
+    line-height: 1.18 !important;
+    margin-bottom: 12px !important;
+    letter-spacing: -0.02em !important;
+  }
+
+  .hero-sub {
+    font-size: 13.5px !important;
+    line-height: 1.5 !important;
+    margin-bottom: 20px !important;
+  }
+
+  /* Prompt Box & Meta Inputs Mobile Fit */
+  .prompt-box {
+    padding: 16px !important;
+    border-radius: 16px !important;
+  }
+
+  .prompt-input {
+    font-size: 14px !important;
+    padding: 12px !important;
+    min-height: 90px !important;
+  }
+
+  .meta-inputs {
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+  }
+
+  .sample-chips {
+    display: flex;
+    overflow-x: auto;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 4px;
+    gap: 8px;
+  }
+
+  .chip-btn {
+    flex-shrink: 0;
+    font-size: 11px;
+    padding: 5px 10px;
+  }
+
   .panel-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr !important;
+    gap: 14px !important;
   }
 
   .hero-judge-banner {
-    padding: 16px;
+    padding: 14px !important;
   }
 
   .judge-qa-box > div:nth-child(2) {
@@ -1656,33 +1740,49 @@ header {
     padding: 18px !important;
   }
 
+  /* Prevent Ask Assistant Floating Button & Bottom Ticker Overlap! */
   .agent-activity-ticker {
-    left: 12px;
-    bottom: 12px;
-    max-width: calc(100vw - 24px);
-    font-size: 10px;
-    padding: 4px 10px;
+    left: 12px !important;
+    bottom: 74px !important; /* Positioned cleanly above floating button */
+    max-width: calc(100vw - 24px) !important;
+    font-size: 10px !important;
+    padding: 6px 12px !important;
+    z-index: 999 !important;
   }
 
   .coach-drawer {
-    right: 12px;
-    bottom: 12px;
+    right: 12px !important;
+    bottom: 12px !important;
+    z-index: 1000 !important;
+  }
+
+  .coach-trigger-btn {
+    padding: 10px 16px !important;
+    font-size: 12.5px !important;
+    box-shadow: 0 8px 24px rgba(99, 102, 241, 0.4) !important;
   }
 
   .coach-chat-window {
     width: calc(100vw - 24px) !important;
     right: 12px !important;
+    bottom: 64px !important;
+    height: 75vh !important;
   }
 }
 
 /* 4. Small Mobile Smartphones (<= 480px) */
 @media (max-width: 480px) {
+  .hero-title {
+    font-size: 26px !important;
+    line-height: 1.15 !important;
+  }
+
   .init-card {
-    padding: 20px;
+    padding: 16px;
   }
 
   .init-card h1 {
-    font-size: 26px;
+    font-size: 24px;
   }
 
   .form-row {
@@ -1690,7 +1790,7 @@ header {
   }
 
   .dash-header h2 {
-    font-size: 20px;
+    font-size: 18px;
   }
 
   .dash-actions {
@@ -1702,7 +1802,7 @@ header {
   .dash-actions button {
     width: 100%;
     font-size: 11px;
-    padding: 6px 8px;
+    padding: 7px 8px;
   }
 
   .btn-optimize-purple-pink {
